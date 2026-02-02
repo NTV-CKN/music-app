@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/fragment_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/txt_home"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/fragment_library"
+        android:icon="@drawable/ic_library_music_black"
+        android:title="@string/txt_library"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/fragment_discovery"
+        android:icon="@drawable/ic_dashboard_black"
+        android:title="@string/txt_discovery"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/fragment_settings"
+        android:icon="@drawable/ic_settings_black"
+        android:title="@string/txt_setting"
+        app:showAsAction="ifRoom" />
+</menu>

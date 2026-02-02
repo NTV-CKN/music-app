@@ -1,0 +1,67 @@
+[versions]
+activityKtx = "1.9.3"
+agp = "8.4.1"
+firebaseBom = "33.7.0"
+fragmentKtx = "1.8.5"
+glide = "4.16.0"
+gson = "2.10.1"
+kotlin = "1.9.22"
+coreKtx = "1.12.0"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+espressoCore = "3.5.1"
+appcompat = "1.6.1"
+material = "1.11.0"
+activity = "1.8.2"
+constraintlayout = "2.1.4"
+media3Exoplayer = "1.5.0"
+navigation = "2.7.7"
+ksp = "1.9.22-1.0.17"
+navigationFragmentKtx = "2.8.5"
+navigationUiKtx = "2.8.5"
+preferenceKtx = "1.2.1"
+retrofit = "2.11.0"
+roomKtx = "2.6.1"
+roomRuntime = "2.6.1"
+fragment = "1.8.9"
+
+[libraries]
+# AndroidX Core
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+
+# UI Components
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+androidx-media3-common = { module = "androidx.media3:media3-common", version.ref = "media3Exoplayer" }
+androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3Exoplayer" }
+androidx-media3-session = { module = "androidx.media3:media3-session", version.ref = "media3Exoplayer" }
+androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3Exoplayer" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-navigation-runtime-ktx = { module = "androidx.navigation:navigation-runtime-ktx", version.ref = "navigationFragmentKtx" }
+androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "preferenceKtx" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomKtx" }
+androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "roomKtx" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# Testing
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtx" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
+test-junit = { group = "junit", name = "junit", version.ref = "junit" }
+test-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+test-androidx-espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+navigation-safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

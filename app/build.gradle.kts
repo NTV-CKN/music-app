@@ -1,0 +1,81 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.navigation.safeargs)
+}
+
+android {
+    namespace = "com.infix.musicappv1"
+    compileSdk = 35
+
+    defaultConfig {
+        applicationId = "com.infix.musicappv1"
+        minSdk = 26
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
+dependencies {
+    // --- 1. Network & Image Loading ---
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.gson)
+    implementation(libs.glide)
+
+    // --- 2. Media3 (Video/Audio) ---
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media3.common)
+    implementation(libs.androidx.media3.session)
+
+    // --- 3. Room Database & Paging ---
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.room.ktx)
+    implementation(libs.androidx.room.paging)
+    implementation(libs.androidx.fragment)
+    ksp(libs.androidx.room.compiler)
+
+    // --- 4. Navigation Component ---
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.runtime.ktx)
+
+    // --- 5. Firebase ---
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.firestore.ktx)
+
+    // --- 6. Android KTX & UI ---
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.preference.ktx)
+
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.google.material)
+    implementation(libs.androidx.constraintlayout)
+    testImplementation(libs.test.junit)
+    androidTestImplementation(libs.test.androidx.junit)
+    androidTestImplementation(libs.test.androidx.espresso)
+}
