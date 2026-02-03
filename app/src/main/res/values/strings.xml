@@ -21,4 +21,7 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="txt_album_hot">Album hot</string>
+    <string name="txt_song_artist">Song artist</string>
+    <string name="txt_song_title">Song title</string>
+    <string name="txt_recommend_song">Recommend song</string>
 </resources>

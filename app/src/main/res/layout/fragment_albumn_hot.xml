@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start_8"
         android:background="@android:color/transparent"
-        android:src="@drawable/outline_arrow_forward_ios_24"
+        android:src="@drawable/ic_outline_arrow_forward_ios_24"
         app:layout_constraintBottom_toBottomOf="@+id/tv_title_album_hot"
         app:layout_constraintStart_toEndOf="@+id/tv_title_album_hot"
         app:layout_constraintTop_toTopOf="@+id/tv_title_album_hot"

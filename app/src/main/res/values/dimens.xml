@@ -11,4 +11,6 @@
     <dimen name="margin_start_8">8dp</dimen>
     <dimen name="margin_top_8">8dp</dimen>
     <dimen name="margin_end_16">16dp</dimen>
+    <dimen name="margin_bottom_8">8dp</dimen>
+    <dimen name="margin_end_8">8dp</dimen>
 </resources>

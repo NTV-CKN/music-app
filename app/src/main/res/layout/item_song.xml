@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_song"
+        android:layout_width="@dimen/button_width_48"
+        android:layout_height="@dimen/button_height_48"
+        android:layout_marginStart="@dimen/margin_start_16"
+        android:layout_marginTop="@dimen/margin_top_8"
+        android:layout_marginBottom="@dimen/margin_bottom_8"
+        app:cardCornerRadius="@dimen/corner_radius_16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/img_item_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription,ImageContrastCheck"
+            tools:srcCompat="@tools:sample/avatars" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_center"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/tv_item_song_song"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_start_8"
+        android:layout_marginEnd="@dimen/margin_end_8"
+        android:text="@string/txt_song_title"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        app:layout_constraintBottom_toTopOf="@id/guideline_center"
+        app:layout_constraintEnd_toStartOf="@id/btn_item_song_option"
+        app:layout_constraintStart_toEndOf="@id/card_song"
+        app:layout_constraintTop_toTopOf="@id/card_song"
+        tools:layout_editor_absoluteX="196dp"
+        tools:layout_editor_absoluteY="6dp" />
+
+    <TextView
+        android:id="@+id/tv_item_song_artist"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:alpha="0.8"
+        android:text="@string/txt_song_artist"
+        app:layout_constraintBottom_toBottomOf="@id/card_song"
+        app:layout_constraintEnd_toEndOf="@id/tv_item_song_song"
+        app:layout_constraintStart_toStartOf="@id/tv_item_song_song"
+        app:layout_constraintTop_toBottomOf="@id/guideline_center"
+        tools:layout_editor_absoluteX="196dp"
+        tools:layout_editor_absoluteY="6dp" />
+
+    <ImageButton
+        android:id="@+id/btn_item_song_option"
+        android:layout_width="@dimen/button_width_48"
+        android:layout_height="@dimen/button_height_48"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_more_horiz_24px"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline_center"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+</androidx.constraintlayout.widget.ConstraintLayout>
