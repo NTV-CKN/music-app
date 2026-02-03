@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.home.albumn.AlbumHotFragment">
+    tools:context=".ui.home.album.AlbumHotFragment">
 
     <TextView
         android:id="@+id/tv_title_album_hot"
