@@ -24,4 +24,7 @@
     <string name="txt_song_artist">Song artist</string>
     <string name="txt_song_title">Song title</string>
     <string name="txt_recommend_song">Recommend song</string>
+    <string name="txt_album_detail">Album detail</string>
+    <string name="txt_amount_of_songs">Amount of songs:</string>
+    <string name="txt_songs_list">Songs list</string>
 </resources>

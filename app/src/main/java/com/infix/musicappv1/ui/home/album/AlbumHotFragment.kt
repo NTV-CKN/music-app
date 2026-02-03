@@ -31,6 +31,7 @@ class AlbumHotFragment : Fragment() {
         }
     }
     private lateinit var binding: FragmentAlbumnHotBinding
+    private lateinit var adapter: AlbumAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,16 +47,25 @@ class AlbumHotFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //fill data for recycler album
-        val adapter = AlbumAdapter(object : AlbumAdapter.AlbumClickListener {
-            override fun onAlbumClick(album: Album) {
-                TODO("Not yet implemented")
-            }
-        })
-        binding.rvAlbumHot.adapter = adapter
+        initRecyclerView()
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        binding.progressAlbumHot.visibility = View.VISIBLE
         viewModel.albums.observe(viewLifecycleOwner, { albums ->
             val sortAlbum = albums.sortedBy { it.size }.reversed().subList(0, 8)
             adapter.updateAlbums(sortAlbum)
+            binding.progressAlbumHot.visibility = View.GONE
         })
+    }
+
+    private fun initRecyclerView() {
+         adapter = AlbumAdapter(object : AlbumAdapter.AlbumClickListener {
+        override fun onAlbumClick(album: Album) {
+
+        }
+    })
+        binding.rvAlbumHot.adapter = adapter
     }
 }

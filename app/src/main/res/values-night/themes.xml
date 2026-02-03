@@ -3,5 +3,8 @@
     <style name="Base.Theme.MusicAppV1" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <style name="ToolbarStyle" parent="Widget.Material3.Toolbar">
+            <item name="navigationIcon">@drawable/ic_baseline_arrow_back_24</item>
+        </style>
     </style>
 </resources>
