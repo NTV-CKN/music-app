@@ -62,6 +62,8 @@ dependencies {
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.cardview)
+    implementation(libs.androidx.recyclerview)
     ksp(libs.androidx.room.compiler)
 
     // --- 4. Navigation Component ---
