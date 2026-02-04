@@ -16,10 +16,11 @@ import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
 import com.infix.musicappv1.data.source.local.SongLocalDataSource
 import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentRecommendSongBinding
+import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.ui.home.rcm_song.more_rcm.MoreRcmSongViewModel
 
-class RecommendSongFragment : Fragment() {
+class RecommendSongFragment : BasePlayMusicFragment() {
     private val viewModel: RecommendSongViewModel by activityViewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -84,7 +85,7 @@ class RecommendSongFragment : Fragment() {
             },
             object : SongAdapter.OptionSongClickListener {
                 override fun onOptionClick(song: Song) {
-
+                    showDialogSongOptionMenu(song)
                 }
             }
         )

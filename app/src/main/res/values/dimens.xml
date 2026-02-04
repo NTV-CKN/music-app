@@ -20,4 +20,8 @@
     <dimen name="height_160dp">160dp</dimen>
     <dimen name="padding_12dp">12dp</dimen>
     <dimen name="margin_12">12dp</dimen>
+    <dimen name="height_1">1dp</dimen>
+    <dimen name="margin_bottom_16">16dp</dimen>
+    <dimen name="button_height_30">30dp</dimen>
+    <dimen name="button_width_30">30dp</dimen>
 </resources>

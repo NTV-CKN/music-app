@@ -29,4 +29,13 @@
     <string name="txt_songs_list">Songs list</string>
     <string name="txt_more_album">More album</string>
     <string name="txt_more_song">More song</string>
+    <string name="txt_download">Download</string>
+    <string name="txt_add_to_favorite">Add to favorite</string>
+    <string name="txt_add_to_playlist">Add to playlist</string>
+    <string name="txt_play_next">Add to play next</string>
+    <string name="txt_view_album">View album</string>
+    <string name="txt_view_artist">View artist</string>
+    <string name="txt_block_song">Block song</string>
+    <string name="txt_report_err">Report error</string>
+    <string name="txt_view_song_info">View song infomation</string>
 </resources>
