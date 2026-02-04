@@ -4,6 +4,8 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
-
+<style name="ToolbarStyle" parent="Widget.Material3.Toolbar">
+    <item name="navigationIcon">@drawable/ic_baseline_arrow_back_24</item>
+</style>
     <style name="Theme.MusicAppV1" parent="Base.Theme.MusicAppV1" />
 </resources>

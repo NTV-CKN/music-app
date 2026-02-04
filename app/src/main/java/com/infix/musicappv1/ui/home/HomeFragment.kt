@@ -5,28 +5,50 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.infix.musicappv1.R
+import com.infix.musicappv1.data.repository.album.AlbumRepositoryImpl
+import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
+import com.infix.musicappv1.data.source.local.AlbumLocalDataSource
+import com.infix.musicappv1.data.source.local.SongLocalDataSource
+import com.infix.musicappv1.data.source.remote.AlbumRemoteDataSource
+import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
+import com.infix.musicappv1.databinding.FragmentHomeBinding
+import com.infix.musicappv1.ui.home.album.AlbumHotViewModel
+import com.infix.musicappv1.ui.home.rcm_song.RecommendSongViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private lateinit var binding: FragmentHomeBinding
+    private val homeViewModel: HomeViewModel by activityViewModels()
+    private val albumViewModel: AlbumHotViewModel by activityViewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                if (modelClass.isAssignableFrom(AlbumHotViewModel::class.java))
+                    return AlbumHotViewModel(
+                        AlbumRepositoryImpl(
+                            AlbumRemoteDataSource(),
+                            AlbumLocalDataSource()
+                        )
+                    ) as T
+                throw IllegalAccessException("model class illegal")
+            }
+        }
+    }
+    private val songViewModel: RecommendSongViewModel by activityViewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                if (modelClass.isAssignableFrom(RecommendSongViewModel::class.java))
+                    return RecommendSongViewModel(
+                        SongRepositoryImpl(
+                            SongRemoteDataSource(),
+                            SongLocalDataSource()
+                        )
+                    ) as T
+                throw IllegalArgumentException("Model class illegal")
+            }
         }
     }
 
@@ -34,27 +56,21 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupInitDataTmp()
+    }
+
+    private fun setupInitDataTmp() {
+        homeViewModel.albums.observe(viewLifecycleOwner) { albums -> albumViewModel.setAlbums(albums) }
+        homeViewModel.songs.observe(viewLifecycleOwner) { songs -> songViewModel.setSongs(songs) }
     }
 }

@@ -1,22 +1,27 @@
 package com.infix.musicappv1.ui.home.album
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.album.Album
+import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.album.AlbumRepositoryImpl
 import com.infix.musicappv1.data.source.local.AlbumLocalDataSource
 import com.infix.musicappv1.data.source.remote.AlbumRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentAlbumnHotBinding
+import com.infix.musicappv1.ui.home.HomeViewModel
+import com.infix.musicappv1.ui.home.album.detail.DetailAlbumViewModel
+import com.infix.musicappv1.ui.home.album.more_album.MoreAlbumViewModel
 
 class AlbumHotFragment : Fragment() {
-    private val viewModel: AlbumHotViewModel by viewModels {
+    private val albumViewModel: AlbumHotViewModel by activityViewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(AlbumHotViewModel::class.java))
@@ -30,7 +35,12 @@ class AlbumHotFragment : Fragment() {
             }
         }
     }
+
+    private val moreAlbumViewModel: MoreAlbumViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
+    private val albumDetailViewModel: DetailAlbumViewModel by activityViewModels()
     private lateinit var binding: FragmentAlbumnHotBinding
+    private lateinit var adapter: AlbumAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,16 +56,53 @@ class AlbumHotFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //fill data for recycler album
-        val adapter = AlbumAdapter(object : AlbumAdapter.AlbumClickListener {
+        initRecyclerView()
+        setupEvent()
+        observeViewModel()
+    }
+
+    private fun setupEvent() {
+        //text view most track album
+        binding.tvTitleAlbumHot.setOnClickListener { navigateToMoreAlbum() }
+        //btn image most track album
+        binding.btnMoreAlbumHot.setOnClickListener { navigateToMoreAlbum() }
+    }
+
+    private fun observeViewModel() {
+        binding.progressAlbumHot.visibility = View.VISIBLE
+        albumViewModel.albums.observe(viewLifecycleOwner, { albums ->
+            val sortAlbum = albums.sortedBy { it.size }.reversed().subList(0, 8)
+            adapter.updateAlbums(sortAlbum)
+            binding.progressAlbumHot.visibility = View.GONE
+        })
+    }
+
+    private fun initRecyclerView() {
+        adapter = AlbumAdapter(object : AlbumAdapter.AlbumClickListener {
             override fun onAlbumClick(album: Album) {
-                TODO("Not yet implemented")
+                albumDetailViewModel.setAlbumAndSongs(album, extractSongsByAlbum(album))
+                findNavController().navigate(R.id.action_navigation_home_to_detailAlbumFragment)
             }
         })
         binding.rvAlbumHot.adapter = adapter
-        viewModel.albums.observe(viewLifecycleOwner, { albums ->
-            val sortAlbum = albums.sortedBy { it.size }.reversed().subList(0, 8)
-            adapter.updateAlbums(sortAlbum)
-        })
+    }
+
+    private fun extractSongsByAlbum(album: Album): List<Song> {
+        val songs = homeViewModel.songs.value
+        val result = mutableListOf<Song>()
+        songs?.let { songs ->
+            for (songId in album.songs) {
+                val index = songs.indexOfFirst { song -> song.id == songId.toInt() }
+                if (index != -1)
+                    result.add(songs[index])
+            }
+        }
+
+        return result
+    }
+
+    private fun navigateToMoreAlbum() {
+        moreAlbumViewModel.setAlbums(homeViewModel.albums.value?:emptyList())
+        findNavController().navigate(R.id.action_navigation_home_to_navigation_more_album)
     }
 }

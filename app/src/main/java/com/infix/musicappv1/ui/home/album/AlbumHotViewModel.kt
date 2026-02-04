@@ -14,8 +14,12 @@ class AlbumHotViewModel(private val albumRepository: AlbumRepository) : ViewMode
     private val _albums = MutableLiveData<List<Album>>()
     val albums: LiveData<List<Album>> = _albums
 
-    init {
-        loadAlbums()
+//    init {
+//        loadAlbums()
+//    }
+
+    fun setAlbums(albums: List<Album>) {
+        _albums.postValue(albums)
     }
 
     private fun loadAlbums() {
