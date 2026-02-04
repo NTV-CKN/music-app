@@ -28,4 +28,5 @@
     <string name="txt_amount_of_songs">Amount of songs: %s</string>
     <string name="txt_songs_list">Songs list</string>
     <string name="txt_more_album">More album</string>
+    <string name="txt_more_song">More song</string>
 </resources>

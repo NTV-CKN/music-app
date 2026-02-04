@@ -9,12 +9,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
 import com.infix.musicappv1.data.source.local.SongLocalDataSource
 import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentRecommendSongBinding
+import com.infix.musicappv1.ui.home.HomeViewModel
+import com.infix.musicappv1.ui.home.rcm_song.more_rcm.MoreRcmSongViewModel
 
 class RecommendSongFragment : Fragment() {
     private val viewModel: RecommendSongViewModel by activityViewModels {
@@ -31,6 +34,9 @@ class RecommendSongFragment : Fragment() {
             }
         }
     }
+    private val moreRcmSongViewModel: MoreRcmSongViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
+
     private lateinit var binding: FragmentRecommendSongBinding
     private lateinit var adapter: SongAdapter
 
@@ -51,6 +57,14 @@ class RecommendSongFragment : Fragment() {
         //init recycler view
         initRecyclerView()
         observeViewModel()
+        setupEvent()
+    }
+
+    private fun setupEvent() {
+        //text view rcm song
+        binding.tvTitleRcmSong.setOnClickListener { navigateToMoreRcmSong() }
+        //btn image more song
+        binding.btnMoreRcmSong.setOnClickListener { navigateToMoreRcmSong() }
     }
 
     private fun observeViewModel() {
@@ -76,5 +90,10 @@ class RecommendSongFragment : Fragment() {
         )
 
         binding.includeRcmSong.rvSongList.adapter = adapter
+    }
+
+    private fun navigateToMoreRcmSong() {
+        moreRcmSongViewModel.setSongs(homeViewModel.songs.value?:emptyList())
+        findNavController().navigate(R.id.action_navigation_home_to_navigation_more_rcm_song)
     }
 }

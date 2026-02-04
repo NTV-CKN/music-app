@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.infix.musicappv1.ui.home.HomeFragment"
-        android:label="fragment_home"
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_navigation_home_to_detailAlbumFragment"
@@ -16,33 +15,35 @@
         <action
             android:id="@+id/action_navigation_home_to_navigation_more_album"
             app:destination="@id/navigation_more_album" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_more_rcm_song"
+            app:destination="@id/navigation_more_rcm_song" />
     </fragment>
     <fragment
         android:id="@+id/navigation_discovery"
         android:name="com.infix.musicappv1.ui.discovery.DiscoveryFragment"
-        android:label="fragment_discovery"
         tools:layout="@layout/fragment_discovery" />
     <fragment
         android:id="@+id/navigation_library"
         android:name="com.infix.musicappv1.ui.library.LibraryFragment"
-        android:label="fragment_library"
         tools:layout="@layout/fragment_library" />
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.infix.musicappv1.ui.settings.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:name="com.infix.musicappv1.ui.settings.SettingsFragment" />
     <fragment
         android:id="@+id/navigation_detail_album"
         android:name="com.infix.musicappv1.ui.home.album.detail.DetailAlbumFragment"
-        android:label="fragment_detail_album"
         tools:layout="@layout/fragment_detail_album" />
     <fragment
         android:id="@+id/navigation_more_album"
         android:name="com.infix.musicappv1.ui.home.album.more_album.MoreAlbumFragment"
-        android:label="fragment_more_album"
         tools:layout="@layout/fragment_more_album" >
         <action
             android:id="@+id/action_navigation_more_album_to_navigation_detail_album"
             app:destination="@id/navigation_detail_album" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_more_rcm_song"
+        android:name="com.infix.musicappv1.ui.home.rcm_song.more_rcm.MoreRcmSongFragment"
+        tools:layout="@layout/fragment_more_rcm_song" />
 </navigation>
