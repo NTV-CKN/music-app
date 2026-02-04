@@ -59,8 +59,9 @@ class SongAdapter(
         this.songs.clear()
         this.songs.addAll(songs)
 
-        notifyItemRangeRemoved(0, oldSize)
-        notifyItemRangeInserted(0, this.songs.size)
+        if (oldSize > this.songs.size)
+            notifyItemRangeRemoved(0, oldSize)
+        notifyItemRangeChanged(0, this.songs.size)
     }
 
     interface SongClickListener {

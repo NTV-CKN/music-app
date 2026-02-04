@@ -51,8 +51,9 @@ class AlbumAdapter(
         this.albums.clear()
         this.albums.addAll(albums)
         //remove old list album
-        notifyItemRangeRemoved(0, oldSize)
-        notifyItemRangeInserted(0, this.albums.size)
+        if (oldSize > this.albums.size)
+            notifyItemRangeRemoved(0, oldSize)
+        notifyItemRangeChanged(0, this.albums.size)
     }
 
     interface AlbumClickListener {

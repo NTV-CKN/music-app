@@ -17,8 +17,12 @@ class RecommendSongViewModel(
     private val _songs = MutableLiveData<List<Song>>()
     val songs: LiveData<List<Song>> = _songs
 
-    init {
-        loadSongs()
+//    init {
+//        loadSongs()
+//    }
+
+    fun setSongs(songs: List<Song>) {
+        _songs.postValue(songs)
     }
 
     private fun loadSongs() {

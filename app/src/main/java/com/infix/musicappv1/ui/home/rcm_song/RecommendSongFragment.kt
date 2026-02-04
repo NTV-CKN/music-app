@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.infix.musicappv1.R
@@ -16,7 +17,7 @@ import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentRecommendSongBinding
 
 class RecommendSongFragment : Fragment() {
-    private val viewModel: RecommendSongViewModel by viewModels {
+    private val viewModel: RecommendSongViewModel by activityViewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(RecommendSongViewModel::class.java))
