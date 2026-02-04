@@ -52,6 +52,8 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private var isObserve = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,7 +68,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupInitDataTmp()
+        if(!isObserve){
+            setupInitDataTmp()
+            isObserve = true
+        }
     }
 
     private fun setupInitDataTmp() {
