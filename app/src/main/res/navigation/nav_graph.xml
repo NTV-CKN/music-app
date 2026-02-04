@@ -12,11 +12,10 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_navigation_home_to_detailAlbumFragment"
-            app:destination="@id/navigation_detail_album"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/navigation_detail_album" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_more_album"
+            app:destination="@id/navigation_more_album" />
     </fragment>
     <fragment
         android:id="@+id/navigation_discovery"
@@ -37,4 +36,13 @@
         android:name="com.infix.musicappv1.ui.home.album.detail.DetailAlbumFragment"
         android:label="fragment_detail_album"
         tools:layout="@layout/fragment_detail_album" />
+    <fragment
+        android:id="@+id/navigation_more_album"
+        android:name="com.infix.musicappv1.ui.home.album.more_album.MoreAlbumFragment"
+        android:label="fragment_more_album"
+        tools:layout="@layout/fragment_more_album" >
+        <action
+            android:id="@+id/action_navigation_more_album_to_navigation_detail_album"
+            app:destination="@id/navigation_detail_album" />
+    </fragment>
 </navigation>

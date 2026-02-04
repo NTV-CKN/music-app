@@ -18,6 +18,7 @@ import com.infix.musicappv1.data.source.remote.AlbumRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentAlbumnHotBinding
 import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.ui.home.album.detail.DetailAlbumViewModel
+import com.infix.musicappv1.ui.home.album.more_album.MoreAlbumViewModel
 
 class AlbumHotFragment : Fragment() {
     private val albumViewModel: AlbumHotViewModel by activityViewModels {
@@ -34,6 +35,8 @@ class AlbumHotFragment : Fragment() {
             }
         }
     }
+
+    private val moreAlbumViewModel: MoreAlbumViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
     private val albumDetailViewModel: DetailAlbumViewModel by activityViewModels()
     private lateinit var binding: FragmentAlbumnHotBinding
@@ -54,7 +57,15 @@ class AlbumHotFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
+        setupEvent()
         observeViewModel()
+    }
+
+    private fun setupEvent() {
+        //text view most track album
+        binding.tvTitleAlbumHot.setOnClickListener { navigateToMoreAlbum() }
+        //btn image most track album
+        binding.btnMoreAlbumHot.setOnClickListener { navigateToMoreAlbum() }
     }
 
     private fun observeViewModel() {
@@ -88,5 +99,10 @@ class AlbumHotFragment : Fragment() {
         }
 
         return result
+    }
+
+    private fun navigateToMoreAlbum() {
+        moreAlbumViewModel.setAlbums(homeViewModel.albums.value?:emptyList())
+        findNavController().navigate(R.id.action_navigation_home_to_navigation_more_album)
     }
 }
