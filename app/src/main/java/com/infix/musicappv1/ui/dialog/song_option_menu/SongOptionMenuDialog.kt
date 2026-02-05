@@ -1,7 +1,6 @@
-package com.infix.musicappv1.ui.dialog
+package com.infix.musicappv1.ui.dialog.song_option_menu
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +10,18 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.option_menu.SongOptionMenuItem
+import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.DialogFragmentSongOptionMenuBinding
 import com.infix.musicappv1.databinding.ItemOptionMenuSongBinding
+import com.infix.musicappv1.enums.SongMenuOptionEnum
+import com.infix.musicappv1.ui.dialog.song_info.SongInfoDialog
+import com.infix.musicappv1.ui.dialog.song_info.SongInfoDialogViewModel
 
 class SongOptionMenuDialog : BottomSheetDialogFragment() {
     private lateinit var binding: DialogFragmentSongOptionMenuBinding
     private lateinit var adapter: SongMenuOptionAdapter
     private val songOptionMenuViewModel: SongOptionMenuViewModel by activityViewModels()
+    private val songInfoViewModel: SongInfoDialogViewModel by activityViewModels()
 
     //class adapter
     class SongMenuOptionAdapter(
@@ -99,7 +103,7 @@ class SongOptionMenuDialog : BottomSheetDialogFragment() {
             mutableListOf(),
             object : SongMenuOptionAdapter.MenuItemClick {
                 override fun onClick(menuItem: SongOptionMenuItem) {
-
+                    onMenuItemClick(menuItem)
                 }
             }
         )
@@ -129,6 +133,29 @@ class SongOptionMenuDialog : BottomSheetDialogFragment() {
 
             }
         }
+    }
+
+    private fun onMenuItemClick(menuItem: SongOptionMenuItem) {
+        when (menuItem.option) {
+            SongMenuOptionEnum.ADD_TO_FAVORITES -> {}
+            SongMenuOptionEnum.VIEW_SONG_INFO -> showSongInfo()
+            SongMenuOptionEnum.VIEW_ARTIST -> {}
+            SongMenuOptionEnum.REPORT_ERROR -> {}
+            SongMenuOptionEnum.ADD_TO_PLAYLIST -> {}
+            SongMenuOptionEnum.DOWNLOAD -> {}
+            SongMenuOptionEnum.BLOCK_SONG -> {}
+            SongMenuOptionEnum.VIEW_ALBUM -> {}
+            SongMenuOptionEnum.PLAY_NEXT -> {}
+        }
+        dismiss()
+    }
+
+    private fun showSongInfo() {
+        songInfoViewModel.setSong(songOptionMenuViewModel.song.value ?: Song())
+        SongInfoDialog().show(
+            requireActivity().supportFragmentManager,
+            SongInfoDialog.TAG
+        )
     }
 
     companion object {

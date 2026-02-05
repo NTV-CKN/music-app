@@ -14,9 +14,10 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.FragmentAlbumnHotBinding
 import com.infix.musicappv1.databinding.FragmentDetailAlbumBinding
+import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.home.rcm_song.SongAdapter
 
-class DetailAlbumFragment : Fragment() {
+class DetailAlbumFragment : BasePlayMusicFragment() {
     private lateinit var binding: FragmentDetailAlbumBinding
     private val detailAlbumViewModel: DetailAlbumViewModel by activityViewModels()
     private lateinit var adapter: SongAdapter
@@ -49,7 +50,7 @@ class DetailAlbumFragment : Fragment() {
             },
             object : SongAdapter.OptionSongClickListener {
                 override fun onOptionClick(song: Song) {
-
+                    showDialogSongOptionMenu(song)
                 }
             }
         )
@@ -61,7 +62,7 @@ class DetailAlbumFragment : Fragment() {
         //album
         detailAlbumViewModel.album.observe(viewLifecycleOwner) { album ->
             binding.includeAlbumDetail.tvAmountSongAlbumDetail.text =
-                getString(R.string.txt_amount_of_songs, album.songs.size)
+                getString(R.string.txt_amount_of_songs, "" + album.songs.size)
             binding.includeAlbumDetail.tvTitleAlbumDetail.text = album.name
             Glide.with(binding.root)
                 .load(album.artwork)

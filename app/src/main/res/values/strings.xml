@@ -38,4 +38,12 @@
     <string name="txt_block_song">Block song</string>
     <string name="txt_report_err">Report error</string>
     <string name="txt_view_song_info">View song infomation</string>
+    <string name="txt_song_title_args">Title: %s</string>
+    <string name="txt_artist_args">Artist: %s</string>
+    <string name="txt_album_args">Album: %s</string>
+    <string name="txt_duration_args">Duration: %s</string>
+    <string name="txt_number_of_plays_args">Number of plays: %s</string>
+    <string name="txt_is_your_favorite_song_args">Is your favorite song: %s</string>
+    <string name="txt_category_args">Category: %s</string>
+    <string name="txt_publish_year_args">Publish year: %s</string>
 </resources>

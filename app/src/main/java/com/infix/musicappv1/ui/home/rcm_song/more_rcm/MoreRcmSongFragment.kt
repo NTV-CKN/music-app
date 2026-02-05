@@ -13,9 +13,10 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.FragmentMoreRcmSongBinding
 import com.infix.musicappv1.databinding.FragmentRecommendSongBinding
+import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.home.rcm_song.SongAdapter
 
-class MoreRcmSongFragment : Fragment() {
+class MoreRcmSongFragment : BasePlayMusicFragment() {
     private lateinit var binding: FragmentMoreRcmSongBinding
     private lateinit var adapter: SongAdapter
 
@@ -49,7 +50,7 @@ class MoreRcmSongFragment : Fragment() {
             },
             object : SongAdapter.OptionSongClickListener {
                 override fun onOptionClick(song: Song) {
-
+                    showDialogSongOptionMenu(song)
                 }
             }
         )

@@ -1,4 +1,4 @@
-package com.infix.musicappv1.ui.dialog
+package com.infix.musicappv1.ui.dialog.song_option_menu
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
