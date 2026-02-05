@@ -20,4 +20,14 @@
     <dimen name="height_160dp">160dp</dimen>
     <dimen name="padding_12dp">12dp</dimen>
     <dimen name="margin_12">12dp</dimen>
+    <dimen name="height_1">1dp</dimen>
+    <dimen name="margin_bottom_16">16dp</dimen>
+    <dimen name="button_height_30">30dp</dimen>
+    <dimen name="button_width_30">30dp</dimen>
+    <dimen name="corner_radius_200">200dp</dimen>
+    <dimen name="height_192">192dp</dimen>
+    <dimen name="width_140">140dp</dimen>
+    <dimen name="height_140">140dp</dimen>
+    <dimen name="margin_top_4">4dp</dimen>
+    <dimen name="margin_bottom_4">4dp</dimen>
 </resources>

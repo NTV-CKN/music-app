@@ -1,4 +1,4 @@
-package com.infix.musicappv1.ui.home.album.detail
+package com.infix.musicappv1.ui.home.rcm_song.more_rcm
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -9,24 +9,24 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.song.Song
-import com.infix.musicappv1.databinding.FragmentAlbumnHotBinding
-import com.infix.musicappv1.databinding.FragmentDetailAlbumBinding
+import com.infix.musicappv1.databinding.FragmentMoreRcmSongBinding
+import com.infix.musicappv1.databinding.FragmentRecommendSongBinding
 import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.home.rcm_song.SongAdapter
 
-class DetailAlbumFragment : BasePlayMusicFragment() {
-    private lateinit var binding: FragmentDetailAlbumBinding
-    private val detailAlbumViewModel: DetailAlbumViewModel by activityViewModels()
+class MoreRcmSongFragment : BasePlayMusicFragment() {
+    private lateinit var binding: FragmentMoreRcmSongBinding
     private lateinit var adapter: SongAdapter
+
+    private val moreRcmSongViewModel: MoreRcmSongViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDetailAlbumBinding.inflate(
+        binding = FragmentMoreRcmSongBinding.inflate(
             inflater,
             container,
             false
@@ -36,12 +36,12 @@ class DetailAlbumFragment : BasePlayMusicFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.includeAlbumDetail.toolbarAlbumDetail.setupWithNavController(findNavController())
-        setupRecyclerView()
-        setupObserveDetailAlbumViewModel()
+        binding.toolbarMoreRcmSong.setupWithNavController(findNavController())
+        initRecyclerView()
+        setupObserveRcmSongViewModel()
     }
 
-    private fun setupRecyclerView() {
+    private fun initRecyclerView() {
         adapter = SongAdapter(
             object : SongAdapter.SongClickListener {
                 override fun onSongClick(song: Song) {
@@ -55,22 +55,11 @@ class DetailAlbumFragment : BasePlayMusicFragment() {
             }
         )
 
-        binding.includeAlbumDetail.includeSongList.rvSongList.adapter = adapter
+        binding.includeMoreRcmSong.rvSongList.adapter = adapter
     }
 
-    private fun setupObserveDetailAlbumViewModel() {
-        //album
-        detailAlbumViewModel.album.observe(viewLifecycleOwner) { album ->
-            binding.includeAlbumDetail.tvAmountSongAlbumDetail.text =
-                getString(R.string.txt_amount_of_songs, "" + album.songs.size)
-            binding.includeAlbumDetail.tvTitleAlbumDetail.text = album.name
-            Glide.with(binding.root)
-                .load(album.artwork)
-                .error(R.drawable.ic_song_24)
-                .into(binding.includeAlbumDetail.imgArtworkAlbumDetail)
-        }
-        //songs
-        detailAlbumViewModel.songs.observe(viewLifecycleOwner) { songs ->
+    private fun setupObserveRcmSongViewModel() {
+        moreRcmSongViewModel.songs.observe(viewLifecycleOwner) { songs ->
             adapter.updateSongs(songs)
         }
     }
