@@ -19,6 +19,7 @@ import com.infix.musicappv1.databinding.FragmentRecommendSongBinding
 import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.ui.home.rcm_song.more_rcm.MoreRcmSongViewModel
+import com.infix.musicappv1.ui.playing.MiniPlayerViewModel
 
 class RecommendSongFragment : BasePlayMusicFragment() {
     private val viewModel: RecommendSongViewModel by activityViewModels {
@@ -37,6 +38,7 @@ class RecommendSongFragment : BasePlayMusicFragment() {
     }
     private val moreRcmSongViewModel: MoreRcmSongViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
+    private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels()
 
     private lateinit var binding: FragmentRecommendSongBinding
     private lateinit var adapter: SongAdapter
@@ -80,7 +82,7 @@ class RecommendSongFragment : BasePlayMusicFragment() {
         adapter = SongAdapter(
             object : SongAdapter.SongClickListener {
                 override fun onSongClick(song: Song) {
-
+                    miniPlayerViewModel.setSong(song)
                 }
             },
             object : SongAdapter.OptionSongClickListener {
