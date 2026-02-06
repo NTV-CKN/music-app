@@ -14,6 +14,9 @@ class MiniPlayerViewModel : ViewModel() {
     private val _mediaItem = MutableLiveData<MediaItem?>()
     val mediaItem: LiveData<MediaItem?> = _mediaItem
 
+    private val _isPlaying = MutableLiveData<Boolean?>()
+    val isPlaying: LiveData<Boolean?> = _isPlaying
+
     fun setSong(song: Song?) {
         _song.postValue(song)
         song?.let {
@@ -21,6 +24,10 @@ class MiniPlayerViewModel : ViewModel() {
             val mediaItem = MediaItem.Builder().setUri(song.source)
             setMediaItem(mediaItem.build())
         }
+    }
+
+    fun setPlaying(bool: Boolean) {
+        _isPlaying.value = bool
     }
 
     private fun setMediaItem(mediaItem: MediaItem) {
