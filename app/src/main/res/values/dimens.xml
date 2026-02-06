@@ -30,4 +30,11 @@
     <dimen name="height_140">140dp</dimen>
     <dimen name="margin_top_4">4dp</dimen>
     <dimen name="margin_bottom_4">4dp</dimen>
+    <dimen name="width_24">24dp</dimen>
+    <dimen name="height_24">24dp</dimen>
+    <dimen name="button_width_32">32dp</dimen>
+    <dimen name="button_height_32">32dp</dimen>
+    <dimen name="margin_end_4">4dp</dimen>
+    <dimen name="width_27">27dp</dimen>
+    <dimen name="height_27">27dp</dimen>
 </resources>
