@@ -8,4 +8,7 @@
     <item name="navigationIcon">@drawable/ic_baseline_arrow_back_24</item>
 </style>
     <style name="Theme.MusicAppV1" parent="Base.Theme.MusicAppV1" />
+    <style name="MiniPlayerStyle">
+        <item name="android:background">@color/purple_100</item>
+    </style>
 </resources>

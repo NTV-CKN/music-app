@@ -8,4 +8,7 @@
     <style name="ToolbarStyle" parent="Widget.Material3.Toolbar">
         <item name="navigationIcon">@drawable/ic_baseline_arrow_back_24</item>
     </style>
+    <style name="MiniPlayerStyle">
+        <item name="android:background">@color/black_light</item>
+    </style>
 </resources>
