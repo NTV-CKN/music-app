@@ -1,7 +1,7 @@
 package com.infix.musicappv1.data.model.album
 
 data class Album(
-    val id: Int = 0,
+   val id: Int = 0,
     val name: String = "",
     val songs: List<String> = emptyList(),
     val size: Int = 0,

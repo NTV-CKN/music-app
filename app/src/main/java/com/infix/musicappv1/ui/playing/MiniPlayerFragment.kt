@@ -18,12 +18,14 @@ import com.bumptech.glide.request.transition.ViewPropertyTransition
 import com.infix.musicappv1.R
 import com.infix.musicappv1.databinding.FragmentMiniPlayerBinding
 import com.infix.musicappv1.ui.viewmodels.PlaybackViewModel
+import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 
 class MiniPlayerFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentMiniPlayerBinding
     private lateinit var objectAnimator: Animator
     private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels()
     private val playbackViewModel: PlaybackViewModel by activityViewModels()
+    private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,35 +43,59 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         setObserve()
         objectAnimator = AnimatorInflater.loadAnimator(requireContext(), R.animator.button_pressed)
+        //setup event
         binding.includeItemMiniPlayer.btnPausePlayMiniPlayer.setOnClickListener(this)
+        binding.includeItemMiniPlayer.btnFavoriteMiniPlayer.setOnClickListener(this)
+        binding.includeItemMiniPlayer.btnSkipNextMiniPlayer.setOnClickListener(this)
     }
 
     private fun setObserve() {
-        //song
-        miniPlayerViewModel.song.observe(viewLifecycleOwner) {
-            it?.let { song ->
-                binding.includeItemMiniPlayer.tvArtistMiniPlayer.text = song.artist
-                binding.includeItemMiniPlayer.tvTitleMiniplayer.text = song.title
+        //mediacontroller
+        playbackViewModel.mediaController.observe(viewLifecycleOwner) {
+            Log.d("SVU", "MediaController ${it}")
+            it?.let { contractEventPlayer(it) }
+        }
+
+        //playing song
+        playingSongSharedViewModel.playingSongLivedata.observe(viewLifecycleOwner) { playingSong ->
+            val song = playingSong?.song
+            Log.d("SVU", "PlayingSong with ${song}")
+            song?.let {
+                binding.includeItemMiniPlayer.tvArtistMiniPlayer.text = it.artist
+                binding.includeItemMiniPlayer.tvTitleMiniplayer.text = it.title
                 Glide.with(binding.root)
-                    .load(song.image)
+                    .load(it.image)
                     .error(R.drawable.ic_song_24)
                     .into(binding.includeItemMiniPlayer.imgMiniPlayer)
             }
         }
-        //mediaitem
-        miniPlayerViewModel.mediaItem.observe(viewLifecycleOwner) { mediaItem ->
-            if (mediaItem == null) return@observe
-            playbackViewModel.mediaController.value?.let { controller ->
-                controller.setMediaItem(mediaItem)
-                //prepare MediaSource load buffering
-                controller.prepare()
-                //start play
-                controller.play()
 
-                //contract listener MediaPlayer
-                contractEventPlayer(controller)
+        //playlist current
+        playingSongSharedViewModel.currentPlaylist.observe(viewLifecycleOwner) {
+            Log.d("SVU", "PlayListCurrent")
+            miniPlayerViewModel.setMediaItems(it?.getMediaItems())
+        }
+
+        //media items
+        miniPlayerViewModel.mediaItems.observe(viewLifecycleOwner) { mediaItems ->
+            if (mediaItems == null) return@observe
+            playbackViewModel.mediaController.value?.setMediaItems(mediaItems)
+        }
+
+        //current index to play
+        playingSongSharedViewModel.indexToPlay.observe(viewLifecycleOwner) {
+            it?.let {
+                Log.d("SVU", "" + playbackViewModel.mediaController.value)
+                val controller = playbackViewModel.mediaController.value ?: return@observe
+                if (it > -1 && it < controller.mediaItemCount) {
+                    Log.d("SVU", "Current index play")
+                    controller.seekTo(it, 0)
+                    controller.prepare()
+                    controller.play()
+                }
             }
         }
+
         //is playing
         miniPlayerViewModel.isPlaying.observe(viewLifecycleOwner) {
             it?.let { isPlaying ->
@@ -100,6 +126,11 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    private fun skipNextMusic() {
+        val mediaController = playbackViewModel.mediaController.value ?: return
+        if (mediaController.hasNextMediaItem()) mediaController.seekToNextMediaItem()
+    }
+
     override fun onClick(v: View?) {
         if (v == null) return
         objectAnimator.setTarget(v)
@@ -107,7 +138,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         when (v.id) {
             R.id.btn_pause_play_mini_player -> pausePlayMusic()
             R.id.btn_favorite_mini_player -> {}
-            R.id.btn_skip_next_mini_player -> {}
+            R.id.btn_skip_next_mini_player -> skipNextMusic()
             else -> {}
         }
     }
