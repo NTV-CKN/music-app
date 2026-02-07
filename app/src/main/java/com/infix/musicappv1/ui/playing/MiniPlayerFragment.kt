@@ -2,8 +2,6 @@ package com.infix.musicappv1.ui.playing
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
-import android.animation.ObjectAnimator
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,7 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.transition.ViewPropertyTransition
 import com.infix.musicappv1.R
 import com.infix.musicappv1.databinding.FragmentMiniPlayerBinding
 import com.infix.musicappv1.ui.viewmodels.PlaybackViewModel
@@ -22,7 +19,9 @@ import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 
 class MiniPlayerFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentMiniPlayerBinding
-    private lateinit var objectAnimator: Animator
+    private lateinit var animatorBtnPressed: Animator
+    private lateinit var animatorRotatingDisk: Animator
+
     private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels()
     private val playbackViewModel: PlaybackViewModel by activityViewModels()
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels()
@@ -42,11 +41,20 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setObserve()
-        objectAnimator = AnimatorInflater.loadAnimator(requireContext(), R.animator.button_pressed)
+        setupAnimator()
         //setup event
         binding.includeItemMiniPlayer.btnPausePlayMiniPlayer.setOnClickListener(this)
         binding.includeItemMiniPlayer.btnFavoriteMiniPlayer.setOnClickListener(this)
         binding.includeItemMiniPlayer.btnSkipNextMiniPlayer.setOnClickListener(this)
+    }
+
+    private fun setupAnimator() {
+        animatorBtnPressed =
+            AnimatorInflater.loadAnimator(requireContext(), R.animator.button_pressed)
+        animatorRotatingDisk =
+            AnimatorInflater.loadAnimator(requireContext(), R.animator.rotating_disk)
+
+        animatorRotatingDisk.setTarget(binding.includeItemMiniPlayer.imgMiniPlayer)
     }
 
     private fun setObserve() {
@@ -99,10 +107,14 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         //is playing
         miniPlayerViewModel.isPlaying.observe(viewLifecycleOwner) {
             it?.let { isPlaying ->
-                if (isPlaying)
+                if (isPlaying) {
                     binding.includeItemMiniPlayer.btnPausePlayMiniPlayer.setImageResource(R.drawable.ic_pause_circle_48px)
-                else
+                    if (animatorRotatingDisk.isPaused) animatorRotatingDisk.resume()
+                    else if (!animatorRotatingDisk.isRunning) animatorRotatingDisk.start()
+                } else {
                     binding.includeItemMiniPlayer.btnPausePlayMiniPlayer.setImageResource(R.drawable.ic_play_circle_48px)
+                    animatorRotatingDisk.pause()
+                }
             }
         }
     }
@@ -128,13 +140,16 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
 
     private fun skipNextMusic() {
         val mediaController = playbackViewModel.mediaController.value ?: return
-        if (mediaController.hasNextMediaItem()) mediaController.seekToNextMediaItem()
+        if (mediaController.hasNextMediaItem()) {
+            mediaController.seekToNextMediaItem()
+            animatorRotatingDisk.end()
+        }
     }
 
     override fun onClick(v: View?) {
         if (v == null) return
-        objectAnimator.setTarget(v)
-        objectAnimator.start()
+        animatorBtnPressed.setTarget(v)
+        animatorBtnPressed.start()
         when (v.id) {
             R.id.btn_pause_play_mini_player -> pausePlayMusic()
             R.id.btn_favorite_mini_player -> {}

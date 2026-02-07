@@ -70,7 +70,7 @@
             app:layout_constraintEnd_toEndOf="@+id/tv_title_miniplayer"
             app:layout_constraintStart_toStartOf="@+id/tv_title_miniplayer"
             app:layout_constraintTop_toTopOf="@+id/guideline5"
-            tools:ignore="TextContrastCheck" />
+             tools:ignore="TextContrastCheck" />
 
         <ImageButton
             android:id="@+id/btn_favorite_mini_player"
