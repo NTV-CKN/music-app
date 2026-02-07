@@ -9,9 +9,12 @@ import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 object MediaControllerProvider {
-    private var mediaController: MediaController? = null
+    private val _controllerFlow = MutableStateFlow<MediaController?>(null)
+    val controllerFlow: StateFlow<MediaController?> = _controllerFlow
     private lateinit var mediaFuture: ListenableFuture<MediaController>
 
     @OptIn(UnstableApi::class)
@@ -30,14 +33,13 @@ object MediaControllerProvider {
         mediaFuture.addListener({
             if (mediaFuture.isDone && !mediaFuture.isCancelled) {
                 try {
-                    mediaController = mediaFuture.get()
+                    _controllerFlow.value = mediaFuture.get()
                 } catch (e: Exception) {
                     Log.e("SVU", e.message ?: "Unknow error at Mediacontrollerprovider")
+                    _controllerFlow.value = null
                 }
             } else
-                mediaController = null
+                _controllerFlow.value = null
         }, MoreExecutors.directExecutor())
     }
-
-    fun getMediaController() = mediaController
 }

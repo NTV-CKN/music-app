@@ -11,9 +11,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
+import com.infix.musicappv1.data.model.now_playing.PlayingSong
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.FragmentAlbumnHotBinding
 import com.infix.musicappv1.databinding.FragmentDetailAlbumBinding
+import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.home.rcm_song.SongAdapter
 
@@ -44,8 +46,13 @@ class DetailAlbumFragment : BasePlayMusicFragment() {
     private fun setupRecyclerView() {
         adapter = SongAdapter(
             object : SongAdapter.SongClickListener {
-                override fun onSongClick(song: Song) {
-
+                override fun onSongClick(song: Song, pos: Int) {
+                    playSong(
+                        song,
+                        pos,
+                        PlaylistEnum.DETAIL_ALBUM.value,
+                        detailAlbumViewModel.songs.value ?: emptyList()
+                    )
                 }
             },
             object : SongAdapter.OptionSongClickListener {

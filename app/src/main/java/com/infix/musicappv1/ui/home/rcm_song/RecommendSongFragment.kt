@@ -16,12 +16,14 @@ import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
 import com.infix.musicappv1.data.source.local.SongLocalDataSource
 import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentRecommendSongBinding
+import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.ui.home.rcm_song.more_rcm.MoreRcmSongViewModel
+import com.infix.musicappv1.ui.playing.MiniPlayerViewModel
 
 class RecommendSongFragment : BasePlayMusicFragment() {
-    private val viewModel: RecommendSongViewModel by activityViewModels {
+    private val rcmSongViewModel: RecommendSongViewModel by activityViewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(RecommendSongViewModel::class.java))
@@ -37,6 +39,7 @@ class RecommendSongFragment : BasePlayMusicFragment() {
     }
     private val moreRcmSongViewModel: MoreRcmSongViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
+//    private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels()
 
     private lateinit var binding: FragmentRecommendSongBinding
     private lateinit var adapter: SongAdapter
@@ -70,7 +73,7 @@ class RecommendSongFragment : BasePlayMusicFragment() {
 
     private fun observeViewModel() {
         binding.progressRcmSong.visibility = View.VISIBLE
-        viewModel.songs.observe(viewLifecycleOwner) { songs ->
+        rcmSongViewModel.songs.observe(viewLifecycleOwner) { songs ->
             adapter.updateSongs(songs.subList(0, 10))
             binding.progressRcmSong.visibility = View.GONE
         }
@@ -79,8 +82,13 @@ class RecommendSongFragment : BasePlayMusicFragment() {
     private fun initRecyclerView() {
         adapter = SongAdapter(
             object : SongAdapter.SongClickListener {
-                override fun onSongClick(song: Song) {
-
+                override fun onSongClick(song: Song, pos: Int) {
+                    playSong(
+                        song,
+                        pos,
+                        PlaylistEnum.RECOMMENDED.value,
+                        rcmSongViewModel.songs.value?.subList(0, 10) ?: emptyList()
+                    )
                 }
             },
             object : SongAdapter.OptionSongClickListener {
@@ -94,7 +102,7 @@ class RecommendSongFragment : BasePlayMusicFragment() {
     }
 
     private fun navigateToMoreRcmSong() {
-        moreRcmSongViewModel.setSongs(homeViewModel.songs.value?:emptyList())
+        moreRcmSongViewModel.setSongs(homeViewModel.songs.value ?: emptyList())
         findNavController().navigate(R.id.action_navigation_home_to_navigation_more_rcm_song)
     }
 }

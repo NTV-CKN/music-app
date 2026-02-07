@@ -25,7 +25,7 @@ class SongAdapter(
                 .error(R.drawable.ic_song_24)
                 .into(binding.imgItemSong)
             //song click listener
-            onSongClick.onSongClick(song)
+           binding.root.setOnClickListener {  onSongClick.onSongClick(song, position) }
             //option
             binding.btnItemSongOption.setOnClickListener {
                 onOptionClick.onOptionClick(song)
@@ -65,7 +65,7 @@ class SongAdapter(
     }
 
     interface SongClickListener {
-        fun onSongClick(song: Song)
+        fun onSongClick(song: Song, pos: Int)
     }
 
     interface OptionSongClickListener {
