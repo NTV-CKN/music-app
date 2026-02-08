@@ -9,11 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.media3.common.Player
-import androidx.media3.session.MediaController
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
+import com.infix.musicappv1.data.repository.PlaybackRepository
+import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentMiniPlayerBinding
+import com.infix.musicappv1.ui.viewmodels.PlaybackRepositoryFactory
 import com.infix.musicappv1.ui.viewmodels.PlaybackViewModel
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 
@@ -22,9 +23,21 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
     private lateinit var animatorBtnPressed: Animator
     private lateinit var animatorRotatingDisk: Animator
 
-    private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels()
+    private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels {
+        PlaybackRepositoryFactory(
+            PlaybackRepository.getInstance(
+                MusicDatabase.getInstance(requireContext().applicationContext).songRecentDao()
+            )
+        )
+    }
     private val playbackViewModel: PlaybackViewModel by activityViewModels()
-    private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels()
+    private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels {
+        PlaybackRepositoryFactory(
+            PlaybackRepository.getInstance(
+                MusicDatabase.getInstance(requireContext().applicationContext).songRecentDao()
+            )
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,8 +73,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
     private fun setObserve() {
         //mediacontroller
         playbackViewModel.mediaController.observe(viewLifecycleOwner) {
-            Log.d("SVU", "MediaController ${it}")
-            it?.let { contractEventPlayer(it) }
+            //   it?.let { contractEventPlayer(it) }
         }
 
         //playing song
@@ -81,7 +93,9 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         //playlist current
         playingSongSharedViewModel.currentPlaylist.observe(viewLifecycleOwner) {
             Log.d("SVU", "PlayListCurrent")
-            miniPlayerViewModel.setMediaItems(it?.getMediaItems())
+            if (it == null) return@observe
+            if (it != playingSongSharedViewModel.getPlaylistTrackCurrent())
+                miniPlayerViewModel.setMediaItems(it.getMediaItems())
         }
 
         //media items
@@ -93,10 +107,11 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         //current index to play
         playingSongSharedViewModel.indexToPlay.observe(viewLifecycleOwner) {
             it?.let {
-                Log.d("SVU", "" + playbackViewModel.mediaController.value)
                 val controller = playbackViewModel.mediaController.value ?: return@observe
+                val indexMediaCur = playingSongSharedViewModel.getMediaItemIndexCurrent()
+                if (it == indexMediaCur) return@observe
+//                Log.d("SVU", "MEDIA ${indexMediaCur} IT ${it}")
                 if (it > -1 && it < controller.mediaItemCount) {
-                    Log.d("SVU", "Current index play")
                     controller.seekTo(it, 0)
                     controller.prepare()
                     controller.play()
@@ -119,14 +134,14 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun MiniPlayerFragment.contractEventPlayer(controller: MediaController) {
-        controller.addListener(object : Player.Listener {
-            override fun onIsPlayingChanged(isPlaying: Boolean) {
-                super.onIsPlayingChanged(isPlaying)
-                miniPlayerViewModel.setPlaying(isPlaying)
-            }
-        })
-    }
+//    private fun MiniPlayerFragment.contractEventPlayer(controller: MediaController) {
+//        controller.addListener(object : Player.Listener {
+//            override fun onIsPlayingChanged(isPlaying: Boolean) {
+//                super.onIsPlayingChanged(isPlaying)
+//                miniPlayerViewModel.setPlaying(isPlaying)
+//            }
+//        })
+//    }
 
     private fun pausePlayMusic() {
         miniPlayerViewModel.isPlaying.value?.let { isPlaying ->

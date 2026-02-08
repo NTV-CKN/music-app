@@ -18,7 +18,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -41,6 +43,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.coroutines.android)
     // --- 1. Network & Image Loading ---
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

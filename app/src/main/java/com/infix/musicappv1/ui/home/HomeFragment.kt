@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.repository.album.AlbumRepositoryImpl
 import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
-import com.infix.musicappv1.data.source.local.AlbumLocalDataSource
-import com.infix.musicappv1.data.source.local.SongLocalDataSource
+import com.infix.musicappv1.data.source.local.album.AlbumLocalDataSource
+import com.infix.musicappv1.data.source.local.song.SongLocalDataSource
 import com.infix.musicappv1.data.source.remote.AlbumRemoteDataSource
 import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentHomeBinding
