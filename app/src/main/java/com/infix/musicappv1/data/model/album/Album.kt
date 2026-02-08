@@ -1,11 +1,18 @@
 package com.infix.musicappv1.data.model.album
 
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "albums")
 data class Album(
-   val id: Int = 0,
-    val name: String = "",
-    val songs: List<String> = emptyList(),
-    val size: Int = 0,
-    val artwork: String = ""
+    @PrimaryKey
+   var id: Int = 0,
+    var name: String = "",
+    @Ignore
+    var songs: List<String> = emptyList(),
+    var size: Int = 0,
+    var artwork: String = ""
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

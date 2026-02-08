@@ -9,8 +9,8 @@ import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.album.AlbumRepositoryImpl
 import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
 import com.infix.musicappv1.data.source.Result
-import com.infix.musicappv1.data.source.local.AlbumLocalDataSource
-import com.infix.musicappv1.data.source.local.SongLocalDataSource
+import com.infix.musicappv1.data.source.local.album.AlbumLocalDataSource
+import com.infix.musicappv1.data.source.local.song.SongLocalDataSource
 import com.infix.musicappv1.data.source.remote.AlbumRemoteDataSource
 import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
 import kotlinx.coroutines.Dispatchers

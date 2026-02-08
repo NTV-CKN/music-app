@@ -1,13 +1,18 @@
 package com.infix.musicappv1.data.model.song
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "songs")
 open class Song(
-    val id: Int = 0,
-    val title: String = "",
-    val album: String = "",
-    val artist: String = "",
-    val source: String = "",
-    val image: String = "",
-    val duration: Int = 0,
+    @PrimaryKey
+    var id: Int = 0,
+    var title: String = "",
+    var album: String = "",
+    var artist: String = "",
+    var source: String = "",
+    var image: String = "",
+    var duration: Int = 0,
     var favorite: Boolean = false,
     var counter: Int = 0,
     var replay: Int = 0

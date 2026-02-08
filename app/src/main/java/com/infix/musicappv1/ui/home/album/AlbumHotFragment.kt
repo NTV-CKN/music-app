@@ -13,7 +13,7 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.album.AlbumRepositoryImpl
-import com.infix.musicappv1.data.source.local.AlbumLocalDataSource
+import com.infix.musicappv1.data.source.local.album.AlbumLocalDataSource
 import com.infix.musicappv1.data.source.remote.AlbumRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentAlbumnHotBinding
 import com.infix.musicappv1.ui.home.HomeViewModel

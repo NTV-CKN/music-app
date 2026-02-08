@@ -1,6 +1,7 @@
 package com.infix.musicappv1.data.model.now_playing
 
 import androidx.media3.common.MediaItem
+import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 
 data class PlayingSong(
