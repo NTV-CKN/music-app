@@ -7,16 +7,18 @@ import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.ui.dialog.song_option_menu.SongOptionMenuDialog
 import com.infix.musicappv1.ui.dialog.song_option_menu.SongOptionMenuViewModel
-import com.infix.musicappv1.ui.viewmodels.PlaybackRepositoryFactory
+import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import kotlin.getValue
 
 abstract class BasePlayMusicFragment : Fragment() {
     private val songOptionMenuViewModel: SongOptionMenuViewModel by activityViewModels()
-    private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels{
-        PlaybackRepositoryFactory(
+    private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels {
+        val db = MusicDatabase.getInstance(requireContext().applicationContext)
+        Factory(
             PlaybackRepository.getInstance(
-                MusicDatabase.getInstance(requireContext().applicationContext).songRecentDao()
+                db.songRecentDao(),
+                db.songDao()
             )
         )
     }

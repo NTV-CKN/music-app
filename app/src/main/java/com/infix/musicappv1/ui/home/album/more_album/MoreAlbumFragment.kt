@@ -7,21 +7,39 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.song.Song
+import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
+import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentMoreAlbumBinding
 import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.ui.home.album.detail.DetailAlbumViewModel
+import com.infix.musicappv1.utils.InjectUtils
 
 class MoreAlbumFragment : Fragment() {
     private lateinit var binding: FragmentMoreAlbumBinding
     private lateinit var adapter: MoreAlbumAdapter
 
     private val moreAlbumViewModel: MoreAlbumViewModel by activityViewModels()
-    private val homeViewModel: HomeViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                if (modelClass.isAssignableFrom(HomeViewModel::class.java))
+                    return HomeViewModel(
+                        SongRepositoryImpl(
+                            SongRemoteDataSource(),
+                            InjectUtils.getSongLocalDataSource(requireContext().applicationContext)
+                        )
+                    ) as T
+                throw IllegalArgumentException("Model class is not legal")
+            }
+        }
+    }
     private val albumDetailViewModel: DetailAlbumViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -59,7 +77,7 @@ class MoreAlbumFragment : Fragment() {
         val result = mutableListOf<Song>()
         songs?.let { songs ->
             for (songId in album.songs) {
-                val index = songs.indexOfFirst { song -> song.id == songId.toInt() }
+                val index = songs.indexOfFirst { song -> song.id == songId }
                 if (index != -1)
                     result.add(songs[index])
             }

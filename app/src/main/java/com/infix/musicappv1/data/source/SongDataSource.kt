@@ -1,6 +1,8 @@
 package com.infix.musicappv1.data.source
 
+import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongList
+import kotlinx.coroutines.flow.Flow
 
 interface SongDataSource {
     interface Remote {
@@ -8,6 +10,11 @@ interface SongDataSource {
     }
 
     interface Local {
-        //TODO
+        suspend fun update(vararg song: Song)
+        suspend fun insert(vararg song: Song)
+        suspend fun delete(vararg song: Song)
+        fun getAllSongs(): Flow<List<Song>>
+        fun getSongsFavorite(): Flow<List<Song>>
+        suspend fun updateSongFavorite(id: String, isFavorite: Boolean)
     }
 }

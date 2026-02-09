@@ -1,6 +1,33 @@
 package com.infix.musicappv1.data.source.local.song
 
+import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.source.SongDataSource
+import kotlinx.coroutines.flow.Flow
 
-class SongLocalDataSource: SongDataSource.Local {
+class SongLocalDataSource(
+    private val songDao: SongDao
+) : SongDataSource.Local {
+    override suspend fun update(vararg song: Song) {
+        songDao.update(*song)
+    }
+
+    override suspend fun insert(vararg song: Song) {
+        songDao.insert(*song)
+    }
+
+    override suspend fun delete(vararg song: Song) {
+        songDao.delete(*song)
+    }
+
+    override fun getAllSongs(): Flow<List<Song>> {
+        return songDao.getAllSongs()
+    }
+
+    override fun getSongsFavorite(): Flow<List<Song>> {
+        return songDao.getSongsFavorite()
+    }
+
+    override suspend fun updateSongFavorite(id: String, isFavorite: Boolean) {
+        songDao.updateFavorite(id, isFavorite)
+    }
 }

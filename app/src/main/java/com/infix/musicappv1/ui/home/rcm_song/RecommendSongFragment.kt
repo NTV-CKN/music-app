@@ -20,6 +20,7 @@ import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.ui.home.rcm_song.more_rcm.MoreRcmSongViewModel
+import com.infix.musicappv1.utils.InjectUtils
 
 class RecommendSongFragment : BasePlayMusicFragment() {
     private val rcmSongViewModel: RecommendSongViewModel by activityViewModels {
@@ -29,7 +30,7 @@ class RecommendSongFragment : BasePlayMusicFragment() {
                     return RecommendSongViewModel(
                         SongRepositoryImpl(
                             SongRemoteDataSource(),
-                            SongLocalDataSource()
+                            InjectUtils.getSongLocalDataSource(requireContext().applicationContext)
                         )
                     ) as T
                 throw IllegalArgumentException("Model class illegal")
@@ -37,7 +38,20 @@ class RecommendSongFragment : BasePlayMusicFragment() {
         }
     }
     private val moreRcmSongViewModel: MoreRcmSongViewModel by activityViewModels()
-    private val homeViewModel: HomeViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                if (modelClass.isAssignableFrom(HomeViewModel::class.java))
+                    return HomeViewModel(
+                        SongRepositoryImpl(
+                            SongRemoteDataSource(),
+                            InjectUtils.getSongLocalDataSource(requireContext().applicationContext)
+                        )
+                    ) as T
+                throw IllegalArgumentException("Model class is not legal")
+            }
+        }
+    }
 //    private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels()
 
     private lateinit var binding: FragmentRecommendSongBinding

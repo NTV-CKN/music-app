@@ -19,10 +19,24 @@ import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentHomeBinding
 import com.infix.musicappv1.ui.home.album.AlbumHotViewModel
 import com.infix.musicappv1.ui.home.rcm_song.RecommendSongViewModel
+import com.infix.musicappv1.utils.InjectUtils
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
-    private val homeViewModel: HomeViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                if (modelClass.isAssignableFrom(HomeViewModel::class.java))
+                    return HomeViewModel(
+                        SongRepositoryImpl(
+                            SongRemoteDataSource(),
+                            InjectUtils.getSongLocalDataSource(requireContext().applicationContext)
+                        )
+                    ) as T
+                throw IllegalArgumentException("Model class is not legal")
+            }
+        }
+    }
     private val albumViewModel: AlbumHotViewModel by activityViewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -44,7 +58,7 @@ class HomeFragment : Fragment() {
                     return RecommendSongViewModel(
                         SongRepositoryImpl(
                             SongRemoteDataSource(),
-                            SongLocalDataSource()
+                            InjectUtils.getSongLocalDataSource(requireContext().applicationContext)
                         )
                     ) as T
                 throw IllegalArgumentException("Model class illegal")
@@ -68,7 +82,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(!isObserve){
+        if (!isObserve) {
             setupInitDataTmp()
             isObserve = true
         }

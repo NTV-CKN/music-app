@@ -37,4 +37,6 @@
     <dimen name="margin_end_4">4dp</dimen>
     <dimen name="width_27">27dp</dimen>
     <dimen name="height_27">27dp</dimen>
+    <dimen name="width_30">30dp</dimen>
+    <dimen name="height_30">30dp</dimen>
 </resources>

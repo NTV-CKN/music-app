@@ -74,8 +74,8 @@
 
         <ImageButton
             android:id="@+id/btn_favorite_mini_player"
-            android:layout_width="@dimen/width_27"
-            android:layout_height="@dimen/height_27"
+            android:layout_width="@dimen/width_30"
+            android:layout_height="@dimen/height_30"
             android:layout_marginEnd="@dimen/margin_end_8"
             android:background="@android:color/transparent"
             app:layout_constraintBottom_toTopOf="@+id/guideline5"

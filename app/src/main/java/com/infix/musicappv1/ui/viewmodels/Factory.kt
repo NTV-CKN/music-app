@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.ui.playing.MiniPlayerViewModel
 
-class PlaybackRepositoryFactory(private val playbackRepository: PlaybackRepository) :
+class Factory(private val playbackRepository: PlaybackRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PlayingSongSharedViewModel::class.java))

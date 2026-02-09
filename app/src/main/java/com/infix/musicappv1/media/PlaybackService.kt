@@ -34,8 +34,10 @@ class PlaybackService : MediaSessionService() {
 
     override fun onCreate() {
         super.onCreate()
+        val db = MusicDatabase.getInstance(applicationContext)
         playbackRepository = PlaybackRepository.getInstance(
-            MusicDatabase.getInstance(applicationContext).songRecentDao()
+            db.songRecentDao(),
+            db.songDao()
         )
         initScope()
         initSessionAndPlayer()
