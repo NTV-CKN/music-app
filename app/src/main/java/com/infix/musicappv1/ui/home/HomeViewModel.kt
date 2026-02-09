@@ -13,19 +13,17 @@ import com.infix.musicappv1.data.source.local.album.AlbumLocalDataSource
 import com.infix.musicappv1.data.source.local.song.SongLocalDataSource
 import com.infix.musicappv1.data.source.remote.AlbumRemoteDataSource
 import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
+import com.infix.musicappv1.utils.InjectUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
+    private val songRepository: SongRepositoryImpl
 ) : ViewModel() {
     //temporary
     private val albumRepository = AlbumRepositoryImpl(
         AlbumRemoteDataSource(),
         AlbumLocalDataSource()
-    )
-    private val songRepository = SongRepositoryImpl(
-        SongRemoteDataSource(),
-        SongLocalDataSource()
     )
 
     private val _songs = MutableLiveData<List<Song>>()
@@ -41,9 +39,10 @@ class HomeViewModel(
     private fun setupDataTmp() {
         viewModelScope.launch(Dispatchers.IO) {
             val resultSong = songRepository.loadSongs()
-            if (resultSong is Result.Success)
+            if (resultSong is Result.Success) {
+                songRepository.insert(*resultSong.data.songs.toTypedArray())
                 _songs.postValue(resultSong.data.songs)
-            else if (resultSong is Result.Error) {
+            } else if (resultSong is Result.Error) {
                 _songs.postValue(emptyList())
             }
 

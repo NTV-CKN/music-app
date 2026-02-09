@@ -1,5 +1,6 @@
 package com.infix.musicappv1.data.repository.song
 
+import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongList
 import com.infix.musicappv1.data.source.local.song.SongLocalDataSource
 import com.infix.musicappv1.data.source.Result
@@ -11,5 +12,9 @@ class SongRepositoryImpl(
 ): SongRepository {
     override suspend fun loadSongs(): Result<SongList> {
         return remoteSongSrc.loadSongs()
+    }
+
+    override suspend fun insert(vararg song: Song) {
+        localSongSrc.insert(*song)
     }
 }

@@ -13,12 +13,15 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.album.AlbumRepositoryImpl
+import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
 import com.infix.musicappv1.data.source.local.album.AlbumLocalDataSource
 import com.infix.musicappv1.data.source.remote.AlbumRemoteDataSource
+import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentAlbumnHotBinding
 import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.ui.home.album.detail.DetailAlbumViewModel
 import com.infix.musicappv1.ui.home.album.more_album.MoreAlbumViewModel
+import com.infix.musicappv1.utils.InjectUtils
 
 class AlbumHotFragment : Fragment() {
     private val albumViewModel: AlbumHotViewModel by activityViewModels {
@@ -37,7 +40,20 @@ class AlbumHotFragment : Fragment() {
     }
 
     private val moreAlbumViewModel: MoreAlbumViewModel by activityViewModels()
-    private val homeViewModel: HomeViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                if (modelClass.isAssignableFrom(HomeViewModel::class.java))
+                    return HomeViewModel(
+                        SongRepositoryImpl(
+                            SongRemoteDataSource(),
+                            InjectUtils.getSongLocalDataSource(requireContext().applicationContext)
+                        )
+                    ) as T
+                throw IllegalArgumentException("Model class is not legal")
+            }
+        }
+    }
     private val albumDetailViewModel: DetailAlbumViewModel by activityViewModels()
     private lateinit var binding: FragmentAlbumnHotBinding
     private lateinit var adapter: AlbumAdapter
@@ -92,7 +108,7 @@ class AlbumHotFragment : Fragment() {
         val result = mutableListOf<Song>()
         songs?.let { songs ->
             for (songId in album.songs) {
-                val index = songs.indexOfFirst { song -> song.id == songId.toInt() }
+                val index = songs.indexOfFirst { song -> song.id == songId }
                 if (index != -1)
                     result.add(songs[index])
             }
@@ -102,7 +118,7 @@ class AlbumHotFragment : Fragment() {
     }
 
     private fun navigateToMoreAlbum() {
-        moreAlbumViewModel.setAlbums(homeViewModel.albums.value?:emptyList())
+        moreAlbumViewModel.setAlbums(homeViewModel.albums.value ?: emptyList())
         findNavController().navigate(R.id.action_navigation_home_to_navigation_more_album)
     }
 }

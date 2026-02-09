@@ -5,10 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.infix.musicappv1.data.model.now_playing.PlayingSong
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PlaybackRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class PlayingSongSharedViewModel(private val playbackRepository: PlaybackRepository) : ViewModel() {
     val currentPlaylist: LiveData<Playlist?> = playbackRepository.currentPlaylist.asLiveData()
@@ -42,6 +45,12 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
 
     fun updateIndexToPlay(index: Int) {
         playbackRepository.updateIndexToPlay(index)
+    }
+
+    fun updateSongFavorite(id: String, isFavorite: Boolean) {
+       viewModelScope.launch(Dispatchers.IO) {
+           playbackRepository.updateSongFavorite(id, isFavorite)
+       }
     }
 
     fun getMediaItemIndexCurrent() = playbackRepository.getMediaItemIndexCurrent()

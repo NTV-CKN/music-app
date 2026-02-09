@@ -1,26 +1,41 @@
 package com.infix.musicappv1.data.repository
 
+import android.util.Log
 import com.infix.musicappv1.data.model.now_playing.MediaItemTransitionWrap
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.recent.SongRecent
-import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.source.local.recent.SongRecentDao
+import com.infix.musicappv1.data.source.local.song.SongDao
 import com.infix.musicappv1.enums.PlaylistEnum
-import com.infix.musicappv1.media.PlaybackService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlin.collections.set
 
-class PlaybackRepository private constructor(private val songRecentDao: SongRecentDao) {
+class PlaybackRepository private constructor(
+    private val songRecentDao: SongRecentDao,
+    private val songDao: SongDao
+) {
+    //observe song transition
     private val _mediaItemTransition: MutableStateFlow<MediaItemTransitionWrap?> =
         MutableStateFlow(null)
     val mediaItemTransition: StateFlow<MediaItemTransitionWrap?> = _mediaItemTransition
+
+    //observe current playlist when song clicked at any playlist
     private val _currentPlaylist: MutableStateFlow<Playlist?> = MutableStateFlow<Playlist?>(null)
     val currentPlaylist: StateFlow<Playlist?> = _currentPlaylist
+
+    //observe index to play when PlayerMedia recall mediaItemTransition
     private val _indexToPlay = MutableStateFlow<Int?>(null)
     val indexToPlay: StateFlow<Int?> = _indexToPlay
+
+    //observe status Player isplaying
     private val _isPlaying = MutableStateFlow(false)
     val isPlaying: StateFlow<Boolean> = _isPlaying
+
+    //observe song favorite
+    private val _isFavorite = MutableStateFlow(false)
+    val isFavorite: StateFlow<Boolean> = _isFavorite
 
     private var mediaItemCurrentIndex: Int? = null
 
@@ -37,11 +52,12 @@ class PlaybackRepository private constructor(private val songRecentDao: SongRece
     fun updateMediaTransition(
         mediaItemTransitionWrap: MediaItemTransitionWrap?
     ) {
-
         _mediaItemTransition.value = mediaItemTransitionWrap
         mediaItemTransitionWrap?.index?.let {
             mediaItemCurrentIndex = it
+            //when user not in app and comeback, this code help miniplayer update correct song on notification media
             updateIndexToPlay(it)
+            updateIsFavorite()
         }
     }
 
@@ -71,15 +87,34 @@ class PlaybackRepository private constructor(private val songRecentDao: SongRece
         songRecentDao.insert(songRecent)
     }
 
+    suspend fun updateSongFavorite(id: String, isFavorite: Boolean) {
+        songDao.updateFavorite(id, isFavorite)
+        //if current song playing is favorite, we need update UI for that
+        //else we only write favorite for song id and non update UI
+        _indexToPlay.value?.let { indexToPlay ->
+            val currentSong = playlistTrackCurrent?.songs?.getOrNull(indexToPlay)
+            if (currentSong != null && currentSong.id == id)
+                _isFavorite.update { isFavorite }
+//            Log.d("SVU", isFavorite.toString())
+        }
+    }
+
+    private fun updateIsFavorite() {
+        val song = playlistTrackCurrent?.songs?.getOrNull(_indexToPlay.value ?: -1)
+        song?.let {
+            _isFavorite.value = song.favorite
+        }
+    }
+
     companion object {
         @Volatile
         private var instance: PlaybackRepository? = null
-        fun getInstance(songRecentDao: SongRecentDao): PlaybackRepository {
+        fun getInstance(songRecentDao: SongRecentDao, songDao: SongDao): PlaybackRepository {
             if (instance == null) {
                 synchronized(this) {
                 }
                 if (instance == null)
-                    instance = PlaybackRepository(songRecentDao)
+                    instance = PlaybackRepository(songRecentDao, songDao)
             }
             return instance!!
         }

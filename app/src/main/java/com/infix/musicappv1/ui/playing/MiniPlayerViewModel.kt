@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.distinctUntilChanged
 import androidx.media3.common.MediaItem
 import com.infix.musicappv1.data.repository.PlaybackRepository
 
@@ -12,7 +13,7 @@ class MiniPlayerViewModel(
 ) : ViewModel() {
     private val _mediaItems = MutableLiveData<List<MediaItem>?>()
     val mediaItems: LiveData<List<MediaItem>?> = _mediaItems
-
+    val isFavorite: LiveData<Boolean> = playbackRepository.isFavorite.asLiveData().distinctUntilChanged()
     val isPlaying: LiveData<Boolean?> = playbackRepository.isPlaying.asLiveData()
 
 //    fun setSong(song: Song?) {

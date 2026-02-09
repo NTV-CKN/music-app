@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "songs")
 open class Song(
     @PrimaryKey
-    var id: Int = 0,
+    var id: String = "",
     var title: String = "",
     var album: String = "",
     var artist: String = "",
@@ -27,6 +27,6 @@ open class Song(
     }
 
     override fun hashCode(): Int {
-        return id
+        return id.hashCode()
     }
 }

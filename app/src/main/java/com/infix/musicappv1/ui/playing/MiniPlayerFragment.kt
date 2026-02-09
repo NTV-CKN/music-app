@@ -14,7 +14,7 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentMiniPlayerBinding
-import com.infix.musicappv1.ui.viewmodels.PlaybackRepositoryFactory
+import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlaybackViewModel
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 
@@ -24,17 +24,21 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
     private lateinit var animatorRotatingDisk: Animator
 
     private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels {
-        PlaybackRepositoryFactory(
+        val db = MusicDatabase.getInstance(requireContext().applicationContext)
+        Factory(
             PlaybackRepository.getInstance(
-                MusicDatabase.getInstance(requireContext().applicationContext).songRecentDao()
+                db.songRecentDao(),
+                db.songDao()
             )
         )
     }
     private val playbackViewModel: PlaybackViewModel by activityViewModels()
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels {
-        PlaybackRepositoryFactory(
+        val db = MusicDatabase.getInstance(requireContext().applicationContext)
+        Factory(
             PlaybackRepository.getInstance(
-                MusicDatabase.getInstance(requireContext().applicationContext).songRecentDao()
+                db.songRecentDao(),
+                db.songDao()
             )
         )
     }
@@ -132,6 +136,15 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
                 }
             }
         }
+
+        //is favorite
+        miniPlayerViewModel.isFavorite.observe(viewLifecycleOwner) { isFavorite ->
+            val icFavorite = if (isFavorite)
+                R.drawable.ic_favorite_on
+            else
+                R.drawable.ic_favorite_off
+            binding.includeItemMiniPlayer.btnFavoriteMiniPlayer.setImageResource(icFavorite)
+        }
     }
 
 //    private fun MiniPlayerFragment.contractEventPlayer(controller: MediaController) {
@@ -161,13 +174,22 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    private fun updateSongFavorite() {
+        val songCurrent = playingSongSharedViewModel.playingSongLivedata.value?.song
+        songCurrent?.let { song ->
+            val isFavorite = !song.favorite
+            song.favorite = isFavorite
+            playingSongSharedViewModel.updateSongFavorite(song.id, isFavorite)
+        }
+    }
+
     override fun onClick(v: View?) {
         if (v == null) return
         animatorBtnPressed.setTarget(v)
         animatorBtnPressed.start()
         when (v.id) {
             R.id.btn_pause_play_mini_player -> pausePlayMusic()
-            R.id.btn_favorite_mini_player -> {}
+            R.id.btn_favorite_mini_player -> updateSongFavorite()
             R.id.btn_skip_next_mini_player -> skipNextMusic()
             else -> {}
         }
