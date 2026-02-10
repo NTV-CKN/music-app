@@ -1,6 +1,7 @@
 package com.infix.musicappv1.ui.viewmodels
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
@@ -15,7 +16,8 @@ import kotlinx.coroutines.launch
 
 class PlayingSongSharedViewModel(private val playbackRepository: PlaybackRepository) : ViewModel() {
     val currentPlaylist: LiveData<Playlist?> = playbackRepository.currentPlaylist.asLiveData()
-    val indexToPlay: LiveData<Int?> = playbackRepository.indexToPlay.asLiveData().distinctUntilChanged()
+    val indexToPlay: LiveData<Int?> =
+        playbackRepository.indexToPlay.asLiveData().distinctUntilChanged()
 
     val playingSongLivedata: LiveData<PlayingSong?> =
         playbackRepository.mediaItemTransition.asLiveData().map { mediaWrap ->
@@ -34,6 +36,14 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
             }
         }
 
+    private val _isDataReady = MutableLiveData(false)
+    val isDataReady: LiveData<Boolean> = _isDataReady
+
+    init {
+//        val songCurrent = currentPlaylist.value?.songs?.getOrNull(indexToPlay.value ?: -1)
+//        _isRestoreSession.value = songCurrent == null
+    }
+
     fun updatePlaylistCurrent(songs: List<Song>, namePlaylist: String) {
         val playlist = playbackRepository.getPlaylists()[namePlaylist]
         playlist?.let {
@@ -48,9 +58,17 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
     }
 
     fun updateSongFavorite(id: String, isFavorite: Boolean) {
-       viewModelScope.launch(Dispatchers.IO) {
-           playbackRepository.updateSongFavorite(id, isFavorite)
-       }
+        viewModelScope.launch(Dispatchers.IO) {
+            playbackRepository.updateSongFavorite(id, isFavorite)
+        }
+    }
+
+    //We only restore when value of currentPlaylist and indexToPlay is NULL
+    //Notice: Now I'm still not store playlist, so this func not stable yet
+    fun restorePrevSession(songId: String?, namePlaylist: String?) {
+        //check value of stateflow is null
+        //retrieve data of name playlist under room db, after select get songs
+        //set current playlist and index to play
     }
 
     fun getMediaItemIndexCurrent() = playbackRepository.getMediaItemIndexCurrent()
