@@ -31,8 +31,8 @@ class HomeViewModel(
     //when _songRemote has data, songsMediator notify for observe to update local db
 //    val songsMediator: LiveData<List<Song>?> = _songsRemote.map { it }
 //
-//    private val _songsLocal = MutableLiveData<List<Song>?>()
-    val songsLocal: LiveData<List<Song>?> = songRepository.getAllSongsFlow().asLiveData()
+    private val _songsLocal = MutableLiveData<List<Song>?>()
+    val songsLocal: LiveData<List<Song>?> = _songsLocal
 
     private val _albums = MutableLiveData<List<Album>>()
     val albums: LiveData<List<Album>> = _albums
@@ -54,11 +54,13 @@ class HomeViewModel(
                     extractSongRemoteNotContainLocal(songsLocal, resultSong.data.songs)
                 if (songsExtract.isNotEmpty()) {
                     songRepository.insert(*songsExtract.toTypedArray())
+                    songsLocal.addAll(songsExtract)
                 }
             } else if (resultSong is Result.Error) {
 //                _songsRemote.postValue(emptyList())
                 Log.e("HomeViewmodel", resultSong.err.message ?: "Unknown err")
             }
+            _songsLocal.postValue(songsLocal)
             val resultAlbum = albumRepository.loadAlbums()
             if (resultAlbum is Result.Success) {
                 _albums.postValue(resultAlbum.data.albums)
