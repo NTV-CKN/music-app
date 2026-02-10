@@ -1,6 +1,5 @@
 package com.infix.musicappv1.ui.home.album.more_album
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -73,7 +72,7 @@ class MoreAlbumFragment : Fragment() {
     }
 
     private fun extractSongsByAlbum(album: Album): List<Song> {
-        val songs = homeViewModel.songs.value
+        val songs = homeViewModel.songsLocal.value
         val result = mutableListOf<Song>()
         songs?.let { songs ->
             for (songId in album.songs) {

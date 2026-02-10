@@ -19,8 +19,12 @@ class SongLocalDataSource(
         songDao.delete(*song)
     }
 
-    override fun getAllSongs(): Flow<List<Song>> {
+    override suspend fun getAllSongs(): List<Song> {
         return songDao.getAllSongs()
+    }
+
+    override fun getAllSongsFlow(): Flow<List<Song>> {
+        return songDao.getAllSongsFlow()
     }
 
     override fun getSongsFavorite(): Flow<List<Song>> {

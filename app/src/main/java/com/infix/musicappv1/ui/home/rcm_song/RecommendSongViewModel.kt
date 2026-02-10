@@ -1,6 +1,5 @@
 package com.infix.musicappv1.ui.home.rcm_song
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,7 +17,7 @@ class RecommendSongViewModel(
     val songs: LiveData<List<Song>> = _songs
 
 //    init {
-//        loadSongs()
+//        loadSongsRemote()
 //    }
 
     fun setSongs(songs: List<Song>) {
@@ -27,7 +26,7 @@ class RecommendSongViewModel(
 
     private fun loadSongs() {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = songRepository.loadSongs()
+            val result = songRepository.loadSongsRemote()
             if (result is Result.Success)
                 _songs.postValue(result.data.songs)
             else if (result is Result.Error) {

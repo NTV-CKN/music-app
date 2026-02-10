@@ -104,7 +104,7 @@ class AlbumHotFragment : Fragment() {
     }
 
     private fun extractSongsByAlbum(album: Album): List<Song> {
-        val songs = homeViewModel.songs.value
+        val songs = homeViewModel.songsLocal.value
         val result = mutableListOf<Song>()
         songs?.let { songs ->
             for (songId in album.songs) {

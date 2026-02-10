@@ -13,7 +13,8 @@ interface SongDataSource {
         suspend fun update(vararg song: Song)
         suspend fun insert(vararg song: Song)
         suspend fun delete(vararg song: Song)
-        fun getAllSongs(): Flow<List<Song>>
+        suspend fun getAllSongs(): List<Song>
+        fun getAllSongsFlow(): Flow<List<Song>>
         fun getSongsFavorite(): Flow<List<Song>>
         suspend fun updateSongFavorite(id: String, isFavorite: Boolean)
     }

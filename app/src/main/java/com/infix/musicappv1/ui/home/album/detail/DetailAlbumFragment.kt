@@ -76,7 +76,7 @@ class DetailAlbumFragment : BasePlayMusicFragment() {
                 .error(R.drawable.ic_song_24)
                 .into(binding.includeAlbumDetail.imgArtworkAlbumDetail)
         }
-        //songs
+        //songsLocal
         detailAlbumViewModel.songs.observe(viewLifecycleOwner) { songs ->
             adapter.updateSongs(songs)
         }

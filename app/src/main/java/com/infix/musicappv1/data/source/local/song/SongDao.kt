@@ -11,20 +11,30 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SongDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(vararg song: Song)
 
     @Delete
     suspend fun delete(vararg song: Song)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.IGNORE)
     suspend fun update(vararg song: Song)
 
-    @Query("""
+    @Query(
+        """
         SELECT *
         FROM songs
-    """)
-    fun getAllSongs(): Flow<List<Song>>
+    """
+    )
+    fun getAllSongsFlow(): Flow<List<Song>>
+
+    @Query(
+        """
+        SELECT *
+        FROM songs
+    """
+    )
+    suspend fun getAllSongs(): List<Song>
 
     @Query(
         """
@@ -43,4 +53,6 @@ interface SongDao {
         """
     )
     suspend fun updateFavorite(id: String, isFavorite: Boolean)
+
+
 }

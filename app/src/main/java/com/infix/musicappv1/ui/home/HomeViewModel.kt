@@ -1,8 +1,10 @@
 package com.infix.musicappv1.ui.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.song.Song
@@ -10,12 +12,10 @@ import com.infix.musicappv1.data.repository.album.AlbumRepositoryImpl
 import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
 import com.infix.musicappv1.data.source.Result
 import com.infix.musicappv1.data.source.local.album.AlbumLocalDataSource
-import com.infix.musicappv1.data.source.local.song.SongLocalDataSource
 import com.infix.musicappv1.data.source.remote.AlbumRemoteDataSource
-import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
-import com.infix.musicappv1.utils.InjectUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.collections.emptyList
 
 class HomeViewModel(
     private val songRepository: SongRepositoryImpl
@@ -26,8 +26,13 @@ class HomeViewModel(
         AlbumLocalDataSource()
     )
 
-    private val _songs = MutableLiveData<List<Song>>()
-    val songs: LiveData<List<Song>> = _songs
+//    private val _songsRemote = MutableLiveData<List<Song>?>()
+
+    //when _songRemote has data, songsMediator notify for observe to update local db
+//    val songsMediator: LiveData<List<Song>?> = _songsRemote.map { it }
+//
+//    private val _songsLocal = MutableLiveData<List<Song>?>()
+    val songsLocal: LiveData<List<Song>?> = songRepository.getAllSongsFlow().asLiveData()
 
     private val _albums = MutableLiveData<List<Album>>()
     val albums: LiveData<List<Album>> = _albums
@@ -38,14 +43,22 @@ class HomeViewModel(
 
     private fun setupDataTmp() {
         viewModelScope.launch(Dispatchers.IO) {
-            val resultSong = songRepository.loadSongs()
+            //load song db
+            val songsLocal = songRepository.getAllSongs().toMutableList()
+            //load song remote
+            val resultSong = songRepository.loadSongsRemote()
             if (resultSong is Result.Success) {
-                songRepository.insert(*resultSong.data.songs.toTypedArray())
-                _songs.postValue(resultSong.data.songs)
+//                _songsRemote.postValue(resultSong.data.songs)
+                //compare songs between local and remote
+                val songsExtract =
+                    extractSongRemoteNotContainLocal(songsLocal, resultSong.data.songs)
+                if (songsExtract.isNotEmpty()) {
+                    songRepository.insert(*songsExtract.toTypedArray())
+                }
             } else if (resultSong is Result.Error) {
-                _songs.postValue(emptyList())
+//                _songsRemote.postValue(emptyList())
+                Log.e("HomeViewmodel", resultSong.err.message ?: "Unknown err")
             }
-
             val resultAlbum = albumRepository.loadAlbums()
             if (resultAlbum is Result.Success) {
                 _albums.postValue(resultAlbum.data.albums)
@@ -53,5 +66,17 @@ class HomeViewModel(
                 _albums.postValue(emptyList())
             }
         }
+    }
+
+    private fun extractSongRemoteNotContainLocal(
+        local: List<Song>,
+        remote: List<Song>
+    ): List<Song> {
+        val result = mutableListOf<Song>()
+        val localSet = local.toSet()
+        for (tmp in remote)
+            if (!localSet.contains(tmp)) result.add(tmp)
+
+        return result
     }
 }

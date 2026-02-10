@@ -24,7 +24,7 @@ abstract class BasePlayMusicFragment : Fragment() {
     }
 
     protected fun playSong(song: Song, index: Int, namePlaylist: String, songs: List<Song>) {
-        //update songs for current playlist
+        //update songsLocal for current playlist
         playingSongSharedViewModel.updatePlaylistCurrent(songs, namePlaylist)
         //update index of song will be play
         playingSongSharedViewModel.updateIndexToPlay(index)

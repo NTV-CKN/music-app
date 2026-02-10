@@ -4,6 +4,7 @@ import android.util.Log
 import com.infix.musicappv1.data.model.now_playing.MediaItemTransitionWrap
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.recent.SongRecent
+import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.source.local.recent.SongRecentDao
 import com.infix.musicappv1.data.source.local.song.SongDao
 import com.infix.musicappv1.enums.PlaylistEnum
@@ -85,6 +86,10 @@ class PlaybackRepository private constructor(
 
     suspend fun insertSongRecent(songRecent: SongRecent) {
         songRecentDao.insert(songRecent)
+    }
+
+    suspend fun updateSong(song: Song) {
+        songDao.update(song)
     }
 
     suspend fun updateSongFavorite(id: String, isFavorite: Boolean) {
