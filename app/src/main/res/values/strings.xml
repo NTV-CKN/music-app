@@ -46,4 +46,5 @@
     <string name="txt_is_your_favorite_song_args">Is your favorite song: %s</string>
     <string name="txt_category_args">Category: %s</string>
     <string name="txt_publish_year_args">Publish year: %s</string>
+    <string name="txt_now_playing">Now Playing</string>
 </resources>

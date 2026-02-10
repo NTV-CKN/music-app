@@ -2,6 +2,7 @@ package com.infix.musicappv1.ui.playing
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -60,9 +61,20 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         setObserve()
         setupAnimator()
         //setup event
+        setupEvent()
+    }
+
+    private fun setupEvent() {
         binding.includeItemMiniPlayer.btnPausePlayMiniPlayer.setOnClickListener(this)
         binding.includeItemMiniPlayer.btnFavoriteMiniPlayer.setOnClickListener(this)
         binding.includeItemMiniPlayer.btnSkipNextMiniPlayer.setOnClickListener(this)
+        //show now playing
+        binding.root.setOnClickListener {
+            Intent(requireContext(), NowPlayingActivity::class.java).apply {
+
+                startActivity(this)
+            }
+        }
     }
 
     private fun setupAnimator() {

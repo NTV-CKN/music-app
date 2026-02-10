@@ -22,6 +22,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicAppV1">
         <activity
+            android:name=".ui.playing.NowPlayingActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
@@ -32,16 +35,14 @@
         </activity>
 
         <service
-            android:foregroundServiceType="mediaPlayback"
             android:name=".media.PlaybackService"
-            android:exported="true">
+            android:exported="true"
+            android:foregroundServiceType="mediaPlayback">
             <intent-filter>
                 <action android:name="androidx.media3.session.MediaSessionService" />
                 <action android:name="androidx.media3.session.MediaBrowserService" />
-
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>
