@@ -25,8 +25,11 @@ class PlaybackService : MediaSessionService() {
     private lateinit var listener: Player.Listener
     private lateinit var playbackRepository: PlaybackRepository
     private lateinit var serviceScope: CoroutineScope
-    private var jobInsertRecentSong: Job? = null
+
+    //Jobs
     private val supervisorJob = SupervisorJob()
+    private var jobInsertRecentSong: Job? = null
+    private var jobUpdateSong: Job? = null
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession {
         return mediaSession
@@ -106,8 +109,11 @@ class PlaybackService : MediaSessionService() {
                     val playlistCurrent = playbackRepository.currentPlaylist.value
                     playlistCurrent?.let { playlist ->
                         val index = mediaSession.player.currentMediaItemIndex
-                        if (index > -1 && playlist.songs.size > index)
-                            writeRecentSongToDb(playlist.songs[index])
+                        if (index > -1 && playlist.songs.size > index) {
+                            val song = playlist.songs[index]
+                            writeRecentSongToDb(song)
+                            increaseReplayAndCounter(song)
+                        }
                     }
                 }
             }//end onMediaItemTransition
@@ -127,6 +133,20 @@ class PlaybackService : MediaSessionService() {
             delay(4000)
             withContext(Dispatchers.IO) {
                 playbackRepository.insertSongRecent(SongRecent.Builder(song).build())
+            }
+        }
+    }
+
+    private fun increaseReplayAndCounter(song: Song) {
+        jobUpdateSong?.cancel()
+        jobUpdateSong = serviceScope.launch {
+            delay(4000)
+            song.apply {
+                replay++
+                counter++
+            }
+            withContext(Dispatchers.IO) {
+                playbackRepository.updateSong(song)
             }
         }
     }

@@ -6,14 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.infix.musicappv1.R
 import com.infix.musicappv1.data.repository.album.AlbumRepositoryImpl
 import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
 import com.infix.musicappv1.data.source.local.album.AlbumLocalDataSource
-import com.infix.musicappv1.data.source.local.song.SongLocalDataSource
 import com.infix.musicappv1.data.source.remote.AlbumRemoteDataSource
 import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentHomeBinding
@@ -90,6 +87,6 @@ class HomeFragment : Fragment() {
 
     private fun setupInitDataTmp() {
         homeViewModel.albums.observe(viewLifecycleOwner) { albums -> albumViewModel.setAlbums(albums) }
-        homeViewModel.songs.observe(viewLifecycleOwner) { songs -> songViewModel.setSongs(songs) }
+        homeViewModel.songsLocal.observe(viewLifecycleOwner) { songs -> songs?.let { songViewModel.setSongs(it) } }
     }
 }

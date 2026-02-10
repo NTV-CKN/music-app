@@ -1,8 +1,6 @@
 package com.infix.musicappv1.ui.home.rcm_song
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
-import com.infix.musicappv1.data.source.local.song.SongLocalDataSource
 import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentRecommendSongBinding
 import com.infix.musicappv1.enums.PlaylistEnum
@@ -115,7 +112,7 @@ class RecommendSongFragment : BasePlayMusicFragment() {
     }
 
     private fun navigateToMoreRcmSong() {
-        moreRcmSongViewModel.setSongs(homeViewModel.songs.value ?: emptyList())
+        moreRcmSongViewModel.setSongs(homeViewModel.songsLocal.value ?: emptyList())
         findNavController().navigate(R.id.action_navigation_home_to_navigation_more_rcm_song)
     }
 }
