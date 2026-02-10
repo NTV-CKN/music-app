@@ -45,12 +45,18 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
     }
 
     fun updatePlaylistCurrent(songs: List<Song>, namePlaylist: String) {
-        val playlist = playbackRepository.getPlaylists()[namePlaylist]
-        playlist?.let {
-            it.updateSongs(songs)
-            playbackRepository.getPlaylists()[namePlaylist] = it
-            playbackRepository.updatePlaylist(it)
+        var playlist = playbackRepository.getPlaylists()[namePlaylist]
+        if (playlist == null) {
+            val newPlaylist = Playlist(namePlaylist = namePlaylist)
+            newPlaylist.updateSongs(songs)
+            playbackRepository.getPlaylists()[namePlaylist] = newPlaylist
+            playlist = newPlaylist
         }
+
+        playlist.updateSongs(songs)
+        playbackRepository.getPlaylists()[namePlaylist] = playlist
+        playbackRepository.updatePlaylist(playlist)
+
     }
 
     fun updateIndexToPlay(index: Int) {

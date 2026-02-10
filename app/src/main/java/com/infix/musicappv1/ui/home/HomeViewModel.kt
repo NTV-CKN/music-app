@@ -61,6 +61,8 @@ class HomeViewModel(
                 Log.e("HomeViewmodel", resultSong.err.message ?: "Unknown err")
             }
             _songsLocal.postValue(songsLocal)
+
+            //album local
             val resultAlbum = albumRepository.loadAlbums()
             if (resultAlbum is Result.Success) {
                 _albums.postValue(resultAlbum.data.albums)
