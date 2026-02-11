@@ -8,18 +8,24 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.data.repository.album.AlbumRepositoryImpl
 import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
 import com.infix.musicappv1.data.source.local.album.AlbumLocalDataSource
+import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.data.source.remote.AlbumRemoteDataSource
 import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentHomeBinding
 import com.infix.musicappv1.ui.home.album.AlbumHotViewModel
 import com.infix.musicappv1.ui.home.rcm_song.RecommendSongViewModel
+import com.infix.musicappv1.ui.viewmodels.Factory
+import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.InjectUtils
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
+    private var isSongsReady = false
+    private var isAlbumReady = false
     private val homeViewModel: HomeViewModel by activityViewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -34,6 +40,12 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
+    private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels {
+        Factory(InjectUtils.getPlaybackRepository(requireContext()))
+    }
+
+
     private val albumViewModel: AlbumHotViewModel by activityViewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -68,7 +80,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentHomeBinding.inflate(
             inflater,
             container,
@@ -86,7 +98,19 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupInitDataTmp() {
-        homeViewModel.albums.observe(viewLifecycleOwner) { albums -> albumViewModel.setAlbums(albums) }
-        homeViewModel.songsLocal.observe(viewLifecycleOwner) { songs -> songs?.let { songViewModel.setSongs(it) } }
+        //album data
+        homeViewModel.albums.observe(viewLifecycleOwner) { albums ->
+            albumViewModel.setAlbums(albums)
+            isAlbumReady = true
+            playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady)
+        }
+        //song local data
+        homeViewModel.songsLocal.observe(viewLifecycleOwner) { songs ->
+            songs?.let {
+                songViewModel.setSongs(it)
+                isSongsReady = true
+                playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady)
+            }
+        }
     }
 }

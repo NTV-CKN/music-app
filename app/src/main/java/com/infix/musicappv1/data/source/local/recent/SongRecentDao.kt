@@ -22,8 +22,8 @@ interface SongRecentDao {
     @Query(
         """
         DELETE FROM song_recents
-        WHERE id NOT IN(
-            SELECT id
+        WHERE song_id NOT IN(
+            SELECT song_id
             FROM song_recents
             ORDER BY play_at DESC
             LIMIT :keepLimit

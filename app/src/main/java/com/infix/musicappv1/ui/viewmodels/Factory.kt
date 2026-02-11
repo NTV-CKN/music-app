@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.ui.playing.MiniPlayerViewModel
+import com.infix.musicappv1.ui.playing.NowPlayingViewModel
 
 class Factory(private val playbackRepository: PlaybackRepository) :
     ViewModelProvider.Factory {
@@ -12,6 +13,8 @@ class Factory(private val playbackRepository: PlaybackRepository) :
             return PlayingSongSharedViewModel(playbackRepository) as T
         else if (modelClass.isAssignableFrom(MiniPlayerViewModel::class.java))
             return MiniPlayerViewModel(playbackRepository) as T
+        else if(modelClass.isAssignableFrom(NowPlayingViewModel::class.java))
+            return NowPlayingViewModel(playbackRepository) as T
         throw IllegalArgumentException("Model class is not legal")
     }
 }

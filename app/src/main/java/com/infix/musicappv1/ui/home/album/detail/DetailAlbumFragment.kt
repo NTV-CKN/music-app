@@ -50,7 +50,8 @@ class DetailAlbumFragment : BasePlayMusicFragment() {
                     playSong(
                         song,
                         pos,
-                        PlaylistEnum.DETAIL_ALBUM.value,
+//                        PlaylistEnum.DETAIL_ALBUM.value,
+                        detailAlbumViewModel.album.value?.name?:"",
                         detailAlbumViewModel.songs.value ?: emptyList()
                     )
                 }

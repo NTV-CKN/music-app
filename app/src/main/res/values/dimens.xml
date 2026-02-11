@@ -39,4 +39,18 @@
     <dimen name="height_27">27dp</dimen>
     <dimen name="width_30">30dp</dimen>
     <dimen name="height_30">30dp</dimen>
+    <dimen name="width_350dp">350dp</dimen>
+    <dimen name="height_350dp">350dp</dimen>
+    <dimen name="margin_top_24">24dp</dimen>
+    <dimen name="margin_top_36">36dp</dimen>
+    <dimen name="margin_start_12">12dp</dimen>
+    <dimen name="margin_end_12">12dp</dimen>
+    <dimen name="width_16">16dp</dimen>
+    <dimen name="height_16">16dp</dimen>
+    <dimen name="height_70">70dp</dimen>
+    <dimen name="width_70">70dp</dimen>
+    <dimen name="margin_top_30">30dp</dimen>
+    <dimen name="margin_top_18">18dp</dimen>
+    <dimen name="width_50">50dp</dimen>
+    <dimen name="height_50">50dp</dimen>
 </resources>

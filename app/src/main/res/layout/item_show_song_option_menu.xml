@@ -70,7 +70,7 @@
         android:layout_width="@dimen/button_width_48"
         android:layout_height="@dimen/button_height_48"
         android:background="?attr/selectableItemBackground"
-        android:src="@drawable/ic_share_24px"
+        android:src="@drawable/ic_share"
         app:layout_constraintBottom_toBottomOf="@id/guideline_center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/guideline_center"

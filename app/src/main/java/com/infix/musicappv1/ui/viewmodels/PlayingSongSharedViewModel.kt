@@ -13,11 +13,11 @@ import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PlayingSongSharedViewModel(private val playbackRepository: PlaybackRepository) : ViewModel() {
     val currentPlaylist: LiveData<Playlist?> = playbackRepository.currentPlaylist.asLiveData()
-    val indexToPlay: LiveData<Int?> =
-        playbackRepository.indexToPlay.asLiveData().distinctUntilChanged()
+    val indexToPlay: LiveData<PlaybackRepository.IndexToPlayDate?> = playbackRepository.indexToPlay.asLiveData()
 
     val playingSongLivedata: LiveData<PlayingSong?> =
         playbackRepository.mediaItemTransition.asLiveData().map { mediaWrap ->
@@ -39,18 +39,19 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
     private val _isDataReady = MutableLiveData(false)
     val isDataReady: LiveData<Boolean> = _isDataReady
 
-    init {
-//        val songCurrent = currentPlaylist.value?.songs?.getOrNull(indexToPlay.value ?: -1)
-//        _isRestoreSession.value = songCurrent == null
-    }
-
     fun updatePlaylistCurrent(songs: List<Song>, namePlaylist: String) {
-        val playlist = playbackRepository.getPlaylists()[namePlaylist]
-        playlist?.let {
-            it.updateSongs(songs)
-            playbackRepository.getPlaylists()[namePlaylist] = it
-            playbackRepository.updatePlaylist(it)
+        var playlist = playbackRepository.getPlaylists()[namePlaylist]
+        if (playlist == null) {
+            val newPlaylist = Playlist(namePlaylist = namePlaylist)
+            newPlaylist.updateSongs(songs)
+            playbackRepository.getPlaylists()[namePlaylist] = newPlaylist
+            playlist = newPlaylist
         }
+
+        playlist.updateSongs(songs)
+        playbackRepository.getPlaylists()[namePlaylist] = playlist
+        playbackRepository.updatePlaylist(playlist)
+
     }
 
     fun updateIndexToPlay(index: Int) {
@@ -63,12 +64,33 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
         }
     }
 
+    fun setIsDataReady(boolean: Boolean) {
+        _isDataReady.value = boolean
+    }
+
     //We only restore when value of currentPlaylist and indexToPlay is NULL
     //Notice: Now I'm still not store playlist, so this func not stable yet
-    fun restorePrevSession(songId: String?, namePlaylist: String?) {
+    fun restorePrevSession(songId: String?, playlistId: Int?) {
         //check value of stateflow is null
-        //retrieve data of name playlist under room db, after select get songs
-        //set current playlist and index to play
+        if (currentPlaylist.value == null && indexToPlay.value == null && playlistId != null && songId != null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                //retrieve data of name playlist under room db, after select get songs
+                val playlistWithSongs = playbackRepository.getPlaylistWithSongs(playlistId)
+                //set current playlist and index to play
+                if (playlistWithSongs != null) {
+                    val playlistCurrent = playlistWithSongs.playlist
+                    val songs = playlistWithSongs.songs
+                    playlistCurrent.updateSongs(songs)
+                    val indexToPlay = songs.indexOfFirst { song -> song.id == songId }
+
+                    withContext(Dispatchers.Main) {
+                        playbackRepository.updatePlaylist(playlistCurrent)
+                        playbackRepository.updateIndexToPlay(indexToPlay)
+                    }
+                }
+            }
+
+        }
     }
 
     fun getMediaItemIndexCurrent() = playbackRepository.getMediaItemIndexCurrent()

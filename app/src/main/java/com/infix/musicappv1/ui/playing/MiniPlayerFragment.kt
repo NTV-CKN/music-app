@@ -2,6 +2,7 @@ package com.infix.musicappv1.ui.playing
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,36 +12,28 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
+import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentMiniPlayerBinding
 import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlaybackViewModel
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
+import com.infix.musicappv1.utils.InjectUtils
 
 class MiniPlayerFragment : Fragment(), View.OnClickListener {
+    private var trackOldPlaylist: Playlist? = Playlist(idPlaylist = -1)
     private lateinit var binding: FragmentMiniPlayerBinding
     private lateinit var animatorBtnPressed: Animator
     private lateinit var animatorRotatingDisk: Animator
-
     private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels {
         val db = MusicDatabase.getInstance(requireContext().applicationContext)
-        Factory(
-            PlaybackRepository.getInstance(
-                db.songRecentDao(),
-                db.songDao()
-            )
-        )
+        Factory(InjectUtils.getPlaybackRepository(requireContext()))
     }
     private val playbackViewModel: PlaybackViewModel by activityViewModels()
+
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels {
-        val db = MusicDatabase.getInstance(requireContext().applicationContext)
-        Factory(
-            PlaybackRepository.getInstance(
-                db.songRecentDao(),
-                db.songDao()
-            )
-        )
+        Factory(InjectUtils.getPlaybackRepository(requireContext()))
     }
 
     override fun onCreateView(
@@ -60,9 +53,20 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         setObserve()
         setupAnimator()
         //setup event
+        setupEvent()
+    }
+
+    private fun setupEvent() {
         binding.includeItemMiniPlayer.btnPausePlayMiniPlayer.setOnClickListener(this)
         binding.includeItemMiniPlayer.btnFavoriteMiniPlayer.setOnClickListener(this)
         binding.includeItemMiniPlayer.btnSkipNextMiniPlayer.setOnClickListener(this)
+        //show now playing
+        binding.root.setOnClickListener {
+            Intent(requireContext(), NowPlayingActivity::class.java).apply {
+
+                startActivity(this)
+            }
+        }
     }
 
     private fun setupAnimator() {
@@ -76,9 +80,9 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
 
     private fun setObserve() {
         //mediacontroller
-        playbackViewModel.mediaController.observe(viewLifecycleOwner) {
-            //   it?.let { contractEventPlayer(it) }
-        }
+//        playbackViewModel.mediaController.observe(viewLifecycleOwner) {
+//            //   it?.let { contractEventPlayer(it) }
+//        }
 
         //playing song
         playingSongSharedViewModel.playingSongLivedata.observe(viewLifecycleOwner) { playingSong ->
@@ -91,7 +95,9 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
                     .load(it.image)
                     .error(R.drawable.ic_song_24)
                     .into(binding.includeItemMiniPlayer.imgMiniPlayer)
-            }
+
+                showMiniPlayer(true)
+            } ?: showMiniPlayer(false)
         }
 
         //playlist current
@@ -109,12 +115,15 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         }
 
         //current index to play
-        playingSongSharedViewModel.indexToPlay.observe(viewLifecycleOwner) {
-            it?.let {
+        playingSongSharedViewModel.indexToPlay.observe(viewLifecycleOwner) { indexToPlay ->
+            indexToPlay?.indexToPlay?.let {
                 val controller = playbackViewModel.mediaController.value ?: return@observe
                 val indexMediaCur = playingSongSharedViewModel.getMediaItemIndexCurrent()
-                if (it == indexMediaCur) return@observe
-//                Log.d("SVU", "MEDIA ${indexMediaCur} IT ${it}")
+                // if old playlist same current playlist and index both same -> ignore
+                if (it == indexMediaCur && trackOldPlaylist == playingSongSharedViewModel.getPlaylistTrackCurrent())
+                    return@observe
+                trackOldPlaylist = playingSongSharedViewModel.getPlaylistTrackCurrent()
+                Log.d("SVU", "MEDIA ${indexMediaCur} IT ${it}")
                 if (it > -1 && it < controller.mediaItemCount) {
                     controller.seekTo(it, 0)
                     controller.prepare()
@@ -181,6 +190,10 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
             song.favorite = isFavorite
             playingSongSharedViewModel.updateSongFavorite(song.id, isFavorite)
         }
+    }
+
+    private fun showMiniPlayer(bool: Boolean) {
+        binding.root.visibility = if (bool) View.VISIBLE else View.GONE
     }
 
     override fun onClick(v: View?) {

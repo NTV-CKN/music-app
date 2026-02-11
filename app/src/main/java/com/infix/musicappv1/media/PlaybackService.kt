@@ -1,6 +1,9 @@
 package com.infix.musicappv1.media
 
+import android.app.PendingIntent
+import android.content.Intent
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -12,6 +15,10 @@ import com.infix.musicappv1.data.model.recent.SongRecent
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
+import com.infix.musicappv1.ui.playing.NowPlayingActivity
+import com.infix.musicappv1.ui.viewmodels.Factory
+import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
+import com.infix.musicappv1.utils.InjectUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -19,12 +26,14 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.getValue
 
 class PlaybackService : MediaSessionService() {
     private lateinit var mediaSession: MediaSession
     private lateinit var listener: Player.Listener
     private lateinit var playbackRepository: PlaybackRepository
     private lateinit var serviceScope: CoroutineScope
+    private lateinit var openNowPlayingPI: PendingIntent
 
     //Jobs
     private val supervisorJob = SupervisorJob()
@@ -37,11 +46,7 @@ class PlaybackService : MediaSessionService() {
 
     override fun onCreate() {
         super.onCreate()
-        val db = MusicDatabase.getInstance(applicationContext)
-        playbackRepository = PlaybackRepository.getInstance(
-            db.songRecentDao(),
-            db.songDao()
-        )
+        playbackRepository = InjectUtils.getPlaybackRepository(this)
         initScope()
         initSessionAndPlayer()
         addListener()
@@ -64,7 +69,17 @@ class PlaybackService : MediaSessionService() {
         val player = ExoPlayer.Builder(applicationContext)
             .setAudioAttributes(AudioAttributes.DEFAULT, true)
             .build()
+
+        val intent = Intent(applicationContext, NowPlayingActivity::class.java)
+        openNowPlayingPI = PendingIntent.getActivity(
+            applicationContext,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
         val sessionMediaBuilder = MediaSession.Builder(applicationContext, player)
+        sessionMediaBuilder.setSessionActivity(openNowPlayingPI)
         mediaSession = sessionMediaBuilder.build()
     }
 
@@ -97,14 +112,16 @@ class PlaybackService : MediaSessionService() {
                     reason == Player.MEDIA_ITEM_TRANSITION_REASON_PLAYLIST_CHANGED
                 //when click song, callback will be call two time
                 val isReadyToPlay =
-                    playbackRepository.getIndexToPlay() == mediaSession.player.currentMediaItemIndex
+                    playbackRepository.getIndexToPlay()?.indexToPlay == mediaSession.player.currentMediaItemIndex
                 if (isReadyToPlay || !isPlaylistChanged) {
-                    playbackRepository.updateMediaTransition(
-                        MediaItemTransitionWrap(
-                            mediaItem,
-                            mediaSession.player.currentMediaItemIndex
+                    serviceScope.launch {
+                        playbackRepository.updateMediaTransition(
+                            MediaItemTransitionWrap(
+                                mediaItem,
+                                mediaSession.player.currentMediaItemIndex
+                            )
                         )
-                    )
+                    }
 
                     val playlistCurrent = playbackRepository.currentPlaylist.value
                     playlistCurrent?.let { playlist ->

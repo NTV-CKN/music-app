@@ -1,5 +1,6 @@
 package com.infix.musicappv1.ui
 
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.infix.musicappv1.data.model.song.Song
@@ -9,18 +10,14 @@ import com.infix.musicappv1.ui.dialog.song_option_menu.SongOptionMenuDialog
 import com.infix.musicappv1.ui.dialog.song_option_menu.SongOptionMenuViewModel
 import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
+import com.infix.musicappv1.utils.InjectUtils
 import kotlin.getValue
 
 abstract class BasePlayMusicFragment : Fragment() {
     private val songOptionMenuViewModel: SongOptionMenuViewModel by activityViewModels()
+
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels {
-        val db = MusicDatabase.getInstance(requireContext().applicationContext)
-        Factory(
-            PlaybackRepository.getInstance(
-                db.songRecentDao(),
-                db.songDao()
-            )
-        )
+        Factory(InjectUtils.getPlaybackRepository(requireContext()))
     }
 
     protected fun playSong(song: Song, index: Int, namePlaylist: String, songs: List<Song>) {
