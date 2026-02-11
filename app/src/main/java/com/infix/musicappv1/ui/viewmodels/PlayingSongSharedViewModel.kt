@@ -17,8 +17,7 @@ import kotlinx.coroutines.withContext
 
 class PlayingSongSharedViewModel(private val playbackRepository: PlaybackRepository) : ViewModel() {
     val currentPlaylist: LiveData<Playlist?> = playbackRepository.currentPlaylist.asLiveData()
-    val indexToPlay: LiveData<Int?> =
-        playbackRepository.indexToPlay.asLiveData().distinctUntilChanged()
+    val indexToPlay: LiveData<PlaybackRepository.IndexToPlayDate?> = playbackRepository.indexToPlay.asLiveData()
 
     val playingSongLivedata: LiveData<PlayingSong?> =
         playbackRepository.mediaItemTransition.asLiveData().map { mediaWrap ->
@@ -82,7 +81,7 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
                     val playlistCurrent = playlistWithSongs.playlist
                     val songs = playlistWithSongs.songs
                     playlistCurrent.updateSongs(songs)
-                    val indexToPlay = songs.indexOfFirst{song -> song.id == songId}
+                    val indexToPlay = songs.indexOfFirst { song -> song.id == songId }
 
                     withContext(Dispatchers.Main) {
                         playbackRepository.updatePlaylist(playlistCurrent)

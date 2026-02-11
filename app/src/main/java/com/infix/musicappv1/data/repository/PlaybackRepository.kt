@@ -1,6 +1,5 @@
 package com.infix.musicappv1.data.repository
 
-import android.util.Log
 import androidx.room.withTransaction
 import com.infix.musicappv1.data.model.now_playing.MediaItemTransitionWrap
 import com.infix.musicappv1.data.model.playlist.Playlist
@@ -26,12 +25,12 @@ class PlaybackRepository private constructor(
     val mediaItemTransition: StateFlow<MediaItemTransitionWrap?> = _mediaItemTransition
 
     //observe current playlist when song clicked at any playlist
-    private val _currentPlaylist: MutableStateFlow<Playlist?> = MutableStateFlow<Playlist?>(null)
+    private val _currentPlaylist: MutableStateFlow<Playlist?> = MutableStateFlow(null)
     val currentPlaylist: StateFlow<Playlist?> = _currentPlaylist
 
     //observe index to play when PlayerMedia recall mediaItemTransition
-    private val _indexToPlay = MutableStateFlow<Int?>(null)
-    val indexToPlay: StateFlow<Int?> = _indexToPlay
+    private val _indexToPlay = MutableStateFlow<IndexToPlayDate?>(null)
+    val indexToPlay: StateFlow<IndexToPlayDate?> = _indexToPlay
 
     //observe status Player isplaying
     private val _isPlaying = MutableStateFlow(false)
@@ -58,7 +57,6 @@ class PlaybackRepository private constructor(
     ) {
         _mediaItemTransition.value = mediaItemTransitionWrap
         mediaItemTransitionWrap?.index?.let {
-            mediaItemCurrentIndex = it
             //when user not in app and comeback, this code help miniplayer update correct song on notification media
             updateIndexToPlay(it)
             updateIsFavorite()
@@ -74,7 +72,8 @@ class PlaybackRepository private constructor(
     fun getIndexToPlay() = indexToPlay.value
 
     fun updateIndexToPlay(index: Int) {
-        _indexToPlay.value = index
+        _indexToPlay.value = IndexToPlayDate(index)
+        mediaItemCurrentIndex = index
     }
 
     fun updatePlaylist(playlist: Playlist) {
@@ -106,7 +105,7 @@ class PlaybackRepository private constructor(
         //if current song playing is favorite, we need update UI for that
         //else we only write favorite for song id and non update UI
         _indexToPlay.value?.let { indexToPlay ->
-            val currentSong = playlistTrackCurrent?.songs?.getOrNull(indexToPlay)
+            val currentSong = playlistTrackCurrent?.songs?.getOrNull(indexToPlay.indexToPlay ?: -1)
             if (currentSong != null && currentSong.id == id)
                 _isFavorite.update { isFavorite }
 //            Log.d("SVU", isFavorite.toString())
@@ -128,11 +127,16 @@ class PlaybackRepository private constructor(
     }
 
     private fun updateIsFavorite() {
-        val song = playlistTrackCurrent?.songs?.getOrNull(_indexToPlay.value ?: -1)
+        val song = playlistTrackCurrent?.songs?.getOrNull(_indexToPlay.value?.indexToPlay ?: -1)
         song?.let {
             _isFavorite.value = song.favorite
         }
     }
+
+    data class IndexToPlayDate(
+        val indexToPlay: Int?,
+        val eventId: Long = System.nanoTime()
+    )
 
     companion object {
         @Volatile

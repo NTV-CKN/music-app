@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
+import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentMiniPlayerBinding
@@ -21,6 +22,7 @@ import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.InjectUtils
 
 class MiniPlayerFragment : Fragment(), View.OnClickListener {
+    private var trackOldPlaylist: Playlist? = Playlist(idPlaylist = -1)
     private lateinit var binding: FragmentMiniPlayerBinding
     private lateinit var animatorBtnPressed: Animator
     private lateinit var animatorRotatingDisk: Animator
@@ -113,12 +115,15 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         }
 
         //current index to play
-        playingSongSharedViewModel.indexToPlay.observe(viewLifecycleOwner) {
-            it?.let {
+        playingSongSharedViewModel.indexToPlay.observe(viewLifecycleOwner) { indexToPlay ->
+            indexToPlay?.indexToPlay?.let {
                 val controller = playbackViewModel.mediaController.value ?: return@observe
                 val indexMediaCur = playingSongSharedViewModel.getMediaItemIndexCurrent()
-                if (it == indexMediaCur) return@observe
-//                Log.d("SVU", "MEDIA ${indexMediaCur} IT ${it}")
+                // if old playlist same current playlist and index both same -> ignore
+                if (it == indexMediaCur && trackOldPlaylist == playingSongSharedViewModel.getPlaylistTrackCurrent())
+                    return@observe
+                trackOldPlaylist = playingSongSharedViewModel.getPlaylistTrackCurrent()
+                Log.d("SVU", "MEDIA ${indexMediaCur} IT ${it}")
                 if (it > -1 && it < controller.mediaItemCount) {
                     controller.seekTo(it, 0)
                     controller.prepare()

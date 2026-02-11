@@ -23,7 +23,8 @@
         android:theme="@style/Theme.MusicAppV1">
         <activity
             android:name=".ui.playing.NowPlayingActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="true">

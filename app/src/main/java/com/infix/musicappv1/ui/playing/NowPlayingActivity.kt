@@ -64,13 +64,15 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
             it?.let { showInfoSong(it.song) }
         }
         //is playing
-        nowPlayingViewModel.isPlaying.observe(this) {isPlaying->
+        nowPlayingViewModel.isPlaying.observe(this) { isPlaying ->
             var icPauseNext: Int
-            if(isPlaying) {
+            if (isPlaying) {
                 icPauseNext = R.drawable.ic_pause_circle_48px
-                animatorRotatingDisk.start()
+                if (!animatorRotatingDisk.isRunning) animatorRotatingDisk.start()
+                else if (animatorRotatingDisk.isPaused) animatorRotatingDisk.resume()
             } else {
                 icPauseNext = R.drawable.ic_play_circle_48px
+                animatorRotatingDisk.pause()
             }
 
             binding.btnPausePlayNowPlaying.setImageResource(icPauseNext)
@@ -78,11 +80,11 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
         //is favorite
         nowPlayingViewModel.isFavorite.observe(this) {
             val icFavorite =
-            if(it) {
-                 R.drawable.ic_favorite_on
-            }else {
-                R.drawable.ic_favorite_off
-            }
+                if (it) {
+                    R.drawable.ic_favorite_on
+                } else {
+                    R.drawable.ic_favorite_off
+                }
             binding.btnAddFavoriteNowPlaying.setImageResource(icFavorite)
         }
     }
@@ -100,7 +102,17 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
     }
 
     private fun setupEvent() {
+        //back press toolbar
         binding.toolbarNowPlaying.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        //btn play
+        binding.btnPausePlayNowPlaying.setOnClickListener(this)
+        binding.btnSkipNextNowPlaying.setOnClickListener(this)
+        binding.btnSkipPrevNowPlaying.setOnClickListener(this)
+        binding.btnShuffleNowPlaying.setOnClickListener(this)
+        binding.btnRepeatNowPlaying.setOnClickListener(this)
+        binding.btnShareNowPlaying.setOnClickListener(this)
+        binding.btnAddFavoriteNowPlaying.setOnClickListener(this)
+        binding.btnMoreOptionNowPlaying.setOnClickListener(this)
     }
 
     private fun showInfoSong(song: Song?) {
@@ -121,7 +133,27 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
     }
 
     override fun onClick(v: View?) {
+        animatorBtnPressed.setTarget(v)
+        animatorBtnPressed.start()
+        when (v?.id) {
+            R.id.btn_pause_play_now_playing -> playPauseSong()
+        }
+    }
 
+    private fun playPauseSong() {
+        val isPlaying = nowPlayingViewModel.isPlaying.value ?: return
+        val controller = playbackViewModel.mediaController.value ?: return
+        var icPauseNext: Int
+        if (isPlaying) {
+            icPauseNext = R.drawable.ic_play_circle_48px
+            controller.pause()
+        } else {
+            icPauseNext = R.drawable.ic_pause_circle_48px
+            controller.prepare()
+            controller.play()
+        }
+
+        binding.btnPausePlayNowPlaying.setImageResource(icPauseNext)
     }
 }
 
