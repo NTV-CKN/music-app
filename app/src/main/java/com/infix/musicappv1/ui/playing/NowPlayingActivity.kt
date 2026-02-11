@@ -4,11 +4,14 @@ import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.os.Bundle
 import android.view.View
+import android.widget.SeekBar
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.C
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import com.bumptech.glide.Glide
@@ -19,9 +22,17 @@ import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.ActivityNowPlayingBinding
 import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlaybackViewModel
+import com.infix.musicappv1.utils.FormatTimeUtils
 import com.infix.musicappv1.utils.InjectUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Listener {
+    private var seekbarJob: Job? = null
     private lateinit var binding: ActivityNowPlayingBinding
     private var mediaController: MediaController? = null
     private val playbackViewModel: PlaybackViewModel by viewModels()
@@ -47,6 +58,28 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
         setupMediaController()
         setupEvent()
         setupObserver()
+        setupSeekbar()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaController?.removeListener(this)
+        seekbarJob?.cancel()
+    }
+
+    private fun setupSeekbar() {
+        seekbarJob?.cancel()
+        seekbarJob = lifecycleScope.launch(Dispatchers.Main) {
+            while (isActive) {
+                mediaController?.let { controller ->
+                    val currentDuration = controller.currentPosition
+                    val labelCurrentDuration = FormatTimeUtils.getMinuteAndSecond(currentDuration)
+                    binding.seekbarNowPlaying.progress = currentDuration.toInt()
+                    binding.tvLabelTimeCurrent.text = labelCurrentDuration
+                }
+                delay(1000)
+            }
+        }
     }
 
     private fun setupAnimator() {
@@ -61,15 +94,19 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
     private fun setupObserver() {
         //playing song
         nowPlayingViewModel.playingSongLivedata.observe(this) {
-            it?.let { showInfoSong(it.song) }
+            it?.let {
+                binding.seekbarNowPlaying.progress = 0
+                setMaxDurationForSeekbar()
+                showInfoSong(it.song)
+                animatorRotatingDisk.start()
+            }
         }
         //is playing
         nowPlayingViewModel.isPlaying.observe(this) { isPlaying ->
             var icPauseNext: Int
             if (isPlaying) {
                 icPauseNext = R.drawable.ic_pause_circle_48px
-                if (!animatorRotatingDisk.isRunning) animatorRotatingDisk.start()
-                else if (animatorRotatingDisk.isPaused) animatorRotatingDisk.resume()
+                if (animatorRotatingDisk.isPaused) animatorRotatingDisk.resume()
             } else {
                 icPauseNext = R.drawable.ic_play_circle_48px
                 animatorRotatingDisk.pause()
@@ -87,11 +124,6 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
                 }
             binding.btnAddFavoriteNowPlaying.setImageResource(icFavorite)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mediaController?.removeListener(this)
     }
 
     private fun setupMediaController() {
@@ -113,6 +145,27 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
         binding.btnShareNowPlaying.setOnClickListener(this)
         binding.btnAddFavoriteNowPlaying.setOnClickListener(this)
         binding.btnMoreOptionNowPlaying.setOnClickListener(this)
+        binding.seekbarNowPlaying.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(
+                seekBar: SeekBar?,
+                progress: Int,
+                fromUser: Boolean
+            ) {
+                if (fromUser) {
+                    mediaController?.let { controller ->
+                        controller.seekTo(progress.toLong())
+                        val fromDuration = FormatTimeUtils.getMinuteAndSecond(progress.toLong())
+                        binding.tvLabelTimeCurrent.text = fromDuration
+                    }
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+
+        })
     }
 
     private fun showInfoSong(song: Song?) {
@@ -130,6 +183,16 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
 
     private fun addListenerMediaController() {
 
+    }
+
+    private fun setMaxDurationForSeekbar() {
+        val controller = playbackViewModel.mediaController.value ?: return
+        val duration = controller.duration
+        if (duration != C.TIME_UNSET) {
+            val totalDuration = FormatTimeUtils.getMinuteAndSecond(duration)
+            binding.seekbarNowPlaying.max = duration.toInt()
+            binding.tvLabelTotalTime.text = totalDuration
+        }
     }
 
     override fun onClick(v: View?) {

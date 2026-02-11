@@ -92,6 +92,7 @@
         app:layout_constraintStart_toStartOf="@+id/img_art_song_now_playing"
         app:layout_constraintTop_toTopOf="@+id/tv_title_song_now_playing"
         app:srcCompat="@drawable/ic_share"
+        app:tint="@color/purple_300"
         tools:ignore="ContentDescription,TouchTargetSizeCheck,SpeakableTextPresentCheck,ImageContrastCheck" />
 
     <ImageButton
@@ -104,6 +105,7 @@
         app:layout_constraintEnd_toEndOf="@+id/img_art_song_now_playing"
         app:layout_constraintTop_toTopOf="@+id/tv_title_song_now_playing"
         app:srcCompat="@drawable/ic_favorite_off"
+        app:tint="@color/purple_300"
         tools:ignore="ContentDescription,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
     <TextView
@@ -140,10 +142,11 @@
     <SeekBar
         android:id="@+id/seekbar_now_playing"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top_36"
+        android:layout_height="@dimen/height_30"
+        android:layout_marginTop="@dimen/margin_top_24"
+        android:background="?attr/selectableItemBackground"
         android:min="0"
-        android:progressTint="@color/purple_300"
+        android:progressTint="@color/purple_200"
         android:thumb="@drawable/thumb"
         android:thumbOffset="0dp"
         app:layout_constraintEnd_toEndOf="@+id/btn_add_favorite_now_playing"
@@ -191,6 +194,7 @@
         app:layout_constraintEnd_toStartOf="@+id/btn_pause_play_now_playing"
         app:layout_constraintTop_toTopOf="@+id/btn_pause_play_now_playing"
         app:srcCompat="@drawable/ic_skip_prev"
+        app:tint="@color/purple_300"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <ImageButton
@@ -207,6 +211,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_label_total_time"
         app:layout_constraintVertical_bias="0.13"
         app:srcCompat="@drawable/ic_pause_circle_48px"
+        app:tint="@color/purple_300"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
     <ImageButton
@@ -220,6 +225,7 @@
         app:layout_constraintStart_toEndOf="@+id/btn_pause_play_now_playing"
         app:layout_constraintTop_toTopOf="@+id/btn_pause_play_now_playing"
         app:srcCompat="@drawable/ic_skip_next_48px"
+        app:tint="@color/purple_300"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <ImageButton
