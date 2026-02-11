@@ -22,7 +22,6 @@ import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.InjectUtils
 
 class MiniPlayerFragment : Fragment(), View.OnClickListener {
-    private var trackOldPlaylist: Playlist? = Playlist(idPlaylist = -1)
     private lateinit var binding: FragmentMiniPlayerBinding
     private lateinit var animatorBtnPressed: Animator
     private lateinit var animatorRotatingDisk: Animator
@@ -79,11 +78,6 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setObserve() {
-        //mediacontroller
-//        playbackViewModel.mediaController.observe(viewLifecycleOwner) {
-//            //   it?.let { contractEventPlayer(it) }
-//        }
-
         //playing song
         playingSongSharedViewModel.playingSongLivedata.observe(viewLifecycleOwner) { playingSong ->
             val song = playingSong?.song
@@ -95,7 +89,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
                     .load(it.image)
                     .error(R.drawable.ic_song_24)
                     .into(binding.includeItemMiniPlayer.imgMiniPlayer)
-
+                animatorRotatingDisk.end()
                 showMiniPlayer(true)
             } ?: showMiniPlayer(false)
         }
@@ -206,5 +200,9 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
             R.id.btn_skip_next_mini_player -> skipNextMusic()
             else -> {}
         }
+    }
+
+    companion object {
+        var trackOldPlaylist: Playlist? = Playlist(idPlaylist = -1)
     }
 }

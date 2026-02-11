@@ -11,6 +11,7 @@ import com.infix.musicappv1.data.model.now_playing.PlayingSong
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PlaybackRepository
+import com.infix.musicappv1.ui.playing.MiniPlayerFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -84,6 +85,7 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
                     val indexToPlay = songs.indexOfFirst { song -> song.id == songId }
 
                     withContext(Dispatchers.Main) {
+//                        MiniPlayerFragment.trackOldPlaylist = playlistCurrent
                         playbackRepository.updatePlaylist(playlistCurrent)
                         playbackRepository.updateIndexToPlay(indexToPlay)
                     }
