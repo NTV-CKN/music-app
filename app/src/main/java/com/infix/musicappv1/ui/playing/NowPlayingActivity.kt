@@ -2,7 +2,11 @@ package com.infix.musicappv1.ui.playing
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
+import android.animation.ObjectAnimator
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import androidx.activity.enableEdgeToEdge
@@ -24,6 +28,7 @@ import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlaybackViewModel
 import com.infix.musicappv1.utils.FormatTimeUtils
 import com.infix.musicappv1.utils.InjectUtils
+import com.infix.musicappv1.utils.MusicAppUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -42,7 +47,7 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
         )
     }
     private lateinit var animatorBtnPressed: Animator
-    private lateinit var animatorRotatingDisk: Animator
+    private lateinit var animatorRotatingDisk: ObjectAnimator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +72,16 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
         seekbarJob?.cancel()
     }
 
+    override fun onBackPressed() {
+        animatorRotatingDisk.pause()
+        val resultIntent = Intent().putExtra(
+            MusicAppUtils.KEY_FRACTION_EXTRA,
+            animatorRotatingDisk.animatedFraction
+        )
+        setResult(RESULT_OK, resultIntent)
+        super.onBackPressed()
+    }
+
     private fun setupSeekbar() {
         seekbarJob?.cancel()
         seekbarJob = lifecycleScope.launch(Dispatchers.Main) {
@@ -86,12 +101,25 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
         animatorBtnPressed =
             AnimatorInflater.loadAnimator(this, R.animator.button_pressed)
         animatorRotatingDisk =
-            AnimatorInflater.loadAnimator(this, R.animator.rotating_disk)
+            AnimatorInflater.loadAnimator(this, R.animator.rotating_disk) as ObjectAnimator
 
+        //get fraction
+        val fraction = intent.getFloatExtra(MusicAppUtils.KEY_FRACTION_EXTRA, 0.0f)
+        animatorRotatingDisk.setCurrentFraction(fraction)
         animatorRotatingDisk.setTarget(binding.imgArtSongNowPlaying)
     }
 
     private fun setupObserver() {
+        //setup media controller
+        playbackViewModel.mediaController.observe(this) {
+            it?.let { controller ->
+                //setup repeat mode
+                updateIconRepeatMode()
+                //setup mode shuffle
+                updateIconShuffle()
+            }
+        }
+
         //playing song
         nowPlayingViewModel.playingSongLivedata.observe(this) {
             it?.let {
@@ -130,6 +158,29 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
         playbackViewModel.mediaController.observe(this) {
             mediaController = it
             addListenerMediaController()
+        }
+    }
+
+    private fun updateIconRepeatMode() {
+        val repeatMode = mediaController?.repeatMode ?: return
+        val ic = when (repeatMode) {
+            Player.REPEAT_MODE_ALL -> R.drawable.ic_repeat_on
+            Player.REPEAT_MODE_OFF -> R.drawable.ic_repeat_off
+            Player.REPEAT_MODE_ONE -> R.drawable.ic_repeat_one
+            else -> R.drawable.ic_repeat_off
+        }
+        binding.btnRepeatNowPlaying.setImageResource(ic)
+    }
+
+    private fun updateIconShuffle() {
+        mediaController?.let { controller ->
+            val isEnable = controller.shuffleModeEnabled
+            val ic = if (isEnable)
+                R.drawable.ic_shuffle_on
+            else
+                R.drawable.ic_shuffle_off
+
+            binding.btnShuffleNowPlaying.setImageResource(ic)
         }
     }
 
@@ -200,6 +251,52 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
         animatorBtnPressed.start()
         when (v?.id) {
             R.id.btn_pause_play_now_playing -> playPauseSong()
+            R.id.btn_skip_next_now_playing -> skipNext()
+            R.id.btn_skip_prev_now_playing -> skipPrev()
+            R.id.btn_shuffle_now_playing -> shuffleSong()
+            R.id.btn_repeat_now_playing -> repeatSongOrPlaylist()
+            R.id.btn_add_favorite_now_playing -> addFavorite()
+        }
+    }
+
+    private fun addFavorite() {
+        val isFavorite = nowPlayingViewModel.isFavorite.value ?: return
+        val songCurrent = nowPlayingViewModel.playingSongLivedata.value?.song ?: return
+        songCurrent.favorite = !isFavorite
+        nowPlayingViewModel.updateFavorite(songCurrent.id, !isFavorite)
+    }
+
+    private fun repeatSongOrPlaylist() {
+        mediaController?.let { controller ->
+            val nowMode = controller.repeatMode
+            controller.repeatMode = when (nowMode) {
+                Player.REPEAT_MODE_ALL -> Player.REPEAT_MODE_ONE
+                Player.REPEAT_MODE_OFF -> Player.REPEAT_MODE_ALL
+                Player.REPEAT_MODE_ONE -> Player.REPEAT_MODE_OFF
+                else -> Player.REPEAT_MODE_OFF
+            }
+
+            updateIconRepeatMode()
+        }
+    }
+
+    private fun shuffleSong() {
+        val isEnable = mediaController?.shuffleModeEnabled ?: return
+        mediaController?.shuffleModeEnabled = !isEnable
+        updateIconShuffle()
+    }
+
+    private fun skipPrev() {
+        mediaController?.let { controller ->
+            if (controller.hasPreviousMediaItem())
+                controller.seekToPrevious()
+        }
+    }
+
+    private fun skipNext() {
+        mediaController?.let { controller ->
+            if (controller.hasNextMediaItem())
+                controller.seekToNext()
         }
     }
 

@@ -2,6 +2,8 @@ package com.infix.musicappv1.ui.playing
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
+import android.animation.ObjectAnimator
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +11,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
@@ -20,11 +24,13 @@ import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlaybackViewModel
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.InjectUtils
+import com.infix.musicappv1.utils.MusicAppUtils
 
 class MiniPlayerFragment : Fragment(), View.OnClickListener {
+    private var fractionDisk: Float = 0.0f
     private lateinit var binding: FragmentMiniPlayerBinding
     private lateinit var animatorBtnPressed: Animator
-    private lateinit var animatorRotatingDisk: Animator
+    private lateinit var animatorRotatingDisk: ObjectAnimator
     private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels {
         val db = MusicDatabase.getInstance(requireContext().applicationContext)
         Factory(InjectUtils.getPlaybackRepository(requireContext()))
@@ -33,6 +39,23 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
 
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels {
         Factory(InjectUtils.getPlaybackRepository(requireContext()))
+    }
+
+    private val nowPlayingLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let { intent ->
+                fractionDisk = intent.getFloatExtra(MusicAppUtils.KEY_FRACTION_EXTRA, fractionDisk)
+
+                val mediaController = playbackViewModel.mediaController.value ?: return@let
+                animatorRotatingDisk.start()
+                animatorRotatingDisk.setCurrentFraction(fractionDisk)
+                if (!mediaController.isPlaying){
+                  animatorRotatingDisk.pause()
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -53,6 +76,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         setupAnimator()
         //setup event
         setupEvent()
+//        animatorRotatingDisk.setc
     }
 
     private fun setupEvent() {
@@ -61,10 +85,17 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         binding.includeItemMiniPlayer.btnSkipNextMiniPlayer.setOnClickListener(this)
         //show now playing
         binding.root.setOnClickListener {
-            Intent(requireContext(), NowPlayingActivity::class.java).apply {
-
-                startActivity(this)
-            }
+            animatorRotatingDisk.pause()
+            nowPlayingLauncher.launch(
+                Intent(
+                    requireContext(),
+                    NowPlayingActivity::class.java
+                ).apply {
+                    putExtra(
+                        MusicAppUtils.KEY_FRACTION_EXTRA,
+                        animatorRotatingDisk.animatedFraction
+                    )
+                })
         }
     }
 
@@ -72,7 +103,10 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         animatorBtnPressed =
             AnimatorInflater.loadAnimator(requireContext(), R.animator.button_pressed)
         animatorRotatingDisk =
-            AnimatorInflater.loadAnimator(requireContext(), R.animator.rotating_disk)
+            AnimatorInflater.loadAnimator(
+                requireContext(),
+                R.animator.rotating_disk
+            ) as ObjectAnimator
 
         animatorRotatingDisk.setTarget(binding.includeItemMiniPlayer.imgMiniPlayer)
     }
@@ -135,7 +169,9 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
                     else if (!animatorRotatingDisk.isRunning) animatorRotatingDisk.start()
                 } else {
                     binding.includeItemMiniPlayer.btnPausePlayMiniPlayer.setImageResource(R.drawable.ic_play_circle_48px)
-                    animatorRotatingDisk.pause()
+                    if (animatorRotatingDisk.isStarted) {
+                        animatorRotatingDisk.pause()
+                    }
                 }
             }
         }

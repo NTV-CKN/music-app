@@ -4,9 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.infix.musicappv1.data.model.now_playing.PlayingSong
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.repository.PlaybackRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class NowPlayingViewModel(
     private val playbackRepository: PlaybackRepository
@@ -33,6 +36,12 @@ class NowPlayingViewModel(
                 null
             }
         }
+
+    fun updateFavorite(songId: String, isFavorite: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            playbackRepository.updateSongFavorite(songId, isFavorite)
+        }
+    }
 
     fun getNamePlaylist() = playlistCurrent.value?.namePlaylist ?: "Unknown"
 }
