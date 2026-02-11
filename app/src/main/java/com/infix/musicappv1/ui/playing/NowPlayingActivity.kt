@@ -26,12 +26,8 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
     private var mediaController: MediaController? = null
     private val playbackViewModel: PlaybackViewModel by viewModels()
     private val nowPlayingViewModel: NowPlayingViewModel by viewModels {
-        val db = MusicDatabase.getInstance(this.applicationContext)
         Factory(
-            PlaybackRepository.getInstance(
-                db.songRecentDao(),
-                db.songDao()
-            )
+            InjectUtils.getPlaybackRepository(this)
         )
     }
     private lateinit var animatorBtnPressed: Animator

@@ -1,21 +1,24 @@
 package com.infix.musicappv1.data.repository
 
 import android.util.Log
+import androidx.room.withTransaction
 import com.infix.musicappv1.data.model.now_playing.MediaItemTransitionWrap
 import com.infix.musicappv1.data.model.playlist.Playlist
+import com.infix.musicappv1.data.model.playlist.PlaylistSong
+import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
 import com.infix.musicappv1.data.model.recent.SongRecent
 import com.infix.musicappv1.data.model.song.Song
-import com.infix.musicappv1.data.source.local.recent.SongRecentDao
-import com.infix.musicappv1.data.source.local.song.SongDao
+import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.enums.PlaylistEnum
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
 import kotlin.collections.set
 
 class PlaybackRepository private constructor(
-    private val songRecentDao: SongRecentDao,
-    private val songDao: SongDao
+    private val db: MusicDatabase
 ) {
     //observe song transition
     private val _mediaItemTransition: MutableStateFlow<MediaItemTransitionWrap?> =
@@ -50,7 +53,7 @@ class PlaybackRepository private constructor(
         }
     }
 
-    fun updateMediaTransition(
+    suspend fun updateMediaTransition(
         mediaItemTransitionWrap: MediaItemTransitionWrap?
     ) {
         _mediaItemTransition.value = mediaItemTransitionWrap
@@ -59,6 +62,12 @@ class PlaybackRepository private constructor(
             //when user not in app and comeback, this code help miniplayer update correct song on notification media
             updateIndexToPlay(it)
             updateIsFavorite()
+            val playlist = currentPlaylist.value
+            val songs = playlist?.songs
+            if (playlist != null)
+                withContext(Dispatchers.IO) {
+                    insertPlaylistAndSongs(playlist, songs!!)
+                }
         }
     }
 
@@ -85,15 +94,15 @@ class PlaybackRepository private constructor(
     }
 
     suspend fun insertSongRecent(songRecent: SongRecent) {
-        songRecentDao.insert(songRecent)
+        db.songRecentDao().insert(songRecent)
     }
 
     suspend fun updateSong(song: Song) {
-        songDao.update(song)
+        db.songDao().update(song)
     }
 
     suspend fun updateSongFavorite(id: String, isFavorite: Boolean) {
-        songDao.updateFavorite(id, isFavorite)
+        db.songDao().updateFavorite(id, isFavorite)
         //if current song playing is favorite, we need update UI for that
         //else we only write favorite for song id and non update UI
         _indexToPlay.value?.let { indexToPlay ->
@@ -102,6 +111,20 @@ class PlaybackRepository private constructor(
                 _isFavorite.update { isFavorite }
 //            Log.d("SVU", isFavorite.toString())
         }
+    }
+
+    suspend fun insertPlaylistAndSongs(playlist: Playlist, songs: List<Song>) {
+        db.withTransaction {
+            db.playlistDao().insert(playlist)
+            val playlistSongs = mutableListOf<PlaylistSong>()
+            for (song in songs)
+                playlistSongs.add(PlaylistSong(playlist.idPlaylist, song.id))
+            db.playlistSongDao().insert(*playlistSongs.toTypedArray())
+        }
+    }
+
+    suspend fun getPlaylistWithSongs(playlistId: Int): PlaylistWithSongs? {
+        return db.playlistDao().getPlaylistWithSongsById(playlistId)
     }
 
     private fun updateIsFavorite() {
@@ -114,12 +137,15 @@ class PlaybackRepository private constructor(
     companion object {
         @Volatile
         private var instance: PlaybackRepository? = null
-        fun getInstance(songRecentDao: SongRecentDao, songDao: SongDao): PlaybackRepository {
+        fun getInstance(
+            db: MusicDatabase
+        ): PlaybackRepository {
             if (instance == null) {
                 synchronized(this) {
                 }
                 if (instance == null)
-                    instance = PlaybackRepository(songRecentDao, songDao)
+                    instance =
+                        PlaybackRepository(db)
             }
             return instance!!
         }

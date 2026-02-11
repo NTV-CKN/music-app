@@ -7,12 +7,13 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.infix.musicappv1.data.model.song.Song
 import java.util.Date
+import java.util.UUID
 
-@Entity
+@Entity(tableName = "playlists")
 data class Playlist(
     @PrimaryKey(true)
-    @ColumnInfo("id")
-    var idPlaylist: Int = 10001,
+    @ColumnInfo("playlist_id")
+    var idPlaylist: Int = autoId++,
     @ColumnInfo("name")
     var namePlaylist: String = "",
     @ColumnInfo("artwork")

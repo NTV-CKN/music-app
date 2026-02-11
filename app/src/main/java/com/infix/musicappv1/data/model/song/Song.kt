@@ -1,11 +1,13 @@
 package com.infix.musicappv1.data.model.song
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "songs")
 open class Song(
     @PrimaryKey
+    @ColumnInfo("song_id")
     var id: String = "",
     var title: String = "",
     var album: String = "",

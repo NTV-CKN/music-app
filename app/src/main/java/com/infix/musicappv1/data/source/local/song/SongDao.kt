@@ -49,7 +49,7 @@ interface SongDao {
         """
             UPDATE songs
             SET favorite = :isFavorite
-            WHERE id = :id
+            WHERE song_id = :id
         """
     )
     suspend fun updateFavorite(id: String, isFavorite: Boolean)

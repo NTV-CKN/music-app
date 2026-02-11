@@ -1,6 +1,8 @@
 package com.infix.musicappv1.ui
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
@@ -18,8 +21,10 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.ActivityMainBinding
+import com.infix.musicappv1.ui.MainActivity.Companion.PREF_PREV_SESSION
 import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
+import com.infix.musicappv1.utils.InjectUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.first
@@ -27,21 +32,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.getValue
 
+//data store pref (Guarantee must only one instance for one file
+private val Context.datastorePrefSession by preferencesDataStore(name = PREF_PREV_SESSION)
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by viewModels {
-        val db = MusicDatabase.getInstance(this.applicationContext)
-        Factory(
-            PlaybackRepository.getInstance(
-                db.songRecentDao(),
-                db.songDao()
-            )
-        )
+        Factory(InjectUtils.getPlaybackRepository(this))
     }
-
-    //data store pref (Guarantee must only one instance for one file
-    private val datastorePrefSession by preferencesDataStore(name = PREF_PREV_SESSION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             try {
                 withContext(NonCancellable) {
                     datastorePrefSession.edit { pref ->
-                        pref[KEY_NAME_ALBUM] = currentPlaylist.namePlaylist
+                        pref[KEY_ID_ALBUM] = currentPlaylist.idPlaylist
                         pref[KEY_SONG_ID] = playingSong.id
                     }
                 }
@@ -105,9 +104,10 @@ class MainActivity : AppCompatActivity() {
 
     private suspend fun restorePrevSession() {
         val dataPref = datastorePrefSession.data.first()
-        val namePlaylist = dataPref[KEY_NAME_ALBUM]
+        val playlistId = dataPref[KEY_ID_ALBUM]
         val songId = dataPref[KEY_SONG_ID]
-        playingSongSharedViewModel.restorePrevSession(songId, namePlaylist)
+        Log.d("MainActivity", "restoePrevSession: songId ${songId} and playlistId ${playlistId}")
+        playingSongSharedViewModel.restorePrevSession(songId, playlistId)
     }
 
 
@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() {
         const val PREF_PREV_SESSION = "com.infix.musicappv1.ui.MainActivity.PREF_PREV_SESSION"
         val KEY_SONG_ID: Preferences.Key<String> =
             stringPreferencesKey("com.infix.musicappv1.ui.MainActivity.KEY_SONG_ID")
-        val KEY_NAME_ALBUM: Preferences.Key<String> =
-            stringPreferencesKey("com.infix.musicappv1.ui.MainActivity.KEY_NAME_ALBUM")
+        val KEY_ID_ALBUM: Preferences.Key<Int> =
+            intPreferencesKey("com.infix.musicappv1.ui.MainActivity.KEY_ID_ALBUM")
     }
 }

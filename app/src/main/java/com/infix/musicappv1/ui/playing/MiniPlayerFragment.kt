@@ -18,30 +18,20 @@ import com.infix.musicappv1.databinding.FragmentMiniPlayerBinding
 import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlaybackViewModel
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
+import com.infix.musicappv1.utils.InjectUtils
 
 class MiniPlayerFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentMiniPlayerBinding
     private lateinit var animatorBtnPressed: Animator
     private lateinit var animatorRotatingDisk: Animator
-
     private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels {
         val db = MusicDatabase.getInstance(requireContext().applicationContext)
-        Factory(
-            PlaybackRepository.getInstance(
-                db.songRecentDao(),
-                db.songDao()
-            )
-        )
+        Factory(InjectUtils.getPlaybackRepository(requireContext()))
     }
     private val playbackViewModel: PlaybackViewModel by activityViewModels()
+
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels {
-        val db = MusicDatabase.getInstance(requireContext().applicationContext)
-        Factory(
-            PlaybackRepository.getInstance(
-                db.songRecentDao(),
-                db.songDao()
-            )
-        )
+        Factory(InjectUtils.getPlaybackRepository(requireContext()))
     }
 
     override fun onCreateView(
@@ -88,9 +78,9 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
 
     private fun setObserve() {
         //mediacontroller
-        playbackViewModel.mediaController.observe(viewLifecycleOwner) {
-            //   it?.let { contractEventPlayer(it) }
-        }
+//        playbackViewModel.mediaController.observe(viewLifecycleOwner) {
+//            //   it?.let { contractEventPlayer(it) }
+//        }
 
         //playing song
         playingSongSharedViewModel.playingSongLivedata.observe(viewLifecycleOwner) { playingSong ->
@@ -103,7 +93,9 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
                     .load(it.image)
                     .error(R.drawable.ic_song_24)
                     .into(binding.includeItemMiniPlayer.imgMiniPlayer)
-            }
+
+                showMiniPlayer(true)
+            } ?: showMiniPlayer(false)
         }
 
         //playlist current
@@ -193,6 +185,10 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
             song.favorite = isFavorite
             playingSongSharedViewModel.updateSongFavorite(song.id, isFavorite)
         }
+    }
+
+    private fun showMiniPlayer(bool: Boolean) {
+        binding.root.visibility = if (bool) View.VISIBLE else View.GONE
     }
 
     override fun onClick(v: View?) {

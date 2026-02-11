@@ -1,6 +1,7 @@
 package com.infix.musicappv1.media
 
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -12,6 +13,9 @@ import com.infix.musicappv1.data.model.recent.SongRecent
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
+import com.infix.musicappv1.ui.viewmodels.Factory
+import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
+import com.infix.musicappv1.utils.InjectUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -19,6 +23,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.getValue
 
 class PlaybackService : MediaSessionService() {
     private lateinit var mediaSession: MediaSession
@@ -37,11 +42,7 @@ class PlaybackService : MediaSessionService() {
 
     override fun onCreate() {
         super.onCreate()
-        val db = MusicDatabase.getInstance(applicationContext)
-        playbackRepository = PlaybackRepository.getInstance(
-            db.songRecentDao(),
-            db.songDao()
-        )
+        playbackRepository = InjectUtils.getPlaybackRepository(this)
         initScope()
         initSessionAndPlayer()
         addListener()
@@ -99,12 +100,14 @@ class PlaybackService : MediaSessionService() {
                 val isReadyToPlay =
                     playbackRepository.getIndexToPlay() == mediaSession.player.currentMediaItemIndex
                 if (isReadyToPlay || !isPlaylistChanged) {
-                    playbackRepository.updateMediaTransition(
-                        MediaItemTransitionWrap(
-                            mediaItem,
-                            mediaSession.player.currentMediaItemIndex
+                    serviceScope.launch {
+                        playbackRepository.updateMediaTransition(
+                            MediaItemTransitionWrap(
+                                mediaItem,
+                                mediaSession.player.currentMediaItemIndex
+                            )
                         )
-                    )
+                    }
 
                     val playlistCurrent = playbackRepository.currentPlaylist.value
                     playlistCurrent?.let { playlist ->
