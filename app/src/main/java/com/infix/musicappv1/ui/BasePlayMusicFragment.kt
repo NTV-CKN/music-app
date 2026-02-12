@@ -3,6 +3,7 @@ package com.infix.musicappv1.ui
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
@@ -20,9 +21,9 @@ abstract class BasePlayMusicFragment : Fragment() {
         Factory(InjectUtils.getPlaybackRepository(requireContext()))
     }
 
-    protected fun playSong(song: Song, index: Int, namePlaylist: String, songs: List<Song>) {
+    protected fun playSong(index: Int, playlist: Playlist, songs: List<Song>) {
         //update songsLocal for current playlist
-        playingSongSharedViewModel.updatePlaylistCurrent(songs, namePlaylist)
+        playingSongSharedViewModel.updatePlaylistCurrent(songs, playlist)
         //update index of song will be play
         playingSongSharedViewModel.updateIndexToPlay(index)
     }

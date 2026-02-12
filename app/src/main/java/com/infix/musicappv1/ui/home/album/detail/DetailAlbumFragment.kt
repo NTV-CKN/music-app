@@ -12,6 +12,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.now_playing.PlayingSong
+import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.FragmentAlbumnHotBinding
 import com.infix.musicappv1.databinding.FragmentDetailAlbumBinding
@@ -47,13 +48,14 @@ class DetailAlbumFragment : BasePlayMusicFragment() {
         adapter = SongAdapter(
             object : SongAdapter.SongClickListener {
                 override fun onSongClick(song: Song, pos: Int) {
-                    playSong(
-                        song,
-                        pos,
+                    detailAlbumViewModel.album.value?.let {
+                        playSong(
+                            pos,
 //                        PlaylistEnum.DETAIL_ALBUM.value,
-                        detailAlbumViewModel.album.value?.name?:"",
-                        detailAlbumViewModel.songs.value ?: emptyList()
-                    )
+                            Playlist(idPlaylist = it.id, namePlaylist = it.name),
+                            detailAlbumViewModel.songs.value ?: emptyList()
+                        )
+                    }
                 }
             },
             object : SongAdapter.OptionSongClickListener {

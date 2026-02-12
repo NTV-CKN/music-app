@@ -11,7 +11,7 @@ import java.util.UUID
 
 @Entity(tableName = "playlists")
 data class Playlist(
-    @PrimaryKey(true)
+    @PrimaryKey
     @ColumnInfo("playlist_id")
     var idPlaylist: Int = autoId++,
     @ColumnInfo("name")
@@ -68,6 +68,7 @@ data class Playlist(
     }
 
     companion object {
-        private var autoId = 10001
+        //with playlist not contain in db remote, we use id custom
+        private var autoId = 1
     }
 }

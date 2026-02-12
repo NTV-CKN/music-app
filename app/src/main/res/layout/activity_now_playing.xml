@@ -146,6 +146,7 @@
         android:layout_marginTop="@dimen/margin_top_24"
         android:background="?attr/selectableItemBackground"
         android:min="0"
+        android:max="0"
         android:progressTint="@color/purple_200"
         android:thumb="@drawable/thumb"
         android:thumbOffset="0dp"

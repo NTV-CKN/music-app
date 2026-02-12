@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
+import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
 import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
@@ -94,9 +95,8 @@ class RecommendSongFragment : BasePlayMusicFragment() {
             object : SongAdapter.SongClickListener {
                 override fun onSongClick(song: Song, pos: Int) {
                     playSong(
-                        song,
                         pos,
-                        PlaylistEnum.RECOMMENDED.value,
+                        Playlist(namePlaylist = PlaylistEnum.RECOMMENDED.value),
                         rcmSongViewModel.songs.value?.subList(0, 10) ?: emptyList()
                     )
                 }

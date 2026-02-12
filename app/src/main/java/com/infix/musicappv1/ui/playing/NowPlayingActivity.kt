@@ -144,7 +144,8 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
                 binding.seekbarNowPlaying.progress = 0
                 showInfoSong(it.song)
                 animatorRotatingDisk.start()
-
+                //set max duration for seekbar
+                setMaxDurationForSeekbar()
             }
         }
         //is playing
@@ -255,14 +256,19 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
             val totalDuration = FormatTimeUtils.getMinuteAndSecond(duration)
             binding.seekbarNowPlaying.max = duration.toInt()
             binding.tvLabelTotalTime.text = totalDuration
-        } else
+        } else {
+            Log.d("NowPlayingActivity", "MAX 0")
             binding.tvLabelTotalTime.text = FormatTimeUtils.getMinuteAndSecond(0)
+            binding.seekbarNowPlaying.max = 0
+        }
     }
 
     override fun onTimelineChanged(timeline: Timeline, reason: Int) {
         super.onTimelineChanged(timeline, reason)
+        Log.d("NowPlayingActivity", "TimelineChanged")
+        if (binding.seekbarNowPlaying.max == 0 && (mediaController?.duration ?: 0L) > 0L)
         //set max duration for seekbar
-        setMaxDurationForSeekbar()
+            setMaxDurationForSeekbar()
     }
 
     override fun onClick(v: View?) {
