@@ -47,4 +47,7 @@
     <string name="txt_category_args">Category: %s</string>
     <string name="txt_publish_year_args">Publish year: %s</string>
     <string name="txt_now_playing">Now Playing</string>
+    <string name="txt_permission_denied">Permission notification is denied!</string>
+    <string name="txt_re_require_permission_notification">The application cannot play song without accepted permission notification!</string>
+    <string name="txt_agree">I agree</string>
 </resources>

@@ -1,9 +1,15 @@
 package com.infix.musicappv1.ui
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,11 +19,15 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.snackbar.Snackbar
 import com.infix.musicappv1.R
+import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.ActivityMainBinding
@@ -27,6 +37,7 @@ import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.InjectUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,6 +51,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by viewModels {
         Factory(InjectUtils.getPlaybackRepository(this))
+    }
+
+    private val permissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        PermissionRepository.getInstance().setGrantedNotification(isGranted)
+        if (!isGranted) {
+            Snackbar.make(
+                binding.root,
+                getString(R.string.txt_permission_denied),
+                Snackbar.LENGTH_SHORT
+            ).setAnchorView(binding.bottomNav)
+                .show()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +81,6 @@ class MainActivity : AppCompatActivity() {
         setupObserver()
     }
 
-
     override fun onStop() {
         super.onStop()
         saveSessionPlaying()
@@ -66,12 +90,31 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
+    @SuppressLint("InlinedApi")
     private fun setupObserver() {
+        //restore previous session
         playingSongSharedViewModel.isDataReady.observe(this) { isReady ->
             if (isReady)
                 lifecycleScope.launch(Dispatchers.IO) {
                     restorePrevSession()
                 }
+        }
+        //observe require ask permission
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                //notification
+                launch {
+                    PermissionRepository.getInstance().askPermissionNotification.collectLatest {
+                        val isGranted =
+                            PermissionRepository.getInstance().isGrantedNotification.value
+                        if (it == null || isGranted == null) return@collectLatest
+                        if (!isGranted && it) {
+                            showAskPermission(Manifest.permission.POST_NOTIFICATIONS)
+                            PermissionRepository.getInstance().setAskPermissionNotification(false)
+                        }
+                    }
+                }//end coroutine notification
+            }
         }
     }
 
@@ -108,6 +151,32 @@ class MainActivity : AppCompatActivity() {
         val songId = dataPref[KEY_SONG_ID]
         Log.d("MainActivity", "restoePrevSession: songId ${songId} and playlistId ${playlistId}")
         playingSongSharedViewModel.restorePrevSession(songId, playlistId)
+    }
+
+    private fun showAskPermission(namePermission: String) {
+        when (namePermission) {
+            Manifest.permission.POST_NOTIFICATIONS -> askNotificationPermission()
+        }
+    }
+
+    private fun askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.txt_re_require_permission_notification),
+                    Snackbar.LENGTH_INDEFINITE
+                ).setAnchorView(binding.bottomNav)
+                    .setAction(getString(R.string.txt_agree)) {
+                        permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
+                    .show()
+            } else {
+                permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
     }
 
 

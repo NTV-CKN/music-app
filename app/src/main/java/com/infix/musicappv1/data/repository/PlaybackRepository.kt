@@ -94,6 +94,7 @@ class PlaybackRepository private constructor(
 
     suspend fun insertSongRecent(songRecent: SongRecent) {
         db.songRecentDao().insert(songRecent)
+        db.songRecentDao().trimSongRecents()
     }
 
     suspend fun updateSong(song: Song) {
