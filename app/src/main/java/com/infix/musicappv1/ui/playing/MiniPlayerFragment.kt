@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
@@ -51,8 +52,8 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
                 val mediaController = playbackViewModel.mediaController.value ?: return@let
                 animatorRotatingDisk.start()
                 animatorRotatingDisk.setCurrentFraction(fractionDisk)
-                if (!mediaController.isPlaying){
-                  animatorRotatingDisk.pause()
+                if (!mediaController.isPlaying) {
+                    animatorRotatingDisk.pause()
                 }
             }
         }
@@ -91,11 +92,18 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
                     requireContext(),
                     NowPlayingActivity::class.java
                 ).apply {
+
                     putExtra(
                         MusicAppUtils.KEY_FRACTION_EXTRA,
                         animatorRotatingDisk.animatedFraction
                     )
-                })
+                },
+                ActivityOptionsCompat.makeCustomAnimation(
+                    requireContext(),
+                    R.anim.slide_up,
+                    R.anim.fade_out
+                )
+            )
         }
     }
 

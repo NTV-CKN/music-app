@@ -5,6 +5,7 @@ import android.animation.AnimatorInflater
 import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -16,7 +17,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.C
+import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.common.Timeline
 import androidx.media3.session.MediaController
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
@@ -60,10 +63,23 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
             insets
         }
         setupAnimator()
-        setupMediaController()
         setupEvent()
         setupObserver()
         setupSeekbar()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (isFinishing)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                overrideActivityTransition(
+                    OVERRIDE_TRANSITION_CLOSE,
+                    R.anim.fade_in,
+                    R.anim.slide_down
+                )
+            } else
+                @Suppress("DEPRECATION")
+                overridePendingTransition(R.anim.fade_in, R.anim.slide_down)
     }
 
     override fun onDestroy() {
@@ -113,6 +129,8 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
         //setup media controller
         playbackViewModel.mediaController.observe(this) {
             it?.let { controller ->
+                mediaController = controller
+                addListenerMediaController()
                 //setup repeat mode
                 updateIconRepeatMode()
                 //setup mode shuffle
@@ -124,9 +142,9 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
         nowPlayingViewModel.playingSongLivedata.observe(this) {
             it?.let {
                 binding.seekbarNowPlaying.progress = 0
-                setMaxDurationForSeekbar()
                 showInfoSong(it.song)
                 animatorRotatingDisk.start()
+
             }
         }
         //is playing
@@ -152,13 +170,7 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
                 }
             binding.btnAddFavoriteNowPlaying.setImageResource(icFavorite)
         }
-    }
 
-    private fun setupMediaController() {
-        playbackViewModel.mediaController.observe(this) {
-            mediaController = it
-            addListenerMediaController()
-        }
     }
 
     private fun updateIconRepeatMode() {
@@ -233,7 +245,7 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
     }
 
     private fun addListenerMediaController() {
-
+        mediaController?.addListener(this)
     }
 
     private fun setMaxDurationForSeekbar() {
@@ -243,7 +255,14 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
             val totalDuration = FormatTimeUtils.getMinuteAndSecond(duration)
             binding.seekbarNowPlaying.max = duration.toInt()
             binding.tvLabelTotalTime.text = totalDuration
-        }
+        } else
+            binding.tvLabelTotalTime.text = FormatTimeUtils.getMinuteAndSecond(0)
+    }
+
+    override fun onTimelineChanged(timeline: Timeline, reason: Int) {
+        super.onTimelineChanged(timeline, reason)
+        //set max duration for seekbar
+        setMaxDurationForSeekbar()
     }
 
     override fun onClick(v: View?) {
