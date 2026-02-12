@@ -40,19 +40,16 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
     private val _isDataReady = MutableLiveData(false)
     val isDataReady: LiveData<Boolean> = _isDataReady
 
-    fun updatePlaylistCurrent(songs: List<Song>, namePlaylist: String) {
-        var playlist = playbackRepository.getPlaylists()[namePlaylist]
+    fun updatePlaylistCurrent(songs: List<Song>, playlistT: Playlist) {
+        var playlist = playbackRepository.getPlaylists()[playlistT.namePlaylist]
         if (playlist == null) {
-            val newPlaylist = Playlist(namePlaylist = namePlaylist)
-            newPlaylist.updateSongs(songs)
-            playbackRepository.getPlaylists()[namePlaylist] = newPlaylist
-            playlist = newPlaylist
+            playbackRepository.getPlaylists()[playlistT.namePlaylist] = playlistT
+            playlist = playlistT
         }
 
         playlist.updateSongs(songs)
-        playbackRepository.getPlaylists()[namePlaylist] = playlist
+        playbackRepository.getPlaylists()[playlistT.namePlaylist] = playlist
         playbackRepository.updatePlaylist(playlist)
-
     }
 
     fun updateIndexToPlay(index: Int) {

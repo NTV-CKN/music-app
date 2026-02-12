@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.infix.musicappv1.R
+import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.FragmentMoreRcmSongBinding
 import com.infix.musicappv1.databinding.FragmentRecommendSongBinding
@@ -47,9 +48,8 @@ class MoreRcmSongFragment : BasePlayMusicFragment() {
             object : SongAdapter.SongClickListener {
                 override fun onSongClick(song: Song, pos: Int) {
                     playSong(
-                        song,
                         pos,
-                        PlaylistEnum.MORE_RCM_SONG.value,
+                        Playlist(namePlaylist = PlaylistEnum.MORE_RCM_SONG.value),
                         moreRcmSongViewModel.songs.value ?: emptyList()
                     )
                 }
