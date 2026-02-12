@@ -1,12 +1,17 @@
 package com.infix.musicappv1.ui.home.rcm_song
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.song.Song
+import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.ItemSongBinding
 
 class SongAdapter(
@@ -25,7 +30,22 @@ class SongAdapter(
                 .error(R.drawable.ic_song_24)
                 .into(binding.imgItemSong)
             //song click listener
-           binding.root.setOnClickListener {  onSongClick.onSongClick(song, position) }
+            binding.root.setOnClickListener {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    val notificationGranted =
+                        checkSelfPermission(
+                            binding.root.context,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) == PackageManager.PERMISSION_GRANTED
+                    PermissionRepository.getInstance().setGrantedNotification(notificationGranted)
+                    if (notificationGranted)
+                        onSongClick.onSongClick(song, position)
+
+                    PermissionRepository.getInstance()
+                        .setAskPermissionNotification(!notificationGranted)
+                } else
+                    onSongClick.onSongClick(song, position)
+            }
             //option
             binding.btnItemSongOption.setOnClickListener {
                 onOptionClick.onOptionClick(song)

@@ -18,6 +18,7 @@ import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
+import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentMiniPlayerBinding
@@ -160,7 +161,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
                     return@observe
                 trackOldPlaylist = playingSongSharedViewModel.getPlaylistTrackCurrent()
                 Log.d("SVU", "MEDIA ${indexMediaCur} IT ${it}")
-                if (it > -1 && it < controller.mediaItemCount) {
+                if (it > -1 && it < controller.mediaItemCount && PermissionRepository.getInstance().isGrantedNotification.value ?: false) {
                     controller.seekTo(it, 0)
                     controller.prepare()
                     controller.play()
@@ -206,27 +207,31 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
     private fun pausePlayMusic() {
         miniPlayerViewModel.isPlaying.value?.let { isPlaying ->
             val controller = playbackViewModel.mediaController.value ?: return@let
-            if (isPlaying)
-                controller.pause()
-            else
-                controller.play()
+            if (PermissionRepository.getInstance().isGrantedNotification.value ?: false)
+                if (isPlaying)
+                    controller.pause()
+                else
+                    controller.play()
         }
     }
 
     private fun skipNextMusic() {
         val mediaController = playbackViewModel.mediaController.value ?: return
-        if (mediaController.hasNextMediaItem()) {
-            mediaController.seekToNextMediaItem()
-            animatorRotatingDisk.end()
-        }
+        if (PermissionRepository.getInstance().isGrantedNotification.value ?: false)
+            if (mediaController.hasNextMediaItem()) {
+                mediaController.seekToNextMediaItem()
+                animatorRotatingDisk.end()
+            }
     }
 
     private fun updateSongFavorite() {
         val songCurrent = playingSongSharedViewModel.playingSongLivedata.value?.song
         songCurrent?.let { song ->
-            val isFavorite = !song.favorite
-            song.favorite = isFavorite
-            playingSongSharedViewModel.updateSongFavorite(song.id, isFavorite)
+            if (PermissionRepository.getInstance().isGrantedNotification.value ?: false) {
+                val isFavorite = !song.favorite
+                song.favorite = isFavorite
+                playingSongSharedViewModel.updateSongFavorite(song.id, isFavorite)
+            }
         }
     }
 

@@ -24,6 +24,7 @@ import androidx.media3.session.MediaController
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.song.Song
+import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.ActivityNowPlayingBinding
@@ -66,6 +67,13 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
         setupEvent()
         setupObserver()
         setupSeekbar()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(!(PermissionRepository.getInstance().isGrantedNotification.value?:true)) {
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     override fun onPause() {
