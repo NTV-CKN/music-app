@@ -35,7 +35,7 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_name_custom_playlist"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start_8"
@@ -45,24 +45,24 @@
         android:maxLines="1"
         android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
+        app:layout_constraintEnd_toStartOf="@+id/btn_more_menu_custom_playlist"
         app:layout_constraintStart_toEndOf="@+id/card_your_playlist"
         app:layout_constraintTop_toTopOf="@+id/card_your_playlist" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tv_number_song_custom_playlist"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
         android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="@+id/card_your_playlist"
-        app:layout_constraintEnd_toEndOf="@+id/textView"
-        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="@+id/tv_name_custom_playlist"
+        app:layout_constraintStart_toStartOf="@+id/tv_name_custom_playlist"
         app:layout_constraintTop_toTopOf="@+id/guideline7" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/btn_more_menu_custom_playlist"
         android:layout_width="@dimen/width_30"
         android:layout_height="@dimen/height_30"
         android:layout_marginEnd="@dimen/margin_end_16"

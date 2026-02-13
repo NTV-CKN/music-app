@@ -9,9 +9,29 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlaylistDao {
+    @Query(
+        """
+        SELECT *
+        FROM playlists
+        WHERE is_custom = 1
+        LIMIT :limit
+    """
+    )
+    fun getPlaylistCustomWithLimit(limit: Int = 10): Flow<List<Playlist>>
+
+    @Query(
+        """
+        SELECT *
+        FROM playlists
+        WHERE is_custom = 1
+    """
+    )
+    fun getAllPlaylistCustom(): Flow<List<Playlist>>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(vararg playlist: Playlist)
 
@@ -33,4 +53,25 @@ interface PlaylistDao {
     @Transaction
     @Query("SELECT * FROM playlists WHERE playlist_id = :playlistId")
     suspend fun getPlaylistWithSongsById(playlistId: Int): PlaylistWithSongs?
+
+    @Transaction
+    @Query(
+        """
+        SELECT * 
+        FROM playlists
+        WHERE is_custom = 1
+    """
+    )
+    fun getPlaylistCustomWithSong(): Flow<List<PlaylistWithSongs>?>
+
+    @Transaction
+    @Query(
+        """
+        SELECT * 
+        FROM playlists
+        WHERE is_custom = 1
+        LIMIT :limit
+    """
+    )
+    fun getLimitPlaylistCustomWithSong(limit: Int = 10): Flow<List<PlaylistWithSongs>?>
 }

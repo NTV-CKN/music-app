@@ -12,7 +12,7 @@ import com.infix.musicappv1.data.repository.album.AlbumRepositoryImpl
 import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
 import com.infix.musicappv1.data.source.Result
 import com.infix.musicappv1.data.source.local.album.AlbumLocalDataSource
-import com.infix.musicappv1.data.source.remote.AlbumRemoteDataSource
+import com.infix.musicappv1.data.source.remote.album.AlbumRemoteDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.collections.emptyList

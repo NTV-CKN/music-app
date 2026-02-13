@@ -19,7 +19,9 @@ data class Playlist(
     @ColumnInfo("artwork")
     var artwork: String = "",
     @ColumnInfo("create_at")
-    var createdAt: Date? = null
+    var createdAt: Date? = null,
+    @ColumnInfo("is_custom")
+    var isCustom: Boolean = false
 ) {
     //    var idPlaylist: Int
 //        get() = _idPlaylist

@@ -4,7 +4,7 @@ import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongList
 import com.infix.musicappv1.data.source.local.song.SongLocalDataSource
 import com.infix.musicappv1.data.source.Result
-import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
+import com.infix.musicappv1.data.source.remote.song.SongRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 
 class SongRepositoryImpl(

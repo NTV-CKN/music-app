@@ -8,7 +8,7 @@ import androidx.fragment.app.activityViewModels
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
-import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
+import com.infix.musicappv1.data.source.remote.song.SongRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentFavoriteSongsBinding
 import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
