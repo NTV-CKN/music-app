@@ -50,4 +50,8 @@
     <string name="txt_permission_denied">Permission notification is denied!</string>
     <string name="txt_re_require_permission_notification">The application cannot play song without accepted permission notification!</string>
     <string name="txt_agree">I agree</string>
+    <string name="txt_recent_heard">Recent heard ></string>
+    <string name="txt_favorite_song">Favorite songs ></string>
+    <string name="txt_your_playlist">Your playlists ></string>
+    <string name="txt_create_playlist">Create playlist</string>
 </resources>

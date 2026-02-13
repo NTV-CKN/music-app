@@ -9,6 +9,7 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.infix.musicappv1.data.model.now_playing.PlayingSong
 import com.infix.musicappv1.data.model.playlist.Playlist
+import com.infix.musicappv1.data.model.recent.SongRecent
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.ui.playing.MiniPlayerFragment
@@ -18,7 +19,8 @@ import kotlinx.coroutines.withContext
 
 class PlayingSongSharedViewModel(private val playbackRepository: PlaybackRepository) : ViewModel() {
     val currentPlaylist: LiveData<Playlist?> = playbackRepository.currentPlaylist.asLiveData()
-    val indexToPlay: LiveData<PlaybackRepository.IndexToPlayDate?> = playbackRepository.indexToPlay.asLiveData()
+    val indexToPlay: LiveData<PlaybackRepository.IndexToPlayDate?> =
+        playbackRepository.indexToPlay.asLiveData()
 
     val playingSongLivedata: LiveData<PlayingSong?> =
         playbackRepository.mediaItemTransition.asLiveData().map { mediaWrap ->

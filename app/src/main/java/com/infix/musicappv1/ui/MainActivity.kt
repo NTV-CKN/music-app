@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.util.DisplayMetrics.DENSITY_DEFAULT
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContract
@@ -35,6 +37,7 @@ import com.infix.musicappv1.ui.MainActivity.Companion.PREF_PREV_SESSION
 import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.InjectUtils
+import com.infix.musicappv1.utils.MusicAppUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.collectLatest
@@ -79,6 +82,22 @@ class MainActivity : AppCompatActivity() {
         }
         initializeNavHostFragment()
         setupObserver()
+        calculateDensityOfApp()
+    }
+
+    private fun calculateDensityOfApp() {
+        //for android >= 11
+        MusicAppUtils.density = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowMetric = windowManager.currentWindowMetrics
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+                windowMetric.density
+            else
+                (windowMetric.bounds.width() / DENSITY_DEFAULT) * 1f
+        } else {
+            val displayMetric = DisplayMetrics()
+            windowManager.defaultDisplay.getMetrics(displayMetric)
+            displayMetric.density
+        }
     }
 
     override fun onStop() {
