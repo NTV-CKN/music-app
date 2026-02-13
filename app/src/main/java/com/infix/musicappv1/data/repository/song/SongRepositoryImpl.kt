@@ -24,6 +24,14 @@ class SongRepositoryImpl(
         localSongSrc.insert(*song)
     }
 
+    override fun getSongsFavoriteWithLimit(limit: Int): Flow<List<Song>> {
+        return localSongSrc.getSongsFavoriteWithLimit(limit)
+    }
+
+    override fun getSongsFavoriteFlow(): Flow<List<Song>> {
+        return localSongSrc.getAllSongsFlow()
+    }
+
     override fun getAllSongsFlow(): Flow<List<Song>> {
         return localSongSrc.getAllSongsFlow()
     }

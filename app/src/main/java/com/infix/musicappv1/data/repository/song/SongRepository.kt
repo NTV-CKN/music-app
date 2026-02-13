@@ -9,5 +9,7 @@ interface SongRepository {
     suspend fun loadSongsRemote(): Result<SongList>
     suspend fun getAllSongs(): List<Song>
     suspend fun insert(vararg song: Song)
+     fun getSongsFavoriteWithLimit(limit: Int = 10): Flow<List<Song>>
+    fun getSongsFavoriteFlow(): Flow<List<Song>>
     fun getAllSongsFlow(): Flow<List<Song>>
 }

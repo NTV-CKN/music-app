@@ -16,6 +16,7 @@ interface SongDataSource {
         suspend fun getAllSongs(): List<Song>
         fun getAllSongsFlow(): Flow<List<Song>>
         fun getSongsFavorite(): Flow<List<Song>>
+        fun getSongsFavoriteWithLimit(limit: Int = 10): Flow<List<Song>>
         suspend fun updateSongFavorite(id: String, isFavorite: Boolean)
     }
 }
