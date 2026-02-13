@@ -2,13 +2,25 @@ package com.infix.musicappv1.utils
 
 import android.content.Context
 import com.infix.musicappv1.data.repository.PlaybackRepository
+import com.infix.musicappv1.data.repository.playlist.PlaylistRepository
+import com.infix.musicappv1.data.repository.playlist.PlaylistRepositoryImpl
 import com.infix.musicappv1.data.repository.song_recent.SongRecentRepository
 import com.infix.musicappv1.data.repository.song_recent.SongRecentRepositoryImpl
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
+import com.infix.musicappv1.data.source.local.playlist.PlaylistLocalDataSource
 import com.infix.musicappv1.data.source.local.recent.SongRecentLocalSource
 import com.infix.musicappv1.data.source.local.song.SongLocalDataSource
+import com.infix.musicappv1.data.source.remote.playlist.PlaylistRemoteDataSource
 
 object InjectUtils {
+    fun getPlaylistRepository(context: Context): PlaylistRepository {
+        val db = MusicDatabase.getInstance(context.applicationContext)
+        return PlaylistRepositoryImpl(
+            PlaylistLocalDataSource(db.playlistDao(), db.playlistSongDao()),
+            PlaylistRemoteDataSource()
+        )
+    }
+
     fun getSongRecentRepository(context: Context): SongRecentRepository {
         val db = MusicDatabase.getInstance(context.applicationContext)
         return SongRecentRepositoryImpl(

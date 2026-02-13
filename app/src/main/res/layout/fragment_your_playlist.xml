@@ -70,6 +70,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
+        android:id="@+id/include_playlist_custom"
         layout="@layout/include_list_your_playlist"
         android:layout_width="match_parent"
         android:layout_height="0dp"

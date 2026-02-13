@@ -31,6 +31,10 @@ class SongLocalDataSource(
         return songDao.getSongsFavorite()
     }
 
+    override fun getSongsFavoriteWithLimit(limit: Int): Flow<List<Song>> {
+        return songDao.getSongsFavoriteWithLimit(limit)
+    }
+
     override suspend fun updateSongFavorite(id: String, isFavorite: Boolean) {
         songDao.updateFavorite(id, isFavorite)
     }

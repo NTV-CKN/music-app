@@ -45,6 +45,14 @@ interface SongDao {
     )
     fun getSongsFavorite(): Flow<List<Song>>
 
+    @Query("""
+        SELECT *
+        FROM songs 
+        WHERE favorite = 1
+        LIMIT :limit
+    """)
+    fun getSongsFavoriteWithLimit(limit: Int = 10): Flow<List<Song>>
+
     @Query(
         """
             UPDATE songs

@@ -15,8 +15,8 @@ import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.album.AlbumRepositoryImpl
 import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
 import com.infix.musicappv1.data.source.local.album.AlbumLocalDataSource
-import com.infix.musicappv1.data.source.remote.AlbumRemoteDataSource
-import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
+import com.infix.musicappv1.data.source.remote.album.AlbumRemoteDataSource
+import com.infix.musicappv1.data.source.remote.song.SongRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentAlbumnHotBinding
 import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.ui.home.album.detail.DetailAlbumViewModel

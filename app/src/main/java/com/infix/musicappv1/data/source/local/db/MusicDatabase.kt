@@ -20,8 +20,8 @@ import com.infix.musicappv1.data.source.local.song.SongDao
 
 @Database(
     entities = [Album::class, Song::class, Playlist::class, SongRecent::class, PlaylistSong::class],
-    version = 1
-//    autoMigrations = [AutoMigration(from = 1, to = 2)]
+    version = 2,
+    autoMigrations = [AutoMigration(from = 1, to = 2)]
 )
 @TypeConverters(value = [DateConverter::class])
 abstract class MusicDatabase : RoomDatabase() {

@@ -4,7 +4,7 @@ import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongList
 import com.infix.musicappv1.data.source.local.song.SongLocalDataSource
 import com.infix.musicappv1.data.source.Result
-import com.infix.musicappv1.data.source.remote.SongRemoteDataSource
+import com.infix.musicappv1.data.source.remote.song.SongRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 
 class SongRepositoryImpl(
@@ -22,6 +22,14 @@ class SongRepositoryImpl(
 
     override suspend fun insert(vararg song: Song) {
         localSongSrc.insert(*song)
+    }
+
+    override fun getSongsFavoriteWithLimit(limit: Int): Flow<List<Song>> {
+        return localSongSrc.getSongsFavoriteWithLimit(limit)
+    }
+
+    override fun getSongsFavoriteFlow(): Flow<List<Song>> {
+        return localSongSrc.getAllSongsFlow()
     }
 
     override fun getAllSongsFlow(): Flow<List<Song>> {
