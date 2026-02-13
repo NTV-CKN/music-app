@@ -17,7 +17,7 @@ interface SongRecentDao {
         LIMIT :limit
     """
     )
-    fun getSongRecents(limit: Int = 30): Flow<List<SongRecent>>
+    fun getSongRecents(limit: Int = 30): Flow<List<SongRecent>?>
 
     @Query(
         """
@@ -33,5 +33,5 @@ interface SongRecentDao {
     suspend fun trimSongRecents(keepLimit: Int = 30)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(songRecent: SongRecent): Long
+    suspend fun insert(vararg songRecent: SongRecent): List<Long>
 }
