@@ -85,9 +85,9 @@ class RecommendSongFragment : BasePlayMusicFragment() {
 
     private fun setupEvent() {
         //text view rcm song
-        binding.tvTitleRcmSong.setOnClickListener { navigateToMoreRcmSong() }
+        binding.tvTitleRcmSong.setOnClickListener { navigateToPlaylistDetail() }
         //btn image more song
-        binding.btnMoreRcmSong.setOnClickListener { navigateToMoreRcmSong() }
+        binding.btnMoreRcmSong.setOnClickListener { navigateToPlaylistDetail() }
     }
 
     private fun observeViewModel() {
@@ -119,7 +119,7 @@ class RecommendSongFragment : BasePlayMusicFragment() {
         binding.includeRcmSong.rvSongList.adapter = adapter
     }
 
-    private fun navigateToMoreRcmSong() {
+    private fun navigateToPlaylistDetail() {
         navigatePlaylistDetailJob?.cancel()
         navigatePlaylistDetailJob = lifecycleScope.launch(Dispatchers.IO) {
             var playlist =

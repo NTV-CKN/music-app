@@ -23,7 +23,11 @@
     <fragment
         android:id="@+id/navigation_library"
         android:name="com.infix.musicappv1.ui.library.LibraryFragment"
-        tools:layout="@layout/fragment_library" />
+        tools:layout="@layout/fragment_library" >
+        <action
+            android:id="@+id/action_navigation_library_to_navigation_detail_playlist"
+            app:destination="@id/navigation_detail_playlist" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_settings"
         android:name="com.infix.musicappv1.ui.settings.SettingsFragment" />
