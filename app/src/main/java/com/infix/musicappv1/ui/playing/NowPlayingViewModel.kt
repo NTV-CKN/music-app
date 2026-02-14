@@ -25,8 +25,8 @@ class NowPlayingViewModel(
             val playlist = playbackRepository.currentPlaylist.value
             val index = mediaWrap?.index ?: -1
 
-            if (index >= 0 && playlist != null && index < playlist.songs.size) {
-                val songTmp = (playlist.songs[index])
+            if (index >= 0 && playlist != null && index < playlist.songsObject.size) {
+                val songTmp = (playlist.songsObject[index])
                 PlayingSong().apply {
                     setIndexCurrent(index)
                     song = songTmp

@@ -21,6 +21,10 @@ class PlaylistLocalDataSource(
         playlistDao.update(playlist)
     }
 
+    override suspend fun getPlaylistWithName(name: String): Playlist? {
+        return playlistDao.getPlaylistWithName(name)
+    }
+
     override fun getPlaylistCustomWithLimit(limit: Int): Flow<List<Playlist>> {
         return playlistDao.getPlaylistCustomWithLimit(limit)
     }

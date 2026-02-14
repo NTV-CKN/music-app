@@ -10,7 +10,6 @@ import android.util.DisplayMetrics
 import android.util.DisplayMetrics.DENSITY_DEFAULT
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -30,8 +29,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.repository.PermissionRepository
-import com.infix.musicappv1.data.repository.PlaybackRepository
-import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.ActivityMainBinding
 import com.infix.musicappv1.ui.MainActivity.Companion.PREF_PREV_SESSION
 import com.infix.musicappv1.ui.viewmodels.Factory
@@ -145,7 +142,7 @@ class MainActivity : AppCompatActivity() {
             try {
                 withContext(NonCancellable) {
                     datastorePrefSession.edit { pref ->
-                        pref[KEY_ID_ALBUM] = currentPlaylist.idPlaylist
+                        pref[KEY_ID_ALBUM] = currentPlaylist.playlistId
                         pref[KEY_SONG_ID] = playingSong.id
                     }
                 }

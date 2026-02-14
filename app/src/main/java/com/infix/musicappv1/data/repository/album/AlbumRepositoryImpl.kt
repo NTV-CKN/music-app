@@ -9,7 +9,7 @@ class AlbumRepositoryImpl(
     private val remoteAlbumSrc: AlbumRemoteDataSource,
     private val localAlbumSrc: AlbumLocalDataSource
 ) : AlbumRepository {
-    override suspend fun loadAlbums(): Result<AlbumList> {
-        return remoteAlbumSrc.loadAlbumsRemote()
-    }
+//    override suspend fun loadAlbums(): Result<AlbumList> {
+////        return remoteAlbumSrc.loadAlbumsRemote()
+//    }
 }

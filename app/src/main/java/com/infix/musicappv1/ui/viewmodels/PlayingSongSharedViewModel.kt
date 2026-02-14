@@ -4,15 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.infix.musicappv1.data.model.now_playing.PlayingSong
 import com.infix.musicappv1.data.model.playlist.Playlist
-import com.infix.musicappv1.data.model.recent.SongRecent
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PlaybackRepository
-import com.infix.musicappv1.ui.playing.MiniPlayerFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,8 +24,8 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
             val playlist = currentPlaylist.value
             val index = mediaWrap?.index ?: -1
 
-            if (index >= 0 && playlist != null && index < playlist.songs.size) {
-                val songTmp = (playlist.songs[index])
+            if (index >= 0 && playlist != null && index < playlist.songsObject.size) {
+                val songTmp = (playlist.songsObject[index])
                 PlayingSong().apply {
                     setIndexCurrent(index)
                     song = songTmp
@@ -74,7 +71,7 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
         //check value of stateflow is null
         if (currentPlaylist.value == null && indexToPlay.value == null && playlistId != null && songId != null) {
             viewModelScope.launch(Dispatchers.IO) {
-                //retrieve data of name playlist under room db, after select get songs
+                //retrieve data of name playlist under room db, after select get songsObject
                 val playlistWithSongs = playbackRepository.getPlaylistWithSongs(playlistId)
                 //set current playlist and index to play
                 if (playlistWithSongs != null) {

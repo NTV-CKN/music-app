@@ -61,7 +61,7 @@ class PlaybackRepository private constructor(
             updateIndexToPlay(it)
             updateIsFavorite()
             val playlist = currentPlaylist.value
-            val songs = playlist?.songs
+            val songs = playlist?.songsObject
             if (playlist != null)
                 withContext(Dispatchers.IO) {
                     insertPlaylistAndSongs(playlist, songs!!)
@@ -106,7 +106,7 @@ class PlaybackRepository private constructor(
         //if current song playing is favorite, we need update UI for that
         //else we only write favorite for song id and non update UI
         _indexToPlay.value?.let { indexToPlay ->
-            val currentSong = playlistTrackCurrent?.songs?.getOrNull(indexToPlay.indexToPlay ?: -1)
+            val currentSong = playlistTrackCurrent?.songsObject?.getOrNull(indexToPlay.indexToPlay ?: -1)
             if (currentSong != null && currentSong.id == id)
                 _isFavorite.update { isFavorite }
 //            Log.d("SVU", isFavorite.toString())
@@ -118,7 +118,7 @@ class PlaybackRepository private constructor(
             db.playlistDao().insert(playlist)
             val playlistSongs = mutableListOf<PlaylistSong>()
             for (song in songs)
-                playlistSongs.add(PlaylistSong(playlist.idPlaylist, song.id))
+                playlistSongs.add(PlaylistSong(playlist.playlistId, song.id))
             db.playlistSongDao().insert(*playlistSongs.toTypedArray())
         }
     }
@@ -128,7 +128,7 @@ class PlaybackRepository private constructor(
     }
 
     private fun updateIsFavorite() {
-        val song = playlistTrackCurrent?.songs?.getOrNull(_indexToPlay.value?.indexToPlay ?: -1)
+        val song = playlistTrackCurrent?.songsObject?.getOrNull(_indexToPlay.value?.indexToPlay ?: -1)
         song?.let {
             _isFavorite.value = song.favorite
         }

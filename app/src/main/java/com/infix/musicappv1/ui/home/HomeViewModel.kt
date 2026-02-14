@@ -4,11 +4,15 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.infix.musicappv1.data.model.album.Album
+import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.album.AlbumRepositoryImpl
+import com.infix.musicappv1.data.repository.playlist.PlaylistRepository
+import com.infix.musicappv1.data.repository.song.SongRepository
 import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
 import com.infix.musicappv1.data.source.Result
 import com.infix.musicappv1.data.source.local.album.AlbumLocalDataSource
@@ -18,13 +22,9 @@ import kotlinx.coroutines.launch
 import kotlin.collections.emptyList
 
 class HomeViewModel(
-    private val songRepository: SongRepositoryImpl
+    private val songRepository: SongRepository,
+    private val playlistRepository: PlaylistRepository
 ) : ViewModel() {
-    //temporary
-    private val albumRepository = AlbumRepositoryImpl(
-        AlbumRemoteDataSource(),
-        AlbumLocalDataSource()
-    )
 
 //    private val _songsRemote = MutableLiveData<List<Song>?>()
 
@@ -34,8 +34,8 @@ class HomeViewModel(
     private val _songsLocal = MutableLiveData<List<Song>?>()
     val songsLocal: LiveData<List<Song>?> = _songsLocal
 
-    private val _albums = MutableLiveData<List<Album>>()
-    val albums: LiveData<List<Album>> = _albums
+    private val _playlists = MutableLiveData<List<Playlist>>()
+    val playlists: LiveData<List<Playlist>> = _playlists
 
     init {
         setupDataTmp()
@@ -48,8 +48,8 @@ class HomeViewModel(
             //load song remote
             val resultSong = songRepository.loadSongsRemote()
             if (resultSong is Result.Success) {
-//                _songsRemote.postValue(resultSong.data.songs)
-                //compare songs between local and remote
+//                _songsRemote.postValue(resultSong.data.songsObject)
+                //compare songsObject between local and remote
                 val songsExtract =
                     extractSongRemoteNotContainLocal(songsLocal, resultSong.data.songs)
                 if (songsExtract.isNotEmpty()) {
@@ -63,11 +63,11 @@ class HomeViewModel(
             _songsLocal.postValue(songsLocal)
 
             //album local
-            val resultAlbum = albumRepository.loadAlbums()
-            if (resultAlbum is Result.Success) {
-                _albums.postValue(resultAlbum.data.albums)
+            val resultPlaylists = playlistRepository.loadSystemPlaylists()
+            if (resultPlaylists is Result.Success) {
+                _playlists.postValue(resultPlaylists.data)
             } else {
-                _albums.postValue(emptyList())
+                _playlists.postValue(emptyList())
             }
         }
     }
@@ -82,5 +82,16 @@ class HomeViewModel(
             if (!localSet.contains(tmp)) result.add(tmp)
 
         return result
+    }
+
+    class Factory(
+        private val songRepository: SongRepository,
+        private val playlistRepository: PlaylistRepository
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(HomeViewModel::class.java))
+                return HomeViewModel(songRepository, playlistRepository) as T
+            throw IllegalArgumentException("Model class is not suit")
+        }
     }
 }
