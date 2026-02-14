@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.album.detail.DetailAlbumFragment">
+    tools:context=".ui.detail.PlaylistDetailFragment">
 
     <include
-        android:id="@+id/include_album_detail"
+        android:id="@+id/include_playlist_detail"
+        layout="@layout/include_playlist_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        layout="@layout/include_album_detail"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

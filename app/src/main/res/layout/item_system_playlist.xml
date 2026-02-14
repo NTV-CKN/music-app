@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/img_item_album"
+            android:id="@+id/img_item_system_playlist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
@@ -27,7 +27,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/tv_item_title"
+        android:id="@+id/tv_title_system_playlist"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium"

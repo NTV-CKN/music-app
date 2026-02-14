@@ -2,6 +2,7 @@ package com.infix.musicappv1.data.repository.playlist
 
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
+import com.infix.musicappv1.data.source.Result
 import com.infix.musicappv1.data.source.local.playlist.PlaylistLocalDataSource
 import com.infix.musicappv1.data.source.remote.playlist.PlaylistRemoteDataSource
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +23,10 @@ class PlaylistRepositoryImpl(
         playlistLocal.updatePlaylist(playlist)
     }
 
+    override suspend fun getPlaylistWithName(name: String): Playlist? {
+        return playlistLocal.getPlaylistWithName(name)
+    }
+
     override fun getPlaylistCustomWithLimit(limit: Int): Flow<List<Playlist>> {
         return playlistLocal.getPlaylistCustomWithLimit(limit)
     }
@@ -36,5 +41,9 @@ class PlaylistRepositoryImpl(
 
     override fun getLimitPlaylistCustomWithSong(limit: Int): Flow<List<PlaylistWithSongs>?> {
         return playlistLocal.getLimitPlaylistCustomWithSong(limit)
+    }
+
+    override suspend fun loadSystemPlaylists(): Result<List<Playlist>> {
+        return playlistRemote.loadSystemPlaylists()
     }
 }

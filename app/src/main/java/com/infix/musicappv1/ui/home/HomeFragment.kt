@@ -8,15 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.data.repository.album.AlbumRepositoryImpl
 import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
 import com.infix.musicappv1.data.source.local.album.AlbumLocalDataSource
-import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.data.source.remote.album.AlbumRemoteDataSource
 import com.infix.musicappv1.data.source.remote.song.SongRemoteDataSource
 import com.infix.musicappv1.databinding.FragmentHomeBinding
-import com.infix.musicappv1.ui.home.album.AlbumHotViewModel
+import com.infix.musicappv1.ui.home.system_playlist.SystemPlaylistViewModel
 import com.infix.musicappv1.ui.home.rcm_song.RecommendSongViewModel
 import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
@@ -27,38 +25,19 @@ class HomeFragment : Fragment() {
     private var isSongsReady = false
     private var isAlbumReady = false
     private val homeViewModel: HomeViewModel by activityViewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(HomeViewModel::class.java))
-                    return HomeViewModel(
-                        SongRepositoryImpl(
-                            SongRemoteDataSource(),
-                            InjectUtils.getSongLocalDataSource(requireContext().applicationContext)
-                        )
-                    ) as T
-                throw IllegalArgumentException("Model class is not legal")
-            }
-        }
+        HomeViewModel.Factory(
+            InjectUtils.getSongRepository(requireContext().applicationContext),
+            InjectUtils.getPlaylistRepository(requireContext().applicationContext)
+        )
     }
-
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels {
         Factory(InjectUtils.getPlaybackRepository(requireContext()))
     }
 
-
-    private val albumViewModel: AlbumHotViewModel by activityViewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(AlbumHotViewModel::class.java))
-                    return AlbumHotViewModel(
-                        AlbumRepositoryImpl(
-                            AlbumRemoteDataSource(),
-                            AlbumLocalDataSource()
-                        )
-                    ) as T
-                throw IllegalAccessException("model class illegal")
-            }
-        }
+    private val systemPlaylistViewModel: SystemPlaylistViewModel by activityViewModels {
+        SystemPlaylistViewModel.Factory(
+            InjectUtils.getPlaylistRepository(requireContext().applicationContext)
+        )
     }
     private val songViewModel: RecommendSongViewModel by activityViewModels {
         object : ViewModelProvider.Factory {
@@ -99,8 +78,8 @@ class HomeFragment : Fragment() {
 
     private fun setupInitDataTmp() {
         //album data
-        homeViewModel.albums.observe(viewLifecycleOwner) { albums ->
-            albumViewModel.setAlbums(albums)
+        homeViewModel.playlists.observe(viewLifecycleOwner) { playlists ->
+            systemPlaylistViewModel.setPlaylists(playlists)
             isAlbumReady = true
             playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady)
         }

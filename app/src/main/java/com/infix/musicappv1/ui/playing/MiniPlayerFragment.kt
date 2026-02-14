@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.activityViewModels
@@ -19,7 +18,6 @@ import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.repository.PermissionRepository
-import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentMiniPlayerBinding
 import com.infix.musicappv1.ui.viewmodels.Factory
@@ -252,6 +250,6 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
     }
 
     companion object {
-        var trackOldPlaylist: Playlist? = Playlist(idPlaylist = -1)
+        var trackOldPlaylist: Playlist? = Playlist(playlistId = -1)
     }
 }

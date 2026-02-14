@@ -3,7 +3,6 @@ package com.infix.musicappv1.media
 import android.app.PendingIntent
 import android.content.Intent
 import android.util.Log
-import androidx.activity.viewModels
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -14,10 +13,7 @@ import com.infix.musicappv1.data.model.now_playing.MediaItemTransitionWrap
 import com.infix.musicappv1.data.model.recent.SongRecent
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PlaybackRepository
-import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.ui.playing.NowPlayingActivity
-import com.infix.musicappv1.ui.viewmodels.Factory
-import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.InjectUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +22,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.getValue
 
 class PlaybackService : MediaSessionService() {
     private lateinit var mediaSession: MediaSession
@@ -126,8 +121,8 @@ class PlaybackService : MediaSessionService() {
                     val playlistCurrent = playbackRepository.currentPlaylist.value
                     playlistCurrent?.let { playlist ->
                         val index = mediaSession.player.currentMediaItemIndex
-                        if (index > -1 && playlist.songs.size > index) {
-                            val song = playlist.songs[index]
+                        if (index > -1 && playlist.songsObject.size > index) {
+                            val song = playlist.songsObject[index]
                             writeRecentSongToDb(song)
                             increaseReplayAndCounter(song)
                         }

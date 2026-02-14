@@ -2,9 +2,10 @@ package com.infix.musicappv1.data.model.album
 
 import androidx.room.Entity
 import androidx.room.Ignore
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "albums")
+@Entity(tableName = "albums", indices = [Index(value = ["name"], unique = true)])
 data class Album(
     @PrimaryKey
    var id: Int = 0,

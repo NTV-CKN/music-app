@@ -4,43 +4,44 @@ import androidx.media3.common.MediaItem
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
+import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 import com.infix.musicappv1.data.model.song.Song
 import java.util.Date
-import java.util.UUID
 
-@Entity(tableName = "playlists")
+@Entity(tableName = "playlists", indices = [Index(value = ["name"], unique = true)])
 data class Playlist(
     @PrimaryKey
     @ColumnInfo("playlist_id")
-    var idPlaylist: Int = autoId++,
+    @SerializedName("id")
+    var playlistId: Int = autoId++,
     @ColumnInfo("name")
+    @SerializedName("name")
     var namePlaylist: String = "",
     @ColumnInfo("artwork")
+    @SerializedName("artwork")
     var artwork: String = "",
     @ColumnInfo("create_at")
     var createdAt: Date? = null,
     @ColumnInfo("is_custom")
-    var isCustom: Boolean = false
-) {
-    //    var idPlaylist: Int
-//        get() = _idPlaylist
-//        set(value) {
-//            _idPlaylist = if (value < 0) autoId++
-//            else value
-//        }
+    var isCustom: Boolean = false,
     @Ignore
-    private val _songs: MutableList<Song> = mutableListOf()
+    @SerializedName("songs")
+    var songsId: List<String> = emptyList()
+) {
+    @Ignore
+    private val _songsObject: MutableList<Song> = mutableListOf()
 
     @Ignore
-    val songs: List<Song> = _songs
+    val songsObject: List<Song> = _songsObject
 
     @Ignore
     private val mediaItems: MutableList<MediaItem> = mutableListOf()
 
     fun updateSongs(songs: List<Song>) {
-        this._songs.clear()
-        this._songs.addAll(songs)
+        this._songsObject.clear()
+        this._songsObject.addAll(songs)
         updateMediaItems(songs)
     }
 
@@ -57,20 +58,22 @@ data class Playlist(
 
         other as Playlist
 
-        if (idPlaylist != other.idPlaylist) return false
-        if (_songs != other._songs) return false
+        if (playlistId != other.playlistId) return false
+        if (_songsObject != other._songsObject) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = idPlaylist
-        result = 31 * result + _songs.hashCode()
+        var result = playlistId
+        result = 31 * result + _songsObject.hashCode()
         return result
     }
 
     companion object {
-        //with playlist not contain in db remote, we use id custom
+        //Playlist user create start at 50000 (we save next id into datastore)
+        //Playlist system start at 10000
+        //Playlist for multiple screen of app start at 1 (ref to PlaylistEnum)
         private var autoId = 1
     }
 }

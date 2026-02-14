@@ -45,6 +45,15 @@ interface PlaylistDao {
         """
         SELECT *
         FROM playlists
+        WHERE name = :name
+    """
+    )
+    suspend fun getPlaylistWithName(name: String): Playlist?
+
+    @Query(
+        """
+        SELECT *
+        FROM playlists
         WHERE playlist_id = :id
     """
     )

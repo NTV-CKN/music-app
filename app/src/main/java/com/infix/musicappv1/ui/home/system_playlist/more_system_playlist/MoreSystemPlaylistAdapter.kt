@@ -1,4 +1,4 @@
-package com.infix.musicappv1.ui.home.album.more_album
+package com.infix.musicappv1.ui.home.system_playlist.more_system_playlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,24 +6,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.album.Album
+import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.databinding.ItemMoreAlbumBinding
 
-class MoreAlbumAdapter(
-    private val onAlbumClick: AlbumClickListener
-) : RecyclerView.Adapter<MoreAlbumAdapter.ViewHolder>() {
-    private val albums = mutableListOf<Album>()
+class MoreSystemPlaylistAdapter(
+    private val onAlbumClick: PlaylistClickListener
+) : RecyclerView.Adapter<MoreSystemPlaylistAdapter.ViewHolder>() {
+    private val playlists = mutableListOf<Playlist>()
 
     inner class ViewHolder(private val binding: ItemMoreAlbumBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(album: Album) {
-            binding.tvTitleAlbumMoreAlbum.text = album.name
+        fun bind(playlist: Playlist) {
+            binding.tvTitleAlbumMoreAlbum.text = playlist.namePlaylist
             Glide.with(binding.root)
-                .load(album.artwork)
+                .load(playlist.artwork)
                 .error(R.drawable.ic_song_24)
                 .into(binding.imgArtworkMoreAlbum)
             //click listener
             binding.root.setOnClickListener {
-                onAlbumClick.onClick(album)
+                onAlbumClick.onClick(playlist)
             }
         }
     }
@@ -44,22 +45,22 @@ class MoreAlbumAdapter(
         holder: ViewHolder,
         position: Int
     ) {
-        holder.bind(albums[position])
+        holder.bind(playlists[position])
     }
 
-    override fun getItemCount(): Int = albums.size
+    override fun getItemCount(): Int = playlists.size
 
-    fun updateAlbums(albums: List<Album>) {
-        val oldSize = this.albums.size
-        this.albums.clear()
-        this.albums.addAll(albums)
+    fun updateAlbums(playlists: List<Playlist>) {
+        val oldSize = this.playlists.size
+        this.playlists.clear()
+        this.playlists.addAll(playlists)
         //remove old list album
-        if (oldSize > this.albums.size)
+        if (oldSize > this.playlists.size)
             notifyItemRangeRemoved(0, oldSize)
-        notifyItemRangeChanged(0, this.albums.size)
+        notifyItemRangeChanged(0, this.playlists.size)
     }
 
-    interface AlbumClickListener {
-        fun onClick(album: Album)
+    interface PlaylistClickListener {
+        fun onClick(playlist: Playlist)
     }
 }
