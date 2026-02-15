@@ -109,6 +109,7 @@ class PlaybackService : MediaSessionService() {
                 val isReadyToPlay =
                     playbackRepository.getIndexToPlay()?.indexToPlay == mediaSession.player.currentMediaItemIndex
                 if (isReadyToPlay || !isPlaylistChanged) {
+                    Log.d("PlaybackService", "Accept change")
                     serviceScope.launch {
                         playbackRepository.updateMediaTransition(
                             MediaItemTransitionWrap(

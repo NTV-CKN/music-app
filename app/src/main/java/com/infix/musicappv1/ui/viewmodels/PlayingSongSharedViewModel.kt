@@ -96,8 +96,11 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
                     }
                 }
             }
-
         }
+//        else if (currentPlaylist.value != null && indexToPlay.value != null) {
+//            //if user change config app like set night mode, data of state flow is exists but
+//            //
+//        }
     }
 
     fun getMediaItemIndexCurrent() = playbackRepository.getMediaItemIndexCurrent()

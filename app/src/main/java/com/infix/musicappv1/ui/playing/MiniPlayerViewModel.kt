@@ -7,12 +7,13 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.media3.common.MediaItem
 import com.infix.musicappv1.data.repository.PlaybackRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class MiniPlayerViewModel(
     private val playbackRepository: PlaybackRepository
 ) : ViewModel() {
-    private val _mediaItems = MutableLiveData<List<MediaItem>?>()
-    val mediaItems: LiveData<List<MediaItem>?> = _mediaItems
+//    private val _mediaItems = MutableStateFlow<List<MediaItem>?>(null)
+//    val mediaItems: StaF<List<MediaItem>?> = _mediaItems
     val isFavorite: LiveData<Boolean> = playbackRepository.isFavorite.asLiveData().distinctUntilChanged()
     val isPlaying: LiveData<Boolean?> = playbackRepository.isPlaying.asLiveData()
 
@@ -25,9 +26,9 @@ class MiniPlayerViewModel(
 //        }
 //    }
 
-    fun setMediaItems(mediaItems: List<MediaItem>?) {
-        _mediaItems.value = mediaItems
-    }
+//    fun setMediaItems(mediaItems: List<MediaItem>?) {
+//        _mediaItems.value = mediaItems
+//    }
 
 //
 //    fun setPlaying(bool: Boolean) {

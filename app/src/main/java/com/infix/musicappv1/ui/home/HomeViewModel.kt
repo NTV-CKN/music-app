@@ -37,11 +37,11 @@ class HomeViewModel(
     private val _playlists = MutableLiveData<List<Playlist>>()
     val playlists: LiveData<List<Playlist>> = _playlists
 
-    init {
-        setupDataTmp()
-    }
+//    init {
+//        setupDataTmp()
+//    }
 
-    private fun setupDataTmp() {
+    fun setupDataTmp() {
         viewModelScope.launch(Dispatchers.IO) {
             //load song db
             val songsLocal = songRepository.getAllSongs().toMutableList()
@@ -69,6 +69,20 @@ class HomeViewModel(
             } else {
                 _playlists.postValue(emptyList())
             }
+        }
+    }
+
+    fun loadLocalData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val songsLocal = songRepository.getAllSongs().toMutableList()
+            _songsLocal.postValue(songsLocal)
+            val resultPlaylists = playlistRepository.loadSystemPlaylists()
+            if (resultPlaylists is Result.Success) {
+                _playlists.postValue(resultPlaylists.data)
+            } else {
+                _playlists.postValue(emptyList())
+            }
+
         }
     }
 
