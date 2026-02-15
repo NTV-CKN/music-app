@@ -11,6 +11,10 @@ class PlaylistRepositoryImpl(
     private val playlistLocal: PlaylistLocalDataSource,
     private val playlistRemote: PlaylistRemoteDataSource
 ) : PlaylistRepository {
+    override suspend fun insertPlaylistStrict(playlist: Playlist) {
+        playlistLocal.insertPlaylistStrict(playlist)
+    }
+
     override suspend fun insertPlaylist(playlist: Playlist) {
         playlistLocal.insertPlaylist(playlist)
     }

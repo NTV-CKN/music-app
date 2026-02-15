@@ -35,6 +35,9 @@ interface PlaylistDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(vararg playlist: Playlist)
 
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    suspend fun insertStrict(playlist: Playlist)
+
     @Delete
     suspend fun delete(vararg playlist: Playlist)
 

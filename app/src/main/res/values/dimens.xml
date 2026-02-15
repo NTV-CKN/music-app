@@ -56,4 +56,5 @@
     <dimen name="margin_top_16">16dp</dimen>
     <dimen name="height_200">200dp</dimen>
     <dimen name="height_450">450dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
 </resources>

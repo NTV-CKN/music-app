@@ -54,4 +54,11 @@
     <string name="txt_favorite_song">Favorite songs ></string>
     <string name="txt_your_playlist">Your playlists ></string>
     <string name="txt_create_playlist">Create playlist</string>
+    <string name="txt_your_playlist_name">Your playlist name</string>
+    <string name="txt_message_dialog_create_playlist">Create playlist</string>
+    <string name="txt_create">Create</string>
+    <string name="txt_name_playlist_exists">The name playlist is already exist!</string>
+    <string name="txt_create_playlist_success">Create playlist successfully!</string>
+    <string name="txt_name_playlist_is_empty">Name playlist is empty!</string>
+    <string name="txt_cancel">Cancel</string>
 </resources>

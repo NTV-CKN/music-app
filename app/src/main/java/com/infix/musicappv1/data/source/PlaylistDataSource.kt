@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface PlaylistDataSource {
     interface Local {
         suspend fun insertPlaylist(playlist: Playlist)
+        suspend fun insertPlaylistStrict(playlist: Playlist)
         suspend fun deletePlaylist(playlist: Playlist)
         suspend fun updatePlaylist(playlist: Playlist)
         suspend fun getPlaylistWithName(name: String): Playlist?
