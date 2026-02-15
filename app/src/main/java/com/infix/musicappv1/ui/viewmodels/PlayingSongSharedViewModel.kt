@@ -1,5 +1,6 @@
 package com.infix.musicappv1.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import com.infix.musicappv1.data.model.now_playing.PlayingSong
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PlaybackRepository
+import com.infix.musicappv1.enums.PlaylistEnum
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -44,6 +46,13 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
         if (playlist == null) {
             playbackRepository.getPlaylists()[playlistT.namePlaylist] = playlistT
             playlist = playlistT
+        }
+        //avoid not update recent playlist
+        if (playlist.namePlaylist == PlaylistEnum.RECENT.value) {
+            val newPlaylist =
+                Playlist(namePlaylist = playlist.namePlaylist, playlistId = playlist.playlistId)
+            playbackRepository.getPlaylists()[playlistT.namePlaylist] = newPlaylist
+            playlist = newPlaylist
         }
 
         playlist.updateSongs(songs)

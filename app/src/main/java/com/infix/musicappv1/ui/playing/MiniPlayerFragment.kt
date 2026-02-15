@@ -137,12 +137,13 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
 
         //playlist current
         playingSongSharedViewModel.currentPlaylist.observe(viewLifecycleOwner) {
-            Log.d("SVU", "PlayListCurrent")
+            Log.d("SVU", "PlayListCurrent1")
             if (it == null) return@observe
-            if (it != playingSongSharedViewModel.getPlaylistTrackCurrent())
+            if (it != playingSongSharedViewModel.getPlaylistTrackCurrent()) {
+                Log.d("SVU", "THOA1")
                 miniPlayerViewModel.setMediaItems(it.getMediaItems())
+            }
         }
-
         //media items
         miniPlayerViewModel.mediaItems.observe(viewLifecycleOwner) { mediaItems ->
             if (mediaItems == null) return@observe

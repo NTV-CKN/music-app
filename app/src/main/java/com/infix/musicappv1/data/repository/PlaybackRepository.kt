@@ -1,5 +1,6 @@
 package com.infix.musicappv1.data.repository
 
+import android.util.Log
 import androidx.room.withTransaction
 import com.infix.musicappv1.data.model.now_playing.MediaItemTransitionWrap
 import com.infix.musicappv1.data.model.playlist.Playlist
@@ -78,6 +79,7 @@ class PlaybackRepository private constructor(
 
     fun updatePlaylist(playlist: Playlist) {
         _currentPlaylist.value = playlist
+        Log.d("SVU", "PlayListCurrent2")
         playlistTrackCurrent = playlist
     }
 

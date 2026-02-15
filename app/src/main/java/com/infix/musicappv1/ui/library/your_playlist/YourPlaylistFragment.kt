@@ -1,6 +1,5 @@
 package com.infix.musicappv1.ui.library.your_playlist
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,9 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.snackbar.Snackbar
+import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
 import com.infix.musicappv1.databinding.FragmentYourPlaylistBinding
@@ -58,8 +56,6 @@ class YourPlaylistFragment : Fragment() {
             CREATE_PLAYLIST_REQUEST_KEY,
             viewLifecycleOwner
         ) { requestKey, bundle ->
-            Log.d("SVUC", bundle.getString(KEY_NAME_PLAYLIST) ?: "DEOHAVE")
-
             if (requestKey != CREATE_PLAYLIST_REQUEST_KEY) return@setFragmentResultListener
             lifecycleScope.launch(Dispatchers.IO) {
                 val namePlaylist = bundle.getString(KEY_NAME_PLAYLIST) ?: return@launch
@@ -79,6 +75,10 @@ class YourPlaylistFragment : Fragment() {
         //create playlist
         binding.wrapCreatePlaylist.setOnClickListener {
             CreatePlaylistDialog().show(requireActivity().supportFragmentManager, null)
+        }
+        //more playlist custom
+        binding.tvLabelYourPlaylist.setOnClickListener {
+            findNavController().navigate(R.id.action_navigation_library_to_navigate_more_your_playlist)
         }
     }
 

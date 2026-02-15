@@ -28,6 +28,7 @@ class MiniPlayerViewModel(
     fun setMediaItems(mediaItems: List<MediaItem>?) {
         _mediaItems.value = mediaItems
     }
+
 //
 //    fun setPlaying(bool: Boolean) {
 //        _isPlaying.value = bool
