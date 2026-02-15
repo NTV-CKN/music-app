@@ -13,6 +13,10 @@ class PlaylistLocalDataSource(
         playlistDao.insert(playlist)
     }
 
+    override suspend fun insertPlaylistStrict(playlist: Playlist) {
+        playlistDao.insertStrict(playlist)
+    }
+
     override suspend fun deletePlaylist(playlist: Playlist) {
         playlistDao.delete(playlist)
     }

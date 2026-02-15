@@ -6,6 +6,7 @@ import com.infix.musicappv1.data.source.Result
 import kotlinx.coroutines.flow.Flow
 
 interface PlaylistRepository {
+    suspend fun insertPlaylistStrict(playlist: Playlist)
     suspend fun insertPlaylist(playlist: Playlist)
     suspend fun deletePlaylist(playlist: Playlist)
     suspend fun updatePlaylist(playlist: Playlist)

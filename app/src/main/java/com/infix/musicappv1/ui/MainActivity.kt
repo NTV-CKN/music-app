@@ -44,7 +44,7 @@ import kotlinx.coroutines.withContext
 import kotlin.getValue
 
 //data store pref (Guarantee must only one instance for one file
-private val Context.datastorePrefSession by preferencesDataStore(name = PREF_PREV_SESSION)
+val Context.datastorePrefSession by preferencesDataStore(name = PREF_PREV_SESSION)
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity() {
             try {
                 withContext(NonCancellable) {
                     datastorePrefSession.edit { pref ->
-                        pref[KEY_ID_ALBUM] = currentPlaylist.playlistId
+                        pref[KEY_ID_PLAYLIST] = currentPlaylist.playlistId
                         pref[KEY_SONG_ID] = playingSong.id
                     }
                 }
@@ -163,7 +163,7 @@ class MainActivity : AppCompatActivity() {
 
     private suspend fun restorePrevSession() {
         val dataPref = datastorePrefSession.data.first()
-        val playlistId = dataPref[KEY_ID_ALBUM]
+        val playlistId = dataPref[KEY_ID_PLAYLIST]
         val songId = dataPref[KEY_SONG_ID]
         Log.d("MainActivity", "restoePrevSession: songId ${songId} and playlistId ${playlistId}")
         playingSongSharedViewModel.restorePrevSession(songId, playlistId)
@@ -200,7 +200,9 @@ class MainActivity : AppCompatActivity() {
         const val PREF_PREV_SESSION = "com.infix.musicappv1.ui.MainActivity.PREF_PREV_SESSION"
         val KEY_SONG_ID: Preferences.Key<String> =
             stringPreferencesKey("com.infix.musicappv1.ui.MainActivity.KEY_SONG_ID")
-        val KEY_ID_ALBUM: Preferences.Key<Int> =
+        val KEY_ID_PLAYLIST: Preferences.Key<Int> =
             intPreferencesKey("com.infix.musicappv1.ui.MainActivity.KEY_ID_ALBUM")
+        val KEY_ID_PLAYLIST_CUSTOM =
+            intPreferencesKey("com.infix.musicappv1.ui.MainActivity.KEY_ID_PLAYLIST_CUSTOM")
     }
 }
