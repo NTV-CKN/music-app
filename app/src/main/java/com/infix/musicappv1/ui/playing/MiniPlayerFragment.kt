@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.activityViewModels
+import androidx.media3.session.MediaController
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
@@ -31,6 +32,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentMiniPlayerBinding
     private lateinit var animatorBtnPressed: Animator
     private lateinit var animatorRotatingDisk: ObjectAnimator
+    private var controller: MediaController? = null
     private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels {
         val db = MusicDatabase.getInstance(requireContext().applicationContext)
         Factory(InjectUtils.getPlaybackRepository(requireContext()))
@@ -119,6 +121,10 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setObserve() {
+        //controller
+        playbackViewModel.mediaController.observe(viewLifecycleOwner) {
+            controller = it
+        }
         //playing song
         playingSongSharedViewModel.playingSongLivedata.observe(viewLifecycleOwner) { playingSong ->
             val song = playingSong?.song
@@ -139,15 +145,15 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         playingSongSharedViewModel.currentPlaylist.observe(viewLifecycleOwner) {
             Log.d("SVU", "PlayListCurrent1")
             if (it == null) return@observe
+            Log.d(
+                "SVU",
+                "Playlist current $it \nplaylist track ${playingSongSharedViewModel.getPlaylistTrackCurrent()}"
+            )
             if (it != playingSongSharedViewModel.getPlaylistTrackCurrent()) {
                 Log.d("SVU", "THOA1")
-                miniPlayerViewModel.setMediaItems(it.getMediaItems())
+                controller?.setMediaItems(it.getMediaItems())
+                Log.d("SVU", "controller: $controller")
             }
-        }
-        //media items
-        miniPlayerViewModel.mediaItems.observe(viewLifecycleOwner) { mediaItems ->
-            if (mediaItems == null) return@observe
-            playbackViewModel.mediaController.value?.setMediaItems(mediaItems)
         }
 
         //current index to play
@@ -156,6 +162,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
                 val controller = playbackViewModel.mediaController.value ?: return@observe
                 val indexMediaCur = playingSongSharedViewModel.getMediaItemIndexCurrent()
                 // if old playlist same current playlist and index both same -> ignore
+
                 if (it == indexMediaCur && trackOldPlaylist == playingSongSharedViewModel.getPlaylistTrackCurrent())
                     return@observe
                 trackOldPlaylist = playingSongSharedViewModel.getPlaylistTrackCurrent()

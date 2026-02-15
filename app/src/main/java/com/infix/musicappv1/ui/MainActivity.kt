@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.DisplayMetrics
 import android.util.DisplayMetrics.DENSITY_DEFAULT
 import android.util.Log
@@ -20,6 +21,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -31,6 +33,7 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.ActivityMainBinding
 import com.infix.musicappv1.ui.MainActivity.Companion.PREF_PREV_SESSION
+import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.InjectUtils
@@ -52,7 +55,12 @@ class MainActivity : AppCompatActivity() {
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by viewModels {
         Factory(InjectUtils.getPlaybackRepository(this))
     }
-
+    private val homeViewModel: HomeViewModel by viewModels {
+        HomeViewModel.Factory(
+            InjectUtils.getSongRepository(this.applicationContext),
+            InjectUtils.getPlaylistRepository(this.applicationContext)
+        )
+    }
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -77,6 +85,13 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+//        if (savedInstanceState != null) {
+//            if (!savedInstanceState.getBoolean(KEY_IS_LOADED, false))
+//                homeViewModel.setupDataTmp()
+//            else
+//                homeViewModel.loadLocalData()
+//        }
+        homeViewModel.setupDataTmp()
         initializeNavHostFragment()
         setupObserver()
         calculateDensityOfApp()
@@ -100,6 +115,11 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         saveSessionPlaying()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        outState.putBoolean(KEY_IS_LOADED, true)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -144,6 +164,7 @@ class MainActivity : AppCompatActivity() {
                     datastorePrefSession.edit { pref ->
                         pref[KEY_ID_PLAYLIST] = currentPlaylist.playlistId
                         pref[KEY_SONG_ID] = playingSong.id
+//                        Log.d("FIX", "save session playing: ${playingSong.id}")
                     }
                 }
             } catch (e: Exception) {
@@ -165,7 +186,7 @@ class MainActivity : AppCompatActivity() {
         val dataPref = datastorePrefSession.data.first()
         val playlistId = dataPref[KEY_ID_PLAYLIST]
         val songId = dataPref[KEY_SONG_ID]
-        Log.d("MainActivity", "restoePrevSession: songId ${songId} and playlistId ${playlistId}")
+//        Log.d("FIX", "restoePrevSession: songId ${songId} and playlistId ${playlistId}")
         playingSongSharedViewModel.restorePrevSession(songId, playlistId)
     }
 
@@ -197,6 +218,7 @@ class MainActivity : AppCompatActivity() {
 
 
     companion object {
+        const val KEY_IS_LOADED = "KEY_IS_LOADED"
         const val PREF_PREV_SESSION = "com.infix.musicappv1.ui.MainActivity.PREF_PREV_SESSION"
         val KEY_SONG_ID: Preferences.Key<String> =
             stringPreferencesKey("com.infix.musicappv1.ui.MainActivity.KEY_SONG_ID")

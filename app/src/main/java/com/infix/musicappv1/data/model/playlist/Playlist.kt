@@ -1,5 +1,6 @@
 package com.infix.musicappv1.data.model.playlist
 
+import android.util.Log
 import androidx.media3.common.MediaItem
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -52,7 +53,8 @@ data class Playlist(
 
     private fun updateMediaItems(songs: List<Song>) {
         this.mediaItems.clear()
-        songs.forEach { song -> this.mediaItems.add(MediaItem.fromUri(song.source)) }
+        songs.forEach { song -> this.mediaItems.add(MediaItem.fromUri(song.source))
+        }
     }
 
     override fun equals(other: Any?): Boolean {

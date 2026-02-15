@@ -44,8 +44,14 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
     fun updatePlaylistCurrent(songs: List<Song>, playlistT: Playlist) {
         var playlist = playbackRepository.getPlaylists()[playlistT.namePlaylist]
         if (playlist == null) {
-            playbackRepository.getPlaylists()[playlistT.namePlaylist] = playlistT
-            playlist = playlistT
+            //we create new instance to avoid ref songs cleared => MediaItems is empty when call updateSongs
+            val newInstance = Playlist(
+                playlistId =  playlistT.playlistId,
+                namePlaylist =  playlistT.namePlaylist,
+                artwork = playlistT.artwork
+            )
+            playbackRepository.getPlaylists()[playlistT.namePlaylist] = newInstance
+            playlist = newInstance
         }
         //avoid not update recent playlist
         if (playlist.namePlaylist == PlaylistEnum.RECENT.value) {
@@ -96,7 +102,6 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
                     }
                 }
             }
-
         }
     }
 
