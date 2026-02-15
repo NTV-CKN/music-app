@@ -20,8 +20,8 @@ import com.infix.musicappv1.data.source.local.song.SongDao
 
 @Database(
     entities = [Album::class, Song::class, Playlist::class, SongRecent::class, PlaylistSong::class],
-    version = 3,
-    autoMigrations = [AutoMigration(from = 2, to = 3)]
+    version = 1,
+//    autoMigrations = [AutoMigration(from = 3, to = 4)]
 )
 @TypeConverters(value = [DateConverter::class])
 abstract class MusicDatabase : RoomDatabase() {
@@ -42,8 +42,9 @@ abstract class MusicDatabase : RoomDatabase() {
                         instance = Room.databaseBuilder(
                             context.applicationContext,
                             MusicDatabase::class.java,
-                            "MusicDB"
-                        ).build()
+                            "mydb"
+                        ).fallbackToDestructiveMigration()
+                            .build()
                     }
                 }
             }

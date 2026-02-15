@@ -152,6 +152,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
             if (it != playingSongSharedViewModel.getPlaylistTrackCurrent()) {
                 Log.d("SVU", "THOA1")
                 controller?.setMediaItems(it.getMediaItems())
+                Log.d("SVU", "controller: $controller")
             }
         }
 

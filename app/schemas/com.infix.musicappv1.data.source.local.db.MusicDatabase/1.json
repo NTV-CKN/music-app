@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7c826199ab1282193d07c72306e29d22",
+    "identityHash": "e775024c148b29e94282199bb9443968",
     "entities": [
       {
         "tableName": "albums",
@@ -39,7 +39,17 @@
             "id"
           ]
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_albums_name",
+            "unique": true,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_albums_name` ON `${TABLE_NAME}` (`name`)"
+          }
+        ],
         "foreignKeys": []
       },
       {
@@ -121,7 +131,7 @@
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`playlist_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `artwork` TEXT NOT NULL, `create_at` INTEGER, `is_custom` INTEGER NOT NULL, PRIMARY KEY(`playlist_id`))",
         "fields": [
           {
-            "fieldPath": "idPlaylist",
+            "fieldPath": "playlistId",
             "columnName": "playlist_id",
             "affinity": "INTEGER",
             "notNull": true
@@ -157,7 +167,17 @@
             "playlist_id"
           ]
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_playlists_name",
+            "unique": true,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_playlists_name` ON `${TABLE_NAME}` (`name`)"
+          }
+        ],
         "foreignKeys": []
       },
       {
@@ -271,7 +291,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7c826199ab1282193d07c72306e29d22')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e775024c148b29e94282199bb9443968')"
     ]
   }
 }

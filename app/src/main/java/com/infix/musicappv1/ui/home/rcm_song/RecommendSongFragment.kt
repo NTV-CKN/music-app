@@ -1,6 +1,7 @@
 package com.infix.musicappv1.ui.home.rcm_song
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

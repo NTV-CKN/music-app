@@ -5,6 +5,7 @@ import android.content.Intent
 import android.util.Log
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
@@ -134,6 +135,14 @@ class PlaybackService : MediaSessionService() {
             override fun onIsPlayingChanged(isPlaying: Boolean) {
                 super.onIsPlayingChanged(isPlaying)
                 playbackRepository.setIsPlaying(isPlaying)
+            }
+            override fun onPlaybackStateChanged(playbackState: Int) {
+                when (playbackState) {
+                    Player.STATE_IDLE -> Log.d("SVU", "Player đang IDLE - Có thể do chưa gọi prepare() hoặc bị stop")
+                    Player.STATE_BUFFERING -> Log.d("SVU", "Player đang BUFFERING - Đang đợi nạp nhạc...")
+                    Player.STATE_READY -> Log.d("SVU", "Player đã SẴN SÀNG")
+                    Player.STATE_ENDED -> Log.d("SVU", "Player đã HÁT XONG")
+                }
             }
         }
 

@@ -1,6 +1,7 @@
 package com.infix.musicappv1.ui.home.system_playlist
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -84,17 +85,12 @@ class SystemPlaylistFragment : Fragment() {
     }
 
     private fun extractSongsByPlaylist(playlist: Playlist): List<Song> {
-        val songs = homeViewModel.songsLocal.value
-        val result = mutableListOf<Song>()
-        songs?.let { songs ->
-            for (songId in playlist.songsId) {
-                val index = songs.indexOfFirst { song -> song.id == songId }
-                if (index != -1)
-                    result.add(songs[index])
-            }
-        }
+        val allSongs = homeViewModel.songsLocal.value ?: return emptyList()
+        val songsMap = allSongs.associateBy { it.id }
 
-        return result
+        return playlist.songsId.mapNotNull { songId ->
+            songsMap[songId]
+        }
     }
 
     private fun navigateToMoreAlbum() {

@@ -1,6 +1,7 @@
 package com.infix.musicappv1.ui.detail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,7 +68,7 @@ class PlaylistDetailFragment : BasePlayMusicFragment() {
                         playSong(
                             pos,
                             it,
-                            playlistDetailViewModel.playlist.value!!.songsObject
+                            it.songsObject
                         )
                     }
                 }

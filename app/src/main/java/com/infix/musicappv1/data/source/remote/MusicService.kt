@@ -11,7 +11,7 @@ https://thantrieu.com/resources/braniumapis/playlist.json
 https://thantrieu.com/resources/braniumapis/songs.json
  */
 interface MusicService {
-    @GET("/resources/braniumapis/songsObject.json")
+    @GET("/resources/braniumapis/songs.json")
     suspend fun loadSongs(): Response<SongList>
 
     @GET("/resources/braniumapis/playlist.json")

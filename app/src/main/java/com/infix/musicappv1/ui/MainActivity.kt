@@ -85,12 +85,12 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        if (savedInstanceState != null) {
-            if (!savedInstanceState.getBoolean(KEY_IS_LOADED, false))
-                homeViewModel.setupDataTmp()
-            else
-                homeViewModel.loadLocalData()
-        }
+//        if (savedInstanceState != null) {
+//            if (!savedInstanceState.getBoolean(KEY_IS_LOADED, false))
+//                homeViewModel.setupDataTmp()
+//            else
+//                homeViewModel.loadLocalData()
+//        }
         homeViewModel.setupDataTmp()
         initializeNavHostFragment()
         setupObserver()
