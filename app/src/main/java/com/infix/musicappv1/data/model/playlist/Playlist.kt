@@ -28,7 +28,10 @@ data class Playlist(
     var isCustom: Boolean = false,
     @Ignore
     @SerializedName("songs")
-    var songsId: List<String> = emptyList()
+    var songsId: List<String> = emptyList(),
+    @Ignore
+    //fix error logic click song recent but not update playlist
+    var playAt: Long = System.currentTimeMillis()
 ) {
     @Ignore
     private val _songsObject: MutableList<Song> = mutableListOf()
@@ -53,12 +56,12 @@ data class Playlist(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
         other as Playlist
 
         if (playlistId != other.playlistId) return false
+        if (playAt != other.playAt) return false
         if (_songsObject != other._songsObject) return false
 
         return true
@@ -66,9 +69,11 @@ data class Playlist(
 
     override fun hashCode(): Int {
         var result = playlistId
+        result = 31 * result + playAt.hashCode()
         result = 31 * result + _songsObject.hashCode()
         return result
     }
+
 
     companion object {
         //Playlist user create start at 50000 (we save next id into datastore)

@@ -62,4 +62,5 @@
     <string name="txt_name_playlist_is_empty">Name playlist is empty!</string>
     <string name="txt_cancel">Cancel</string>
     <string name="txt_your_playlists">Your playlists:</string>
+    <string name="txt_option_create_playlist_custom">Enter name playlist if you want create</string>
 </resources>
