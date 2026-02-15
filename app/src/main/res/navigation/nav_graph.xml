@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_navigation_library_to_navigation_detail_playlist"
             app:destination="@id/navigation_detail_playlist" />
+        <action
+            android:id="@+id/action_navigation_library_to_navigate_more_your_playlist"
+            app:destination="@id/navigate_more_your_playlist" />
     </fragment>
     <fragment
         android:id="@+id/navigation_settings"
@@ -43,4 +46,9 @@
             android:id="@+id/action_navigation_more_system_playlist_to_navigation_detail_playlist"
             app:destination="@id/navigation_detail_playlist" />
     </fragment>
+    <fragment
+        android:id="@+id/navigate_more_your_playlist"
+        android:name="com.infix.musicappv1.ui.library.your_playlist.more_your_playlist.MoreYourPlaylistFragment"
+        android:label="fragment_more_your_playlist"
+        tools:layout="@layout/fragment_more_your_playlist" />
 </navigation>

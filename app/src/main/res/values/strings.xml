@@ -61,4 +61,5 @@
     <string name="txt_create_playlist_success">Create playlist successfully!</string>
     <string name="txt_name_playlist_is_empty">Name playlist is empty!</string>
     <string name="txt_cancel">Cancel</string>
+    <string name="txt_your_playlists">Your playlists:</string>
 </resources>
