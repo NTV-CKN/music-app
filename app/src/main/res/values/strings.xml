@@ -63,4 +63,7 @@
     <string name="txt_cancel">Cancel</string>
     <string name="txt_your_playlists">Your playlists:</string>
     <string name="txt_option_create_playlist_custom">Enter name playlist if you want create</string>
+    <string name="txt_song_already_added_to_playlist">Song already added to playlist</string>
+    <string name="txt_add_song_into_playlist_success">Add song into playlist success</string>
+    <string name="txt_song_id_is_null">Song id is null</string>
 </resources>

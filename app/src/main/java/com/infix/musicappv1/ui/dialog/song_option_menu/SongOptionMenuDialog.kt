@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -23,6 +24,7 @@ class SongOptionMenuDialog : BottomSheetDialogFragment() {
     private lateinit var binding: DialogFragmentSongOptionMenuBinding
     private lateinit var adapter: SongMenuOptionAdapter
     private val songOptionMenuViewModel: SongOptionMenuViewModel by activityViewModels()
+
     //via bottom sheet info song
     private val songInfoViewModel: SongInfoDialogViewModel by activityViewModels()
 
@@ -162,6 +164,11 @@ class SongOptionMenuDialog : BottomSheetDialogFragment() {
     }
 
     private fun showDialogCreateOrAddPlaylistCustom() {
+        val supportFragmentManager = requireActivity().supportFragmentManager
+        supportFragmentManager.setFragmentResult(
+            REQUEST_KEY,
+            bundleOf(KEY_SONG_ID to songOptionMenuViewModel.song.value?.id)
+        )
         YourPlaylistAddOrCreateDialog()
             .show(
                 requireActivity().supportFragmentManager,
@@ -171,5 +178,7 @@ class SongOptionMenuDialog : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "SongOptionMenuDialog"
+        const val REQUEST_KEY = "SongOptionMenuDialog.REQUEST_KEY"
+        const val KEY_SONG_ID = "SongOptionMenuDialog.KEY_SONG_ID"
     }
 }

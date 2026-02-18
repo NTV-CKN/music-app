@@ -1,6 +1,7 @@
 package com.infix.musicappv1.data.repository.playlist
 
 import com.infix.musicappv1.data.model.playlist.Playlist
+import com.infix.musicappv1.data.model.playlist.PlaylistSong
 import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
 import com.infix.musicappv1.data.source.Result
 import com.infix.musicappv1.data.source.local.playlist.PlaylistLocalDataSource
@@ -29,6 +30,10 @@ class PlaylistRepositoryImpl(
 
     override suspend fun getPlaylistWithName(name: String): Playlist? {
         return playlistLocal.getPlaylistWithName(name)
+    }
+
+    override suspend fun insertPlaylistSongStrict(playlistSong: PlaylistSong) {
+        playlistLocal.insertPlaylistSongStrict(playlistSong)
     }
 
     override fun getPlaylistCustomWithLimit(limit: Int): Flow<List<Playlist>> {
