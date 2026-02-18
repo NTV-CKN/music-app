@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
 import com.infix.musicappv1.databinding.FragmentYourPlaylistBinding
+import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
 import com.infix.musicappv1.ui.library.your_playlist.dialog.CreatePlaylistDialog
 import com.infix.musicappv1.utils.InjectUtils
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,9 @@ class YourPlaylistFragment : Fragment() {
             InjectUtils.getPlaylistRepository(requireContext().applicationContext),
             requireContext().applicationContext
         )
+    }
+    private val playlistDetailViewModel: PlaylistDetailViewModel by activityViewModels {
+        PlaylistDetailViewModel.Factory(InjectUtils.getPlaylistRepository(requireContext().applicationContext))
     }
 
     override fun onCreateView(
@@ -86,7 +90,9 @@ class YourPlaylistFragment : Fragment() {
         adapter = PlaylistCustomAdapter(
             object : PlaylistCustomAdapter.OnPlaylistCustomClick {
                 override fun onClick(playlistWithSongs: PlaylistWithSongs) {
-
+                    playlistWithSongs.playlist.updateSongs(playlistWithSongs.songs)
+                    playlistDetailViewModel.setPlaylist(playlistWithSongs.playlist)
+                    findNavController().navigate(R.id.action_navigation_library_to_navigation_detail_playlist)
                 }
 
             },
