@@ -12,15 +12,18 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.option_menu.SongOptionMenuItem
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.DialogFragmentSongOptionMenuBinding
+import com.infix.musicappv1.databinding.DialogFragmentYourPlaylistAddOrCreateBinding
 import com.infix.musicappv1.databinding.ItemOptionMenuSongBinding
 import com.infix.musicappv1.enums.SongMenuOptionEnum
 import com.infix.musicappv1.ui.dialog.song_info.SongInfoDialog
 import com.infix.musicappv1.ui.dialog.song_info.SongInfoDialogViewModel
+import com.infix.musicappv1.ui.dialog.your_playlist_add_create.YourPlaylistAddOrCreateDialog
 
 class SongOptionMenuDialog : BottomSheetDialogFragment() {
     private lateinit var binding: DialogFragmentSongOptionMenuBinding
     private lateinit var adapter: SongMenuOptionAdapter
     private val songOptionMenuViewModel: SongOptionMenuViewModel by activityViewModels()
+    //via bottom sheet info song
     private val songInfoViewModel: SongInfoDialogViewModel by activityViewModels()
 
     //class adapter
@@ -141,7 +144,7 @@ class SongOptionMenuDialog : BottomSheetDialogFragment() {
             SongMenuOptionEnum.VIEW_SONG_INFO -> showSongInfo()
             SongMenuOptionEnum.VIEW_ARTIST -> {}
             SongMenuOptionEnum.REPORT_ERROR -> {}
-            SongMenuOptionEnum.ADD_TO_PLAYLIST -> {}
+            SongMenuOptionEnum.ADD_TO_PLAYLIST -> showDialogCreateOrAddPlaylistCustom()
             SongMenuOptionEnum.DOWNLOAD -> {}
             SongMenuOptionEnum.BLOCK_SONG -> {}
             SongMenuOptionEnum.VIEW_ALBUM -> {}
@@ -156,6 +159,14 @@ class SongOptionMenuDialog : BottomSheetDialogFragment() {
             requireActivity().supportFragmentManager,
             SongInfoDialog.TAG
         )
+    }
+
+    private fun showDialogCreateOrAddPlaylistCustom() {
+        YourPlaylistAddOrCreateDialog()
+            .show(
+                requireActivity().supportFragmentManager,
+                YourPlaylistAddOrCreateDialog.TAG
+            )
     }
 
     companion object {

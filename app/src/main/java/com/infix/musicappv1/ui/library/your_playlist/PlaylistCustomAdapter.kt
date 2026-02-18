@@ -1,6 +1,7 @@
 package com.infix.musicappv1.ui.library.your_playlist
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.infix.musicappv1.R
@@ -9,7 +10,8 @@ import com.infix.musicappv1.databinding.ItemYourPlaylistBinding
 
 class PlaylistCustomAdapter(
     private val onPlaylistClick: OnPlaylistCustomClick,
-    private val onMenuClick: OnMenuOptionClick
+    private val onMenuClick: OnMenuOptionClick,
+    private val showOptionMenu: Boolean = true
 ) : RecyclerView.Adapter<PlaylistCustomAdapter.ViewHolder>() {
     private val playlistCustom = mutableListOf<PlaylistWithSongs>()
 
@@ -21,6 +23,8 @@ class PlaylistCustomAdapter(
                 R.string.txt_amount_of_songs,
                 "" + playlistWithSong.songs.size
             )
+            binding.btnMoreMenuCustomPlaylist.visibility =
+                if (showOptionMenu) View.VISIBLE else View.GONE
             //playlist click
             binding.root.setOnClickListener { onPlaylistClick.onClick(playlistWithSong) }
             //on menu click
