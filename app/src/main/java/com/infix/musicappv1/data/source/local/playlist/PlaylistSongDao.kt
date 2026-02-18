@@ -9,4 +9,6 @@ import com.infix.musicappv1.data.model.playlist.PlaylistSong
 interface PlaylistSongDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(vararg playlistSong: PlaylistSong)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    suspend fun insertStrict(playlistSong: PlaylistSong)
 }
