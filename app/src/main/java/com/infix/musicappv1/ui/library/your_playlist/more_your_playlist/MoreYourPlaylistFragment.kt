@@ -50,7 +50,7 @@ class MoreYourPlaylistFragment : Fragment() {
                 override fun onClick(playlistWithSongs: PlaylistWithSongs) {
                     playlistWithSongs.playlist.updateSongs(playlistWithSongs.songs)
                     playlistDetailViewModel.setPlaylist(playlistWithSongs.playlist)
-                    findNavController().navigate(R.id.action_navigation_library_to_navigation_detail_playlist)
+                    findNavController().navigate(R.id.action_navigate_more_your_playlist_to_navigation_detail_playlist)
                 }
 
             },
