@@ -1,64 +1,85 @@
 package com.infix.musicappv1.ui.dialog.your_playlist_add_create
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.infix.musicappv1.R
+import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
+import com.infix.musicappv1.databinding.DialogFragmentYourPlaylistAddOrCreateBinding
+import com.infix.musicappv1.ui.library.your_playlist.PlaylistCustomAdapter
+import com.infix.musicappv1.ui.library.your_playlist.YourPlaylistViewModel
+import com.infix.musicappv1.ui.library.your_playlist.more_your_playlist.MoreYourPlaylistViewModel
+import com.infix.musicappv1.utils.InjectUtils
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+//this dialog creates a new playlist custom. If a user select an playlist custom existing, it
+// returns playlist id forSongOptionMenuDialo, via to fragment result
+class YourPlaylistAddOrCreateDialog : DialogFragment() {
+    private lateinit var adapter: PlaylistCustomAdapter
+    private lateinit var binding: DialogFragmentYourPlaylistAddOrCreateBinding
 
-/**
- * A simple [Fragment] subclass.
- * Use the [YourPlaylistAddOrCreateDialog.newInstance] factory method to
- * create an instance of this fragment.
- */
-class YourPlaylistAddOrCreateDialog : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(
-            R.layout.dialog_fragment_your_playlist_add_or_create,
-            container,
-            false
+    //create playlist custom
+    private val yourPlaylistViewModel: YourPlaylistViewModel by activityViewModels {
+        YourPlaylistViewModel.Factory(
+            InjectUtils.getPlaylistRepository(requireContext().applicationContext),
+            requireContext().applicationContext
         )
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment YourPlaylistAddOrCreateDialog.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            YourPlaylistAddOrCreateDialog().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    //get playlists custom (limit+offset)
+    private val moreYourPlaylistViewModel: MoreYourPlaylistViewModel by activityViewModels {
+        MoreYourPlaylistViewModel.Factory(
+            InjectUtils.getPlaylistRepository(requireContext().applicationContext)
+        )
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        binding = DialogFragmentYourPlaylistAddOrCreateBinding.inflate(layoutInflater)
+
+        val builder = AlertDialog.Builder(requireContext())
+        val dialog = builder.setView(binding.root).create()
+
+        //setup data playlist
+        initRvPlaylistCustoms()
+        setupObserve()
+        //setup event button
+        setupEventButtons()
+        return dialog
+    }
+
+    private fun setupObserve() {
+        moreYourPlaylistViewModel.playlists.observe(this) {
+            adapter.updatePlaylistCustoms(it ?: emptyList())
+        }
+    }
+
+    private fun initRvPlaylistCustoms() {
+        adapter = PlaylistCustomAdapter(
+            object : PlaylistCustomAdapter.OnPlaylistCustomClick {
+                override fun onClick(playlistWithSongs: PlaylistWithSongs) {
+
                 }
-            }
+            },
+            object : PlaylistCustomAdapter.OnMenuOptionClick {
+                override fun onClick(playlistWithSong: PlaylistWithSongs) {
+
+                }
+            },
+            showOptionMenu = false
+        )
+        binding.includeListPlaylistCustom.listYourLayout.adapter = adapter
+    }
+
+    private fun setupEventButtons() {
+
+    }
+
+    companion object {
+        const val TAG = "YourPlaylistAddOrCreateDialog"
     }
 }
