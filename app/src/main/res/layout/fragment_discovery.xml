@@ -1,14 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/discovery_nested_scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.discovery.DiscoveryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/tv_title_discovery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_start_16"
+            android:layout_marginTop="@dimen/margin_top_8"
+            android:text="@string/txt_discovery"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_search_discovery"
+            android:layout_width="@dimen/button_width_48"
+            android:layout_height="@dimen/button_height_48"
+            android:layout_marginEnd="@dimen/margin_end_16"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_search_24px"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title_discovery"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_title_discovery"
+            tools:ignore="ContentDescription" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fcv_artist"
+            android:name="com.infix.musicappv1.ui.discovery.artist.ArtistFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_discovery"
+            tools:layout="@layout/fragment_artist" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fcv_most_heard"
+            android:name="com.infix.musicappv1.ui.discovery.most_heard.MostHeardFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fcv_artist"
+            tools:layout="@layout/fragment_most_heard" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fcv_interest_artist"
+            android:name="com.infix.musicappv1.ui.discovery.interest_artist.InterestArtistFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fcv_most_heard"
+            tools:layout="@layout/fragment_interest_artist" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

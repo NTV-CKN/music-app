@@ -2,37 +2,36 @@ package com.infix.musicappv1.data.repository.song
 
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongList
-import com.infix.musicappv1.data.source.local.song.SongLocalDataSource
 import com.infix.musicappv1.data.source.Result
-import com.infix.musicappv1.data.source.remote.song.SongRemoteDataSource
+import com.infix.musicappv1.data.source.SongDataSource
 import kotlinx.coroutines.flow.Flow
 
 class SongRepositoryImpl(
-    private val remoteSongSrc: SongRemoteDataSource,
-    private val localSongSrc: SongLocalDataSource
+    private val remote: SongDataSource.Remote,
+    private val local: SongDataSource.Local
 ) : SongRepository {
     override suspend fun loadSongsRemote(): Result<SongList> {
-        return remoteSongSrc.loadSongs()
+        return remote.loadSongs()
     }
 
     override suspend fun getAllSongs(): List<Song> {
-        return localSongSrc.getAllSongs()
+        return local.getAllSongs()
     }
 
 
     override suspend fun insert(vararg song: Song) {
-        localSongSrc.insert(*song)
+        local.insert(*song)
     }
 
     override fun getSongsFavoriteWithLimit(limit: Int): Flow<List<Song>> {
-        return localSongSrc.getSongsFavoriteWithLimit(limit)
+        return local.getSongsFavoriteWithLimit(limit)
     }
 
     override fun getSongsFavoriteFlow(): Flow<List<Song>> {
-        return localSongSrc.getAllSongsFlow()
+        return local.getAllSongsFlow()
     }
 
     override fun getAllSongsFlow(): Flow<List<Song>> {
-        return localSongSrc.getAllSongsFlow()
+        return local.getAllSongsFlow()
     }
 }
