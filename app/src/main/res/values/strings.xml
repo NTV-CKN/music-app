@@ -67,4 +67,5 @@
     <string name="txt_add_song_into_playlist_success">Add song into playlist success</string>
     <string name="txt_song_id_is_null">Song id is null</string>
     <string name="txt_featured_artists"><![CDATA[Featured artists >]]></string>
+    <string name="txt_amount_of_interested">Amount of interested: %d</string>
 </resources>
