@@ -1,4 +1,4 @@
-package com.infix.musicappv1.ui.discovery.favorite_artist
+package com.infix.musicappv1.ui.discovery.interest_artist
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -8,13 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.infix.musicappv1.R
 
-class FavoriteArtistFragment : Fragment() {
+class InterestArtistFragment : Fragment() {
 
     companion object {
-        fun newInstance() = FavoriteArtistFragment()
+        fun newInstance() = InterestArtistFragment()
     }
 
-    private val viewModel: FavoriteArtistViewModel by viewModels()
+    private val viewModel: InterestArtistViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +26,6 @@ class FavoriteArtistFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_favorite_artist, container, false)
+        return inflater.inflate(R.layout.fragment_interest_artist, container, false)
     }
 }

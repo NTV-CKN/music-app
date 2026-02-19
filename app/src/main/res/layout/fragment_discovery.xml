@@ -55,13 +55,13 @@
             tools:layout="@layout/fragment_most_heard" />
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fcv_favorite_artist"
-            android:name="com.infix.musicappv1.ui.discovery.favorite_artist.FavoriteArtistFragment"
+            android:id="@+id/fcv_interest_artist"
+            android:name="com.infix.musicappv1.ui.discovery.interest_artist.InterestArtistFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fcv_most_heard"
-            tools:layout="@layout/fragment_favorite_artist" />
+            tools:layout="@layout/fragment_interest_artist" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

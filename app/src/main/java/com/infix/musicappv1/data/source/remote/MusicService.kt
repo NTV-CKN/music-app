@@ -9,6 +9,7 @@ import retrofit2.http.GET
 /*
 https://thantrieu.com/resources/braniumapis/playlist.json
 https://thantrieu.com/resources/braniumapis/songs.json
+https://thantrieu.com/resources/braniumapis/artists.json
  */
 interface MusicService {
     @GET("/resources/braniumapis/songs.json")
