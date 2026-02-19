@@ -19,7 +19,11 @@
     <fragment
         android:id="@+id/navigation_discovery"
         android:name="com.infix.musicappv1.ui.discovery.DiscoveryFragment"
-        tools:layout="@layout/fragment_discovery" />
+        tools:layout="@layout/fragment_discovery" >
+        <action
+            android:id="@+id/action_navigation_discovery_to_navigate_more_artist"
+            app:destination="@id/navigate_more_artist" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_library"
         android:name="com.infix.musicappv1.ui.library.LibraryFragment"
@@ -55,4 +59,7 @@
             android:id="@+id/action_navigate_more_your_playlist_to_navigation_detail_playlist"
             app:destination="@id/navigation_detail_playlist" />
     </fragment>
+    <fragment
+        android:id="@+id/navigate_more_artist"
+        android:name="com.infix.musicappv1.ui.discovery.artist.more.MoreArtistFragment"/>
 </navigation>
