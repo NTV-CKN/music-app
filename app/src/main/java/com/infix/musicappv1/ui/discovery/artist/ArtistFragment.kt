@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.databinding.FragmentArtistBinding
@@ -40,6 +41,14 @@ class ArtistFragment : Fragment() {
         binding.progressArtist.visibility = View.VISIBLE
         initRecyclerView()
         setupObserve()
+        setupEvent()
+    }
+
+    private fun setupEvent() {
+        //more artist
+        binding.tvLabelArtist.setOnClickListener {
+            findNavController().navigate(R.id.action_navigation_discovery_to_navigate_more_artist)
+        }
     }
 
     private fun initRecyclerView() {
