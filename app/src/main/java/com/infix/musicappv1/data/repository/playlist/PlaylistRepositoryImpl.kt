@@ -3,56 +3,55 @@ package com.infix.musicappv1.data.repository.playlist
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.playlist.PlaylistSong
 import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
+import com.infix.musicappv1.data.source.PlaylistDataSource
 import com.infix.musicappv1.data.source.Result
-import com.infix.musicappv1.data.source.local.playlist.PlaylistLocalDataSource
-import com.infix.musicappv1.data.source.remote.playlist.PlaylistRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 
 class PlaylistRepositoryImpl(
-    private val playlistLocal: PlaylistLocalDataSource,
-    private val playlistRemote: PlaylistRemoteDataSource
+    private val local: PlaylistDataSource.Local,
+    private val remote: PlaylistDataSource.Remote
 ) : PlaylistRepository {
     override suspend fun insertPlaylistStrict(playlist: Playlist) {
-        playlistLocal.insertPlaylistStrict(playlist)
+        local.insertPlaylistStrict(playlist)
     }
 
     override suspend fun insertPlaylist(playlist: Playlist) {
-        playlistLocal.insertPlaylist(playlist)
+        local.insertPlaylist(playlist)
     }
 
     override suspend fun deletePlaylist(playlist: Playlist) {
-        playlistLocal.deletePlaylist(playlist)
+        local.deletePlaylist(playlist)
     }
 
     override suspend fun updatePlaylist(playlist: Playlist) {
-        playlistLocal.updatePlaylist(playlist)
+        local.updatePlaylist(playlist)
     }
 
     override suspend fun getPlaylistWithName(name: String): Playlist? {
-        return playlistLocal.getPlaylistWithName(name)
+        return local.getPlaylistWithName(name)
     }
 
     override suspend fun insertPlaylistSongStrict(playlistSong: PlaylistSong) {
-        playlistLocal.insertPlaylistSongStrict(playlistSong)
+        local.insertPlaylistSongStrict(playlistSong)
     }
 
     override fun getPlaylistCustomWithLimit(limit: Int): Flow<List<Playlist>> {
-        return playlistLocal.getPlaylistCustomWithLimit(limit)
+        return local.getPlaylistCustomWithLimit(limit)
     }
 
     override fun getAllPlaylistCustoms(): Flow<List<Playlist>> {
-        return playlistLocal.getAllPlaylistCustoms()
+        return local.getAllPlaylistCustoms()
     }
 
     override fun getPlaylistCustomWithSong(): Flow<List<PlaylistWithSongs>?> {
-        return playlistLocal.getPlaylistCustomWithSong()
+        return local.getPlaylistCustomWithSong()
     }
 
     override fun getLimitPlaylistCustomWithSong(limit: Int): Flow<List<PlaylistWithSongs>?> {
-        return playlistLocal.getLimitPlaylistCustomWithSong(limit)
+        return local.getLimitPlaylistCustomWithSong(limit)
     }
 
     override suspend fun loadSystemPlaylists(): Result<List<Playlist>> {
-        return playlistRemote.loadSystemPlaylists()
+        return remote.loadSystemPlaylists()
     }
 }

@@ -1,5 +1,6 @@
 package com.infix.musicappv1.data.source.remote
 
+import com.infix.musicappv1.data.model.artist.ArtistList
 import com.infix.musicappv1.data.model.playlist.PlaylistList
 import com.infix.musicappv1.data.model.song.SongList
 import retrofit2.Response
@@ -17,4 +18,7 @@ interface MusicService {
 
     @GET("/resources/braniumapis/playlist.json")
     suspend fun loadSystemPlaylists(): Response<PlaylistList>
+
+    @GET("/resources/braniumapis/artists.json")
+    suspend fun loadArtists(): Response<ArtistList>
 }
