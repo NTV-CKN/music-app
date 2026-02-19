@@ -13,6 +13,7 @@ import com.infix.musicappv1.databinding.FragmentArtistBinding
 import com.infix.musicappv1.databinding.FragmentDiscoveryBinding
 import com.infix.musicappv1.ui.discovery.DiscoveryViewModel
 import com.infix.musicappv1.utils.InjectUtils
+import java.lang.Exception
 import kotlin.getValue
 
 class ArtistFragment : Fragment() {
@@ -60,7 +61,11 @@ class ArtistFragment : Fragment() {
 
     private fun setupObserve() {
         discoveryViewModel.artists.observe(viewLifecycleOwner) {
-            val sublist = it?.subList(0, 10) ?: emptyList()
+            val sublist = try {
+                it?.subList(0, 10) ?: emptyList()
+            } catch (_: Exception) {
+                emptyList()
+            }
             adapter.updateArtists(sublist)
             binding.progressArtist.visibility = View.GONE
         }

@@ -1,10 +1,22 @@
 package com.infix.musicappv1.data.model.artist
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "artists")
 data class Artist(
+    @PrimaryKey
+    @ColumnInfo("artist_id")
     val id: Int,
+    @ColumnInfo("artist_name")
     val name: String,
+    @ColumnInfo("artist_avatar")
     val avatar: String,
-    val interested: Int
+    @ColumnInfo("artist_interested")
+    val interested: Int,
+    @ColumnInfo("artist_is_interested")
+    val isInterested: Boolean = false
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
