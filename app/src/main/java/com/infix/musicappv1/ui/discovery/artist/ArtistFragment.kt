@@ -6,26 +6,63 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.infix.musicappv1.R
+import com.infix.musicappv1.data.model.artist.Artist
+import com.infix.musicappv1.databinding.FragmentArtistBinding
+import com.infix.musicappv1.databinding.FragmentDiscoveryBinding
+import com.infix.musicappv1.ui.discovery.DiscoveryViewModel
+import com.infix.musicappv1.utils.InjectUtils
+import kotlin.getValue
 
 class ArtistFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = ArtistFragment()
-    }
-
-    private val viewModel: ArtistViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
+    private lateinit var binding: FragmentArtistBinding
+    private lateinit var adapter: ArtistAdapter
+    private val discoveryViewModel: DiscoveryViewModel by activityViewModels {
+        DiscoveryViewModel.Factory(InjectUtils.getArtistRepository(requireContext().applicationContext))
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_artist, container, false)
+        binding = FragmentArtistBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.progressArtist.visibility = View.VISIBLE
+        initRecyclerView()
+        setupObserve()
+    }
+
+    private fun initRecyclerView() {
+        adapter = ArtistAdapter(
+            object : ArtistAdapter.OnArtistClick {
+                override fun onClick(artist: Artist) {
+
+                }
+            },
+            object : ArtistAdapter.OnInterestClick {
+                override fun onClick(artist: Artist) {
+
+                }
+            }
+        )
+
+        binding.includeListArtists.rvArtist.adapter = adapter
+    }
+
+    private fun setupObserve() {
+        discoveryViewModel.artists.observe(viewLifecycleOwner) {
+            val sublist = it?.subList(0, 10) ?: emptyList()
+            adapter.updateArtists(sublist)
+            binding.progressArtist.visibility = View.GONE
+        }
     }
 }
