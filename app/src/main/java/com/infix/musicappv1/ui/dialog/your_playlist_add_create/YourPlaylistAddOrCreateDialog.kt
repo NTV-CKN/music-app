@@ -3,16 +3,12 @@ package com.infix.musicappv1.ui.dialog.your_playlist_add_create
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.infix.musicappv1.R
-import com.infix.musicappv1.data.model.playlist.PlaylistSong
+import com.infix.musicappv1.data.model.playlist.PlaylistSongCrossRef
 import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
 import com.infix.musicappv1.databinding.DialogFragmentYourPlaylistAddOrCreateBinding
 import com.infix.musicappv1.ui.dialog.song_option_menu.SongOptionMenuDialog
@@ -22,7 +18,6 @@ import com.infix.musicappv1.ui.library.your_playlist.more_your_playlist.MoreYour
 import com.infix.musicappv1.utils.InjectUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -101,7 +96,7 @@ class YourPlaylistAddOrCreateDialog : DialogFragment() {
                     val playlist = playlistWithSongs.playlist
                     addSongToPlaylistJob = lifecycleScope.launch(Dispatchers.IO) {
                         val result = yourPlaylistViewModel.insertPlaylistSong(
-                            PlaylistSong(
+                            PlaylistSongCrossRef(
                                 playlist.playlistId,
                                 songId!!
                             )

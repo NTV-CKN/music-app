@@ -58,7 +58,7 @@ object InjectUtils {
     fun getArtistRepository(context: Context): ArtistRepository {
         val db = MusicDatabase.getInstance(context.applicationContext)
         return ArtistRepositoryImpl(
-            ArtistLocalDataSource(db.artistDao()),
+            ArtistLocalDataSource(db.artistDao(), db.artistSongDao()),
             ArtistRemoteDataSource()
         )
     }

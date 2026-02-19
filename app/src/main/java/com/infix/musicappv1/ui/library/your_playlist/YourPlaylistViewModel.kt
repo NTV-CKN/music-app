@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
-import com.infix.musicappv1.data.model.playlist.PlaylistSong
+import com.infix.musicappv1.data.model.playlist.PlaylistSongCrossRef
 import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
 import com.infix.musicappv1.data.repository.playlist.PlaylistRepository
 import com.infix.musicappv1.ui.MainActivity
@@ -28,9 +28,9 @@ class YourPlaylistViewModel(
     val playlistCustoms: LiveData<List<PlaylistWithSongs>?> =
         playlistRepository.getLimitPlaylistCustomWithSong().asLiveData()
 
-    suspend fun insertPlaylistSong(playlistSong: PlaylistSong):String {
+    suspend fun insertPlaylistSong(playlistSongCrossRef: PlaylistSongCrossRef):String {
         return try {
-            playlistRepository.insertPlaylistSongStrict(playlistSong)
+            playlistRepository.insertPlaylistSongStrict(playlistSongCrossRef)
             context.getString(R.string.txt_add_song_into_playlist_success)
         } catch (_: SQLiteConstraintException) {
             context.getString(R.string.txt_song_already_added_to_playlist)

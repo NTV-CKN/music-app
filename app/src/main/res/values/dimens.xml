@@ -59,4 +59,6 @@
     <dimen name="margin_8">8dp</dimen>
     <dimen name="width_42">42dp</dimen>
     <dimen name="height_42">42dp</dimen>
+    <dimen name="margin_start_50">50dp</dimen>
+    <dimen name="margin_end_50">50dp</dimen>
 </resources>

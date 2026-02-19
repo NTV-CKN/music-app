@@ -19,15 +19,18 @@
     <fragment
         android:id="@+id/navigation_discovery"
         android:name="com.infix.musicappv1.ui.discovery.DiscoveryFragment"
-        tools:layout="@layout/fragment_discovery" >
+        tools:layout="@layout/fragment_discovery">
         <action
             android:id="@+id/action_navigation_discovery_to_navigate_more_artist"
             app:destination="@id/navigate_more_artist" />
+        <action
+            android:id="@+id/action_navigation_discovery_to_navigate_detail_artist"
+            app:destination="@id/navigate_detail_artist" />
     </fragment>
     <fragment
         android:id="@+id/navigation_library"
         android:name="com.infix.musicappv1.ui.library.LibraryFragment"
-        tools:layout="@layout/fragment_library" >
+        tools:layout="@layout/fragment_library">
         <action
             android:id="@+id/action_navigation_library_to_navigation_detail_playlist"
             app:destination="@id/navigation_detail_playlist" />
@@ -45,7 +48,7 @@
     <fragment
         android:id="@+id/navigation_more_system_playlist"
         android:name="com.infix.musicappv1.ui.home.system_playlist.more_system_playlist.MoreSystemPlaylistFragment"
-        tools:layout="@layout/fragment_more_album" >
+        tools:layout="@layout/fragment_more_album">
         <action
             android:id="@+id/action_navigation_more_system_playlist_to_navigation_detail_playlist"
             app:destination="@id/navigation_detail_playlist" />
@@ -54,12 +57,17 @@
         android:id="@+id/navigate_more_your_playlist"
         android:name="com.infix.musicappv1.ui.library.your_playlist.more_your_playlist.MoreYourPlaylistFragment"
         android:label="fragment_more_your_playlist"
-        tools:layout="@layout/fragment_more_your_playlist" >
+        tools:layout="@layout/fragment_more_your_playlist">
         <action
             android:id="@+id/action_navigate_more_your_playlist_to_navigation_detail_playlist"
             app:destination="@id/navigation_detail_playlist" />
     </fragment>
     <fragment
         android:id="@+id/navigate_more_artist"
-        android:name="com.infix.musicappv1.ui.discovery.artist.more.MoreArtistFragment"/>
+        android:name="com.infix.musicappv1.ui.discovery.artist.more.MoreArtistFragment"
+        tools:layout="@layout/fragment_more_artist" />
+    <fragment
+        android:id="@+id/navigate_detail_artist"
+        android:name="com.infix.musicappv1.ui.discovery.artist.detail.ArtistDetailFragment"
+        tools:layout="@layout/fragment_artist_detail" />
 </navigation>
