@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 2,
-    "identityHash": "e9f939ef67a9cc3c193f2783a45eebce",
+    "version": 3,
+    "identityHash": "ade77ade9fe45929cf39dda7d0354a67",
     "entities": [
       {
         "tableName": "albums",
@@ -330,12 +330,39 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "artist_song_cross_ref",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`artist_id` INTEGER NOT NULL, `song_id` TEXT NOT NULL, PRIMARY KEY(`artist_id`, `song_id`))",
+        "fields": [
+          {
+            "fieldPath": "artistId",
+            "columnName": "artist_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "songId",
+            "columnName": "song_id",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "artist_id",
+            "song_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e9f939ef67a9cc3c193f2783a45eebce')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ade77ade9fe45929cf39dda7d0354a67')"
     ]
   }
 }

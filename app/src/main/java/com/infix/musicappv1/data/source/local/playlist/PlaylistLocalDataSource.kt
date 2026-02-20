@@ -1,7 +1,7 @@
 package com.infix.musicappv1.data.source.local.playlist
 
 import com.infix.musicappv1.data.model.playlist.Playlist
-import com.infix.musicappv1.data.model.playlist.PlaylistSong
+import com.infix.musicappv1.data.model.playlist.PlaylistSongCrossRef
 import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
 import com.infix.musicappv1.data.source.PlaylistDataSource
 import kotlinx.coroutines.flow.Flow
@@ -30,8 +30,8 @@ class PlaylistLocalDataSource(
         return playlistDao.getPlaylistWithName(name)
     }
 
-    override suspend fun insertPlaylistSongStrict(playlistSong: PlaylistSong) {
-        playlistSongDao.insertStrict(playlistSong)
+    override suspend fun insertPlaylistSongStrict(playlistSongCrossRef: PlaylistSongCrossRef) {
+        playlistSongDao.insertStrict(playlistSongCrossRef)
     }
 
     override fun getPlaylistCustomWithLimit(limit: Int): Flow<List<Playlist>> {

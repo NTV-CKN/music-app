@@ -1,6 +1,8 @@
 package com.infix.musicappv1.data.repository.artist
 
 import com.infix.musicappv1.data.model.artist.Artist
+import com.infix.musicappv1.data.model.artist.ArtistSongCrossRef
+import com.infix.musicappv1.data.model.artist.ArtistWithSongs
 import com.infix.musicappv1.data.source.ArtistDataSource
 import com.infix.musicappv1.data.source.Result
 import kotlinx.coroutines.flow.Flow
@@ -31,5 +33,13 @@ class ArtistRepositoryImpl(
 
     override suspend fun insert(vararg artist: Artist) {
         local.insert(*artist)
+    }
+
+    override suspend fun insertArtistSongCrossRef(vararg artistSongCrossRef: ArtistSongCrossRef) {
+        local.insertArtistSongCrossRef(*artistSongCrossRef)
+    }
+
+    override suspend fun getArtistWithSongsByArtistId(artistId: Int): ArtistWithSongs? {
+        return local.getArtistWithSongsByArtistId(artistId)
     }
 }

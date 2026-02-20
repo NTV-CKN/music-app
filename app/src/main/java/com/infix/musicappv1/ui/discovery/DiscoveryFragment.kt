@@ -15,7 +15,10 @@ import com.infix.musicappv1.utils.InjectUtils
 class DiscoveryFragment : Fragment() {
     private lateinit var binding: FragmentDiscoveryBinding
     private val discoveryViewModel: DiscoveryViewModel by activityViewModels {
-        DiscoveryViewModel.Factory(InjectUtils.getArtistRepository(requireContext().applicationContext))
+        DiscoveryViewModel.Factory(
+            InjectUtils.getArtistRepository(requireContext().applicationContext),
+            InjectUtils.getSongRepository(requireContext().applicationContext)
+        )
     }
 
     override fun onCreateView(

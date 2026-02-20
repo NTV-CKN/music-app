@@ -14,6 +14,8 @@ interface SongDataSource {
         suspend fun insert(vararg song: Song)
         suspend fun delete(vararg song: Song)
         suspend fun getAllSongs(): List<Song>
+        fun getTop15SongMostHeard(): Flow<List<Song>>
+        fun getTop40SongMostHeard(): Flow<List<Song>>
         fun getAllSongsFlow(): Flow<List<Song>>
         fun getSongsFavorite(): Flow<List<Song>>
         fun getSongsFavoriteWithLimit(limit: Int = 10): Flow<List<Song>>

@@ -1,17 +1,17 @@
-package com.infix.musicappv1.data.model.playlist
+package com.infix.musicappv1.data.model.artist
 
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 import com.infix.musicappv1.data.model.song.Song
 
-class PlaylistWithSongs(
+class ArtistWithSongs(
     @Embedded
-    val playlist: Playlist,
+    val artist: Artist,
     @Relation(
-        parentColumn = "playlist_id",
+        parentColumn = "artist_id",
         entityColumn = "song_id",
-        associateBy = Junction(PlaylistSongCrossRef::class)
+        associateBy = Junction(ArtistSongCrossRef::class)
     )
     val songs: List<Song>
 )

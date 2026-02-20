@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.room.withTransaction
 import com.infix.musicappv1.data.model.now_playing.MediaItemTransitionWrap
 import com.infix.musicappv1.data.model.playlist.Playlist
-import com.infix.musicappv1.data.model.playlist.PlaylistSong
+import com.infix.musicappv1.data.model.playlist.PlaylistSongCrossRef
 import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
 import com.infix.musicappv1.data.model.recent.SongRecent
 import com.infix.musicappv1.data.model.song.Song
@@ -118,10 +118,10 @@ class PlaybackRepository private constructor(
     suspend fun insertPlaylistAndSongs(playlist: Playlist, songs: List<Song>) {
         db.withTransaction {
             db.playlistDao().insert(playlist)
-            val playlistSongs = mutableListOf<PlaylistSong>()
+            val playlistSongCrossRefs = mutableListOf<PlaylistSongCrossRef>()
             for (song in songs)
-                playlistSongs.add(PlaylistSong(playlist.playlistId, song.id))
-            db.playlistSongDao().insert(*playlistSongs.toTypedArray())
+                playlistSongCrossRefs.add(PlaylistSongCrossRef(playlist.playlistId, song.id))
+            db.playlistSongDao().insert(*playlistSongCrossRefs.toTypedArray())
         }
     }
 

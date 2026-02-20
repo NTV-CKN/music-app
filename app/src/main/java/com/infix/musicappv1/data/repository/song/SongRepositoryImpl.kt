@@ -31,6 +31,14 @@ class SongRepositoryImpl(
         return local.getAllSongsFlow()
     }
 
+    override fun getTop15SongMostHeard(): Flow<List<Song>> {
+        return local.getTop15SongMostHeard()
+    }
+
+    override fun getTop40SongMostHeard(): Flow<List<Song>> {
+        return local.getTop40SongMostHeard()
+    }
+
     override fun getAllSongsFlow(): Flow<List<Song>> {
         return local.getAllSongsFlow()
     }

@@ -11,5 +11,7 @@ interface SongRepository {
     suspend fun insert(vararg song: Song)
      fun getSongsFavoriteWithLimit(limit: Int = 10): Flow<List<Song>>
     fun getSongsFavoriteFlow(): Flow<List<Song>>
+    fun getTop15SongMostHeard(): Flow<List<Song>>
+    fun getTop40SongMostHeard(): Flow<List<Song>>
     fun getAllSongsFlow(): Flow<List<Song>>
 }

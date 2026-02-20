@@ -1,6 +1,5 @@
 package com.infix.musicappv1.ui.discovery.artist
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,8 +10,8 @@ import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.databinding.FragmentArtistBinding
-import com.infix.musicappv1.databinding.FragmentDiscoveryBinding
 import com.infix.musicappv1.ui.discovery.DiscoveryViewModel
+import com.infix.musicappv1.ui.discovery.artist.detail.ArtistDetailViewModel
 import com.infix.musicappv1.utils.InjectUtils
 import java.lang.Exception
 import kotlin.getValue
@@ -21,7 +20,13 @@ class ArtistFragment : Fragment() {
     private lateinit var binding: FragmentArtistBinding
     private lateinit var adapter: ArtistAdapter
     private val discoveryViewModel: DiscoveryViewModel by activityViewModels {
-        DiscoveryViewModel.Factory(InjectUtils.getArtistRepository(requireContext().applicationContext))
+        DiscoveryViewModel.Factory(
+            InjectUtils.getArtistRepository(requireContext().applicationContext),
+            InjectUtils.getSongRepository(requireContext().applicationContext)
+        )
+    }
+    private val artistDetailViewModel: ArtistDetailViewModel by activityViewModels {
+        ArtistDetailViewModel.Factory(InjectUtils.getArtistRepository(requireContext().applicationContext))
     }
 
     override fun onCreateView(
@@ -55,7 +60,8 @@ class ArtistFragment : Fragment() {
         adapter = ArtistAdapter(
             object : ArtistAdapter.OnArtistClick {
                 override fun onClick(artist: Artist) {
-
+                    artistDetailViewModel.setArtistWithSongsByArtistId(artist.id)
+                    findNavController().navigate(R.id.action_navigation_discovery_to_navigate_detail_artist)
                 }
             },
             object : ArtistAdapter.OnInterestClick {
