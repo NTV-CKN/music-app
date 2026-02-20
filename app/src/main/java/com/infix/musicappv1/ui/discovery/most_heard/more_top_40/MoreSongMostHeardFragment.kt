@@ -1,32 +1,34 @@
-package com.infix.musicappv1.ui.discovery.most_heard
+package com.infix.musicappv1.ui.discovery.most_heard.more_top_40
 
+import androidx.fragment.app.viewModels
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
+import com.infix.musicappv1.databinding.FragmentMoreSongMostHeardBinding
 import com.infix.musicappv1.databinding.FragmentMostHeardBinding
 import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
+import com.infix.musicappv1.ui.discovery.most_heard.MostHeardViewModel
 import com.infix.musicappv1.ui.home.rcm_song.SongAdapter
 import com.infix.musicappv1.utils.InjectUtils
 
-class MostHeardFragment : BasePlayMusicFragment() {
-    private lateinit var binding: FragmentMostHeardBinding
+class MoreSongMostHeardFragment : BasePlayMusicFragment() {
+    private lateinit var binding: FragmentMoreSongMostHeardBinding
     private lateinit var adapter: SongAdapter
-    private val mostHeardViewModel: MostHeardViewModel by viewModels {
-        MostHeardViewModel.Factory(InjectUtils.getSongRepository(requireContext().applicationContext))
+    private val mostHeardViewModel: MoreSongMostHeardViewModel by viewModels {
+        MoreSongMostHeardViewModel.Factory(InjectUtils.getSongRepository(requireContext().applicationContext))
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMostHeardBinding.inflate(
+        binding = FragmentMoreSongMostHeardBinding.inflate(
             inflater,
             container,
             false
@@ -36,24 +38,19 @@ class MostHeardFragment : BasePlayMusicFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.progressSongMostHeard.visibility = View.VISIBLE
-        binding.tvLabelMostHeard.setOnClickListener {
-            findNavController().navigate(R.id.action_navigation_discovery_to_navigate_more_song_most_heard)
-        }
         initRecycleView()
         setupObserve()
     }
-
     private fun initRecycleView() {
         adapter = SongAdapter(
             object : SongAdapter.SongClickListener {
                 override fun onSongClick(song: Song, pos: Int) {
-                    val songs = mostHeardViewModel.top15SongMostHeard.value ?: return
+                    val songs = mostHeardViewModel.top40SongMostHeard.value ?: return
                     playSong(
                         pos,
                         Playlist(
-                            playlistId = PlaylistEnum.MOST_HEARD.playlistId,
-                            namePlaylist = PlaylistEnum.MOST_HEARD.name
+                            playlistId = PlaylistEnum.MORE_SONG_MOST_HEARD.playlistId,
+                            namePlaylist = PlaylistEnum.MORE_SONG_MOST_HEARD.name
                         ),
                         songs
                     )
@@ -66,13 +63,12 @@ class MostHeardFragment : BasePlayMusicFragment() {
             }
         )
 
-        binding.includeListSongMostHeard.rvSongList.adapter = adapter
+        binding.includeMoreSongMostHeard.rvSongList.adapter = adapter
     }
 
     private fun setupObserve() {
-        mostHeardViewModel.top15SongMostHeard.observe(viewLifecycleOwner) {
+        mostHeardViewModel.top40SongMostHeard.observe(viewLifecycleOwner) {
             adapter.updateSongs(it ?: emptyList())
-            binding.progressSongMostHeard.visibility = View.GONE
         }
     }
 }
