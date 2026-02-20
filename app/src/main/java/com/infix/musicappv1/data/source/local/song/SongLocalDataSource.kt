@@ -23,6 +23,14 @@ class SongLocalDataSource(
         return songDao.getAllSongs()
     }
 
+    override fun getTop15SongMostHeard(): Flow<List<Song>> {
+        return songDao.getTop15SongMostHeard()
+    }
+
+    override fun getTop40SongMostHeard(): Flow<List<Song>> {
+        return songDao.getTop40SongMostHeard()
+    }
+
     override fun getAllSongsFlow(): Flow<List<Song>> {
         return songDao.getAllSongsFlow()
     }

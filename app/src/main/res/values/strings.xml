@@ -72,4 +72,5 @@
     <string name="txt_amount_interested">Amount interested: %d</string>
     <string name="txt_your_interested_artist">Your interested artist: %s</string>
     <string name="txt_name_artist">Name artist: %s</string>
+    <string name="txt_song_most_heard">Song most heard</string>
 </resources>

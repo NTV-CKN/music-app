@@ -45,12 +45,14 @@ interface SongDao {
     )
     fun getSongsFavorite(): Flow<List<Song>>
 
-    @Query("""
+    @Query(
+        """
         SELECT *
         FROM songs 
         WHERE favorite = 1
         LIMIT :limit
-    """)
+    """
+    )
     fun getSongsFavoriteWithLimit(limit: Int = 10): Flow<List<Song>>
 
     @Query(
@@ -62,5 +64,23 @@ interface SongDao {
     )
     suspend fun updateFavorite(id: String, isFavorite: Boolean)
 
+    @Query(
+        """
+        SELECT *
+        FROM  songs
+        ORDER BY counter DESC
+        LIMIT 15
+    """
+    )
+    fun getTop15SongMostHeard(): Flow<List<Song>>
 
+    @Query(
+        """
+        SELECT *
+        FROM  songs
+        ORDER BY counter DESC
+        LIMIT 40
+    """
+    )
+    fun getTop40SongMostHeard(): Flow<List<Song>>
 }
