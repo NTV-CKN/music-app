@@ -9,6 +9,8 @@ interface ArtistDataSource {
     interface Local {
         fun getAllArtists(): Flow<List<Artist>>
         fun getLimitArtists(limit: Int = 10): Flow<List<Artist>>
+        fun getAllInterestedArtist(): Flow<List<Artist>>
+        fun getLimitInterestArtist(limit: Int = 10): Flow<List<Artist>>
         suspend fun delete(vararg artist: Artist)
         suspend fun update(vararg artist: Artist)
         suspend fun insert(vararg artist: Artist)

@@ -13,7 +13,7 @@
         android:layout_marginStart="@dimen/margin_start_16"
         android:layout_marginTop="@dimen/margin_top_8"
         android:text="@string/txt_playlist_provide"
-        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

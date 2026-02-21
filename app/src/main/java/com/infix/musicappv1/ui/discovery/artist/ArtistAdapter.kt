@@ -27,6 +27,12 @@ class ArtistAdapter(
                 .circleCrop()
                 .into(binding.imgArtist)
 
+            val icInterested = if (artist.isInterested)
+                R.drawable.ic_interest_on
+            else
+                R.drawable.ic_interest_off
+            binding.btnInterestArtist.setImageResource(icInterested)
+
             binding.root.setOnClickListener { onArtistClick.onClick(artist) }
             binding.btnInterestArtist.setOnClickListener { onInterestClick.onClick(artist) }
         }

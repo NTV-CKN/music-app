@@ -18,6 +18,14 @@ class ArtistLocalDataSource(
         return artistDao.getLimitArtists(limit)
     }
 
+    override fun getAllInterestedArtist(): Flow<List<Artist>> {
+        return artistDao.getAllArtists()
+    }
+
+    override fun getLimitInterestArtist(limit: Int): Flow<List<Artist>> {
+        return artistDao.getLimitArtistInterested(limit)
+    }
+
     override suspend fun delete(vararg artist: Artist) {
         artistDao.delete(*artist)
     }

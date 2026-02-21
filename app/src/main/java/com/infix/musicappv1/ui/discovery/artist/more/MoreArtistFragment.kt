@@ -6,9 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.databinding.FragmentMoreArtistBinding
 import com.infix.musicappv1.ui.discovery.artist.ArtistAdapter
+import com.infix.musicappv1.ui.discovery.artist.ArtistViewModel
+import com.infix.musicappv1.ui.discovery.artist.detail.ArtistDetailViewModel
 import com.infix.musicappv1.utils.InjectUtils
 
 class MoreArtistFragment : Fragment() {
@@ -17,6 +21,16 @@ class MoreArtistFragment : Fragment() {
     private val moreArtistViewModel: MoreArtistViewModel by activityViewModels {
         MoreArtistViewModel.Factory(InjectUtils.getArtistRepository(requireContext().applicationContext))
     }
+    private val artistViewModel: ArtistViewModel by activityViewModels {
+        ArtistViewModel.Factory(
+            InjectUtils.getArtistRepository(requireContext().applicationContext)
+        )
+    }
+
+    private val artistDetailViewModel: ArtistDetailViewModel by activityViewModels {
+        ArtistDetailViewModel.Factory(InjectUtils.getArtistRepository(requireContext().applicationContext))
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,12 +55,15 @@ class MoreArtistFragment : Fragment() {
         adapter = ArtistAdapter(
             object : ArtistAdapter.OnArtistClick {
                 override fun onClick(artist: Artist) {
-
+                    artistDetailViewModel.setArtistWithSongsByArtistId(artist.id)
+                    findNavController().navigate(R.id.action_navigation_discovery_to_navigate_detail_artist)
                 }
             },
             object : ArtistAdapter.OnInterestClick {
                 override fun onClick(artist: Artist) {
-
+                    artistViewModel.updateInterestedArtist(
+                        artist.apply { this.isInterested = !this.isInterested }
+                    )
                 }
             }
         )

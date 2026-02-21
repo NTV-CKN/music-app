@@ -13,7 +13,7 @@
         android:layout_marginStart="@dimen/margin_start_16"
         android:layout_marginTop="@dimen/margin_top_8"
         android:text="@string/txt_recommend_song"
-        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,10 +31,10 @@
 
     <include
         android:id="@+id/include_rcm_song"
+        layout="@layout/include_song_list"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top_8"
-        layout="@layout/include_song_list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title_rcm_song" />
