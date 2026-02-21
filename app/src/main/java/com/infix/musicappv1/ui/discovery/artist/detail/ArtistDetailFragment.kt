@@ -36,6 +36,9 @@ class ArtistDetailFragment : BasePlayMusicFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.toolbarArtistDetail.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
         initRecycleView()
         setupObserve()
     }

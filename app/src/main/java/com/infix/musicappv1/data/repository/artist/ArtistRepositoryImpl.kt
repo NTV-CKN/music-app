@@ -23,6 +23,14 @@ class ArtistRepositoryImpl(
         return local.getLimitArtists(limit)
     }
 
+    override fun getAllInterestedArtist(): Flow<List<Artist>> {
+        return local.getAllInterestedArtist()
+    }
+
+    override fun getLimitInterestArtist(limit: Int): Flow<List<Artist>> {
+       return local.getLimitInterestArtist(limit)
+    }
+
     override suspend fun delete(vararg artist: Artist) {
         local.delete(*artist)
     }

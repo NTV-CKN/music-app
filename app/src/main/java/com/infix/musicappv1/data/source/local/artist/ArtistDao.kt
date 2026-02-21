@@ -32,6 +32,21 @@ interface ArtistDao {
     """)
     fun getLimitArtists(limit: Int = 10): Flow<List<Artist>>
 
+    @Query("""
+        SELECT *
+        FROM artists
+        WHERE artist_is_interested = 1
+        LIMIT :limit
+    """)
+    fun getLimitArtistInterested(limit: Int = 10): Flow<List<Artist>>
+
+    @Query("""
+        SELECT *
+        FROM artists
+        WHERE artist_is_interested = 1
+    """)
+    fun getAllArtistInterested(): Flow<List<Artist>>
+
     @Transaction
     @Query("""
         SELECT *

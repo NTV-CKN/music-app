@@ -25,6 +25,12 @@ class ArtistFragment : Fragment() {
             InjectUtils.getSongRepository(requireContext().applicationContext)
         )
     }
+    private val artistViewModel: ArtistViewModel by activityViewModels {
+        ArtistViewModel.Factory(
+            InjectUtils.getArtistRepository(requireContext().applicationContext)
+        )
+    }
+
     private val artistDetailViewModel: ArtistDetailViewModel by activityViewModels {
         ArtistDetailViewModel.Factory(InjectUtils.getArtistRepository(requireContext().applicationContext))
     }
@@ -66,7 +72,9 @@ class ArtistFragment : Fragment() {
             },
             object : ArtistAdapter.OnInterestClick {
                 override fun onClick(artist: Artist) {
-
+                    artistViewModel.updateInterestedArtist(
+                        artist.apply { this.isInterested = !this.isInterested }
+                    )
                 }
             }
         )

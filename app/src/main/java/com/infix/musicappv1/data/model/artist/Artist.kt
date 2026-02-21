@@ -16,7 +16,7 @@ data class Artist(
     @ColumnInfo("artist_interested")
     val interested: Int,
     @ColumnInfo("artist_is_interested")
-    val isInterested: Boolean = false
+    var isInterested: Boolean = false
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

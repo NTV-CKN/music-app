@@ -1,19 +1,15 @@
 package com.infix.musicappv1.ui.discovery.most_heard.more_top_40
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.infix.musicappv1.R
+import androidx.fragment.app.viewModels
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.FragmentMoreSongMostHeardBinding
-import com.infix.musicappv1.databinding.FragmentMostHeardBinding
 import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
-import com.infix.musicappv1.ui.discovery.most_heard.MostHeardViewModel
 import com.infix.musicappv1.ui.home.rcm_song.SongAdapter
 import com.infix.musicappv1.utils.InjectUtils
 
@@ -38,6 +34,9 @@ class MoreSongMostHeardFragment : BasePlayMusicFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.toolbarMoreSongMostHeard.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
         initRecycleView()
         setupObserve()
     }
