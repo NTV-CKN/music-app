@@ -71,6 +71,8 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.activity)
     ksp(libs.androidx.room.compiler)
+    val paging_version = "3.3.0"
+    implementation(libs.androidx.paging.runtime.ktx)
 
     // --- 4. Navigation Component ---
     implementation(libs.androidx.navigation.fragment.ktx)

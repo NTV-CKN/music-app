@@ -13,6 +13,8 @@ import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.playlist.PlaylistSongCrossRef
 import com.infix.musicappv1.data.model.recent.SongRecent
 import com.infix.musicappv1.data.model.song.Song
+import com.infix.musicappv1.data.model.song.SongRemoteKeys
+import com.infix.musicappv1.data.model.tracking.TrackingUpdate
 import com.infix.musicappv1.data.source.local.album.AlbumDao
 import com.infix.musicappv1.data.source.local.artist.ArtistDao
 import com.infix.musicappv1.data.source.local.artist.ArtistSongDao
@@ -20,9 +22,14 @@ import com.infix.musicappv1.data.source.local.playlist.PlaylistDao
 import com.infix.musicappv1.data.source.local.playlist.PlaylistSongDao
 import com.infix.musicappv1.data.source.local.recent.SongRecentDao
 import com.infix.musicappv1.data.source.local.song.SongDao
+import com.infix.musicappv1.data.source.local.song.SongRemoteKeysDao
+import com.infix.musicappv1.data.source.local.tracking.TrackingUpdateDao
 
 @Database(
-    entities = [Album::class, Song::class, Playlist::class, SongRecent::class, PlaylistSongCrossRef::class, Artist::class, ArtistSongCrossRef::class],
+    entities = [Album::class, Song::class, Playlist::class,
+        SongRecent::class, PlaylistSongCrossRef::class,
+        Artist::class, ArtistSongCrossRef::class,
+        SongRemoteKeys::class, TrackingUpdate::class],
     version = 3,
     autoMigrations = [AutoMigration(from = 2, to = 3)]
 )
@@ -35,6 +42,8 @@ abstract class MusicDatabase : RoomDatabase() {
     abstract fun playlistSongDao(): PlaylistSongDao
     abstract fun artistDao(): ArtistDao
     abstract fun artistSongDao(): ArtistSongDao
+    abstract fun songRemoteKeysDao(): SongRemoteKeysDao
+    abstract fun trackingUpdateDao(): TrackingUpdateDao
 
     companion object {
         @Volatile
