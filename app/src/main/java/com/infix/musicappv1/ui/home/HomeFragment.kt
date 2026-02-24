@@ -1,14 +1,12 @@
 package com.infix.musicappv1.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentHomeBinding
 import com.infix.musicappv1.ui.home.rcm_song.RecommendSongViewModel
@@ -16,8 +14,6 @@ import com.infix.musicappv1.ui.home.system_playlist.SystemPlaylistViewModel
 import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.InjectUtils
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
@@ -62,22 +58,27 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (!isObserve) {
-            //setupInitDataTmp()
+            setupInitDataTmp()
             isObserve = true
+        }
+        if (savedInstanceState != null) {
+            val scrollY = savedInstanceState.getInt(SCROLL_POS_Y, 0)
+            binding.homeScrollView.post {
+                binding.homeScrollView.scrollTo(0, scrollY)
+            }
         }
     }
 
-    private fun setupInitDataTmp() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                //rcm song
-                rcmSongViewModel.songs.collectLatest {
-                    isSongsReady = true
-                    playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady)
-                }
-                //playlist system
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val scrollY = binding.root.scrollY
+        outState.putInt(SCROLL_POS_Y, scrollY)
+    }
 
-            }
+    private fun setupInitDataTmp() {
+        homeViewModel.songLocal.observe(viewLifecycleOwner) { songs ->
+            isSongsReady = true
+            playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady)
         }
         //album data
 //        homeViewModel.playlists.observe(viewLifecycleOwner) { playlists ->
@@ -85,5 +86,9 @@ class HomeFragment : Fragment() {
 //            isAlbumReady = true
 //            playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady)
 //        }
+    }
+
+    companion object {
+        const val SCROLL_POS_Y = "com.infix.musicappv1.ui.home.HomeFragment.SCROLL_POS_Y"
     }
 }

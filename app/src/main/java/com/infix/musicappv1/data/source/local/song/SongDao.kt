@@ -23,6 +23,15 @@ interface SongDao {
 
     @Query(
         """
+        UPDATE songs
+        SET replay = :replay, counter = :counter
+        WHERE song_id = :songId
+    """
+    )
+    suspend fun updateReplayAndCounter(songId: String, replay: Int, counter: Int)
+
+    @Query(
+        """
         SELECT *
         FROM songs
     """
@@ -44,7 +53,7 @@ interface SongDao {
         FROM songs
     """
     )
-    suspend fun getAllSongs(): List<Song>
+    fun getAllSongs(): Flow<List<Song>>
 
     @Query(
         """
@@ -74,7 +83,8 @@ interface SongDao {
     )
     suspend fun updateFavorite(id: String, isFavorite: Boolean)
 
-    @Query("""
+    @Query(
+        """
             DELETE
             FROM songs
     """

@@ -20,7 +20,7 @@ class SongLocalDataSource(
         songDao.delete(*song)
     }
 
-    override suspend fun getAllSongs(): List<Song> {
+    override fun getAllSongsFlow(): Flow<List<Song>> {
         return songDao.getAllSongs()
     }
 
@@ -33,7 +33,7 @@ class SongLocalDataSource(
     }
 
     override fun getAllSongsPaging(): PagingSource<Int, Song> {
-       return songDao.getAllSongsPaging()
+        return songDao.getAllSongsPaging()
     }
 
     override fun getNSongsPaging(limit: Int): PagingSource<Int, Song> {

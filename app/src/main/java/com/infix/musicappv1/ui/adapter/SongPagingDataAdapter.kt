@@ -49,7 +49,7 @@ class SongPagingDataAdapter(
             oldItem: Song,
             newItem: Song
         ): Boolean {
-//            Log.d("SSSS", "" + oldItem + " " + newItem)
+            Log.d("SSSS", "" + oldItem + " " + newItem)
             return oldItem.id == newItem.id
         }
 
@@ -61,7 +61,6 @@ class SongPagingDataAdapter(
                     && oldItem.title == newItem.title
                     && oldItem.album == newItem.album
         }
-
     }
 
     inner class ViewHolder(private val binding: ItemSongBinding) :
@@ -81,12 +80,12 @@ class SongPagingDataAdapter(
                             binding.root.context,
                             Manifest.permission.POST_NOTIFICATIONS
                         ) == PackageManager.PERMISSION_GRANTED
-                    PermissionRepository.Companion.getInstance()
+                    PermissionRepository.getInstance()
                         .setGrantedNotification(notificationGranted)
                     if (notificationGranted)
                         onSongClick.onSongClick(song, position)
 
-                    PermissionRepository.Companion.getInstance()
+                    PermissionRepository.getInstance()
                         .setAskPermissionNotification(!notificationGranted)
                 } else
                     onSongClick.onSongClick(song, position)

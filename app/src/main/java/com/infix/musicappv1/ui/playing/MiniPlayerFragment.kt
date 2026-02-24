@@ -128,7 +128,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         //playing song
         playingSongSharedViewModel.playingSongLivedata.observe(viewLifecycleOwner) { playingSong ->
             val song = playingSong?.song
-            Log.d("SVU", "PlayingSong with ${song}")
+            Log.d("MiniPlayerFragment", "PlayingSong with ${song}")
             song?.let {
                 binding.includeItemMiniPlayer.tvArtistMiniPlayer.text = it.artist
                 binding.includeItemMiniPlayer.tvTitleMiniplayer.text = it.title
@@ -143,16 +143,17 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
 
         //playlist current
         playingSongSharedViewModel.currentPlaylist.observe(viewLifecycleOwner) {
-            Log.d("SVU", "PlayListCurrent1")
+            Log.d("MiniPlayerFragment", "PlayListCurrent1")
             if (it == null) return@observe
             Log.d(
-                "SVU",
+                "MiniPlayerFragment",
                 "Playlist current $it \nplaylist track ${playingSongSharedViewModel.getPlaylistTrackCurrent()}"
             )
+
             if (it != playingSongSharedViewModel.getPlaylistTrackCurrent()) {
-                Log.d("SVU", "THOA1")
+                Log.d("MiniPlayerFragment", "THOA1")
                 controller?.setMediaItems(it.getMediaItems())
-                Log.d("SVU", "controller: $controller")
+                Log.d("MiniPlayerFragment", "controller: $controller")
             }
         }
 
@@ -166,7 +167,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
                 if (it == indexMediaCur && trackOldPlaylist == playingSongSharedViewModel.getPlaylistTrackCurrent())
                     return@observe
                 trackOldPlaylist = playingSongSharedViewModel.getPlaylistTrackCurrent()
-                Log.d("SVU", "MEDIA ${indexMediaCur} IT ${it}")
+                Log.d("MiniPlayerFragment", "MEDIA ${indexMediaCur} IT ${it}")
                 if (it > -1 && it < controller.mediaItemCount && PermissionRepository.getInstance().isGrantedNotification.value ?: false) {
                     controller.seekTo(it, 0)
                     controller.prepare()

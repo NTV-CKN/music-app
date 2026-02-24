@@ -99,8 +99,8 @@ class PlaybackRepository private constructor(
         db.songRecentDao().trimSongRecents()
     }
 
-    suspend fun updateSong(song: Song) {
-        db.songDao().update(song)
+    suspend fun updateSong(songId: String, replay: Int, counter: Int) {
+        db.songDao().updateReplayAndCounter(songId, replay, counter)
     }
 
     suspend fun updateSongFavorite(id: String, isFavorite: Boolean) {

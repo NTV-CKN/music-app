@@ -16,8 +16,8 @@ class SongRepositoryImpl(
         return remote.loadSongs(pagingParam)
     }
 
-    override suspend fun getAllSongs(): List<Song> {
-        return local.getAllSongs()
+    override fun getAllSongsFlow(): Flow<List<Song>> {
+        return local.getAllSongsFlow()
     }
 
 

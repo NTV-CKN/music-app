@@ -34,6 +34,7 @@ class SongRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, Song>
     ): MediatorResult {
+        Log.d("SongRemoteMediator", "Load type: "+loadType.name)
         val numPage = when (loadType) {
             LoadType.REFRESH -> {
                 //refresh page current

@@ -15,7 +15,7 @@ interface SongDataSource {
         suspend fun update(vararg song: Song)
         suspend fun insert(vararg song: Song)
         suspend fun delete(vararg song: Song)
-        suspend fun getAllSongs(): List<Song>
+        fun getAllSongsFlow(): Flow<List<Song>>
         fun getTop15SongMostHeard(): Flow<List<Song>>
         fun getTop40SongMostHeard(): Flow<List<Song>>
         fun getAllSongsPaging(): PagingSource<Int, Song>

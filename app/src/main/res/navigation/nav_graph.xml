@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_navigation_home_to_navigation_more_album"
             app:destination="@id/navigation_more_system_playlist" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigate_more_song_recommend"
+            app:destination="@id/navigate_more_song_recommend" />
     </fragment>
     <fragment
         android:id="@+id/navigation_discovery"
@@ -78,4 +81,9 @@
         android:name="com.infix.musicappv1.ui.discovery.most_heard.more_top_40.MoreSongMostHeardFragment"
         android:label="fragment_more_song_most_heard"
         tools:layout="@layout/fragment_more_song_most_heard" />
+    <fragment
+        android:id="@+id/navigate_more_song_recommend"
+        android:name="com.infix.musicappv1.ui.home.rcm_song.more.MoreRecommendSongFragment"
+        android:label="fragment_more_recommend_song"
+        tools:layout="@layout/fragment_more_recommend_song" />
 </navigation>
