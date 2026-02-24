@@ -19,5 +19,5 @@ interface TrackingUpdateDao {
        LIMIT 1
    """
     )
-    suspend fun getLastUpdateSongs(): Long
+    suspend fun getLastUpdateSongs(): Long?
 }

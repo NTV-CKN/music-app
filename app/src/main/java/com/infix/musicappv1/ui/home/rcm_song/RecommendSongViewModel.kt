@@ -2,9 +2,11 @@ package com.infix.musicappv1.ui.home.rcm_song
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import com.infix.musicappv1.data.repository.song.SongRemoteMediator
 import com.infix.musicappv1.data.repository.song.SongRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
@@ -26,7 +28,7 @@ class RecommendSongViewModel(
         remoteMediator = SongRemoteMediator(songRepository, musicDb),
     ) {
         songRepository.getNSongsPaging(10)
-    }.flow
+    }.flow.cachedIn(viewModelScope)//cached to avoid refresh when user return app
 
 
     class Factory(private val songRepository: SongRepository, private val musicDb: MusicDatabase) :
