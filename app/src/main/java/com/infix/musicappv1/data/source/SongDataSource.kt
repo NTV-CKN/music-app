@@ -1,5 +1,6 @@
 package com.infix.musicappv1.data.source
 
+import androidx.paging.PagingSource
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongList
 import com.infix.musicappv1.data.source.remote.PagingParam
@@ -17,7 +18,8 @@ interface SongDataSource {
         suspend fun getAllSongs(): List<Song>
         fun getTop15SongMostHeard(): Flow<List<Song>>
         fun getTop40SongMostHeard(): Flow<List<Song>>
-        fun getAllSongsFlow(): Flow<List<Song>>
+        fun getAllSongsPaging(): PagingSource<Int, Song>
+        fun getNSongsPaging(limit: Int = 10): PagingSource<Int, Song>
         fun getSongsFavorite(): Flow<List<Song>>
         fun getSongsFavoriteWithLimit(limit: Int = 10): Flow<List<Song>>
         suspend fun updateSongFavorite(id: String, isFavorite: Boolean)

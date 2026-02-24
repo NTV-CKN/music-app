@@ -1,37 +1,40 @@
 package com.infix.musicappv1.ui.home.rcm_song
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.infix.musicappv1.data.model.song.Song
+import androidx.lifecycle.ViewModelProvider
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import com.infix.musicappv1.data.repository.song.SongRemoteMediator
 import com.infix.musicappv1.data.repository.song.SongRepository
-import com.infix.musicappv1.data.source.Result
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.infix.musicappv1.data.source.local.db.MusicDatabase
 
 class RecommendSongViewModel(
-    private val songRepository: SongRepository
+    private val songRepository: SongRepository,
+    private val musicDb: MusicDatabase
 ) : ViewModel() {
-    private val _songs = MutableLiveData<List<Song>>()
-    val songs: LiveData<List<Song>> = _songs
+    //    private val _songs = MutableLiveData<List<Song>>()
+//    val songs: LiveData<List<Song>> = _songs
+    @OptIn(ExperimentalPagingApi::class)
+    val songs = Pager(
+        config = PagingConfig(
+            pageSize = 10,
+            initialLoadSize = 10,
+            prefetchDistance = 3,
+            enablePlaceholders = false
+        ),
+        remoteMediator = SongRemoteMediator(songRepository, musicDb),
+    ) {
+        songRepository.getNSongsPaging(10)
+    }.flow
 
-//    init {
-//        loadSongsRemote()
-//    }
 
-    fun setSongs(songs: List<Song>) {
-        _songs.postValue(songs)
-    }
-
-    private fun loadSongs() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = songRepository.loadSongsRemote()
-            if (result is Result.Success)
-                _songs.postValue(result.data.songs)
-            else if (result is Result.Error) {
-                _songs.postValue(emptyList())
-            }
+    class Factory(private val songRepository: SongRepository, private val musicDb: MusicDatabase) :
+        ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(RecommendSongViewModel::class.java))
+                return RecommendSongViewModel(songRepository, musicDb) as T
+            throw IllegalArgumentException("Model class is not suit")
         }
     }
 }

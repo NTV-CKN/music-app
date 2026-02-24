@@ -1,5 +1,6 @@
 package com.infix.musicappv1.data.repository.song
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -37,6 +38,7 @@ class SongRemoteMediator(
             LoadType.APPEND -> {
                 //get last song remote key
                 val songRemoteKey = getLastSongRemoteKey(state)
+//                Log.d("SongRemoteMediator", "Next key of APPEND ${songRemoteKey?.nextKey}")
                 songRemoteKey?.nextKey ?: return MediatorResult.Success(
                     endOfPaginationReached = true
                 )
@@ -44,13 +46,16 @@ class SongRemoteMediator(
         }
 
         return try {
+//            Log.d("SongRemoteMediator", "Offset: "+ numPage *state.config.pageSize  + ", limit: " + state.config.pageSize)
             val songsRemote = songRepository.loadSongsPaging(
-                PagingParam(offset = numPage, limit = state.config.pageSize)
+                PagingParam(offset = numPage*state.config.pageSize, limit = state.config.pageSize)
             )?.songs ?: emptyList()
             val endOfReach = songsRemote.isEmpty() || songsRemote.size < state.config.pageSize
+//            Log.d("SongRemoteMediator", "is end of reach: $endOfReach")
             musicDb.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     musicDb.songRemoteKeysDao().clear()
+                    musicDb.songDao().clear()
                 }
                 val nextKey = if (endOfReach) null else numPage + 1
                 val prevKey = if (numPage == 0) null else numPage - 1
@@ -60,15 +65,19 @@ class SongRemoteMediator(
 
                 musicDb.songRemoteKeysDao().insert(*remoteKeys.toTypedArray())
                 songRepository.insert(*songsRemote.toTypedArray())
-                MediatorResult.Success(endOfPaginationReached = endOfReach)
             }
+
+            MediatorResult.Success(endOfPaginationReached = endOfReach)
         } catch (e: Exception) {
+            Log.d("SongRemoteMediator", e.message?:"Unknow")
             MediatorResult.Error(e)
         }
     }
 
     private suspend fun getLastSongRemoteKey(state: PagingState<Int, Song>): SongRemoteKeys? {
-        return state.lastItemOrNull()?.let { song ->
+        return state.pages.lastOrNull {it.data.isNotEmpty() }?.data?.lastOrNull()?.let { song ->
+            Log.d("SongRemoteMediator", "song: $song")
+
             musicDb.songRemoteKeysDao().getSongRemoteKeysById(song.id)
         }
     }

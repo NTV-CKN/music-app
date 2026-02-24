@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.DisplayMetrics
 import android.util.DisplayMetrics.DENSITY_DEFAULT
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -21,7 +20,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -33,7 +31,6 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.ActivityMainBinding
 import com.infix.musicappv1.ui.MainActivity.Companion.PREF_PREV_SESSION
-import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.InjectUtils
@@ -44,23 +41,24 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.getValue
 
 //data store pref (Guarantee must only one instance for one file
 val Context.datastorePrefSession by preferencesDataStore(name = PREF_PREV_SESSION)
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by viewModels {
         Factory(InjectUtils.getPlaybackRepository(this))
     }
-    private val homeViewModel: HomeViewModel by viewModels {
-        HomeViewModel.Factory(
-            InjectUtils.getSongRepository(this.applicationContext),
-            InjectUtils.getPlaylistRepository(this.applicationContext)
-        )
-    }
+//    private val homeViewModel: HomeViewModel by viewModels {
+//        HomeViewModel.Factory(
+//            InjectUtils.getSongRepository(this.applicationContext),
+//            InjectUtils.getPlaylistRepository(this.applicationContext),
+//            MusicDatabase.getInstance(this.applicationContext)
+//        )
+//    }
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -91,7 +89,6 @@ class MainActivity : AppCompatActivity() {
 //            else
 //                homeViewModel.loadLocalData()
 //        }
-        homeViewModel.setupDataTmp()
         initializeNavHostFragment()
         setupObserver()
         calculateDensityOfApp()

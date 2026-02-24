@@ -1,12 +1,11 @@
-package com.infix.musicappv1.ui.home.rcm_song
+package com.infix.musicappv1.ui.adapter
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
@@ -33,15 +32,15 @@ class SongAdapter(
             binding.root.setOnClickListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     val notificationGranted =
-                        checkSelfPermission(
+                        ContextCompat.checkSelfPermission(
                             binding.root.context,
                             Manifest.permission.POST_NOTIFICATIONS
                         ) == PackageManager.PERMISSION_GRANTED
-                    PermissionRepository.getInstance().setGrantedNotification(notificationGranted)
+                    PermissionRepository.Companion.getInstance().setGrantedNotification(notificationGranted)
                     if (notificationGranted)
                         onSongClick.onSongClick(song, position)
 
-                    PermissionRepository.getInstance()
+                    PermissionRepository.Companion.getInstance()
                         .setAskPermissionNotification(!notificationGranted)
                 } else
                     onSongClick.onSongClick(song, position)

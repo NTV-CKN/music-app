@@ -1,5 +1,6 @@
 package com.infix.musicappv1.data.source.local.song
 
+import androidx.paging.PagingSource
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.source.SongDataSource
 import kotlinx.coroutines.flow.Flow
@@ -31,8 +32,12 @@ class SongLocalDataSource(
         return songDao.getTop40SongMostHeard()
     }
 
-    override fun getAllSongsFlow(): Flow<List<Song>> {
-        return songDao.getAllSongsFlow()
+    override fun getAllSongsPaging(): PagingSource<Int, Song> {
+       return songDao.getAllSongsPaging()
+    }
+
+    override fun getNSongsPaging(limit: Int): PagingSource<Int, Song> {
+        return songDao.getNSongsPaging(limit)
     }
 
     override fun getSongsFavorite(): Flow<List<Song>> {

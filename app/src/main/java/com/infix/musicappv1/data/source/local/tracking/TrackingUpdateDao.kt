@@ -17,7 +17,6 @@ interface TrackingUpdateDao {
        FROM tracking_update
        ORDER BY song_update_at DESC
        LIMIT 1
-       )
    """
     )
     suspend fun getLastUpdateSongs(): Long

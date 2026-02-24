@@ -5,41 +5,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
-import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
-import com.infix.musicappv1.data.source.remote.song.SongRemoteDataSource
+import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentRecommendSongBinding
 import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
+import com.infix.musicappv1.ui.adapter.SongAdapter
+import com.infix.musicappv1.ui.adapter.SongPagingDataAdapter
 import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
 import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.utils.InjectUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class RecommendSongFragment : BasePlayMusicFragment() {
     private var navigatePlaylistDetailJob: Job? = null
     private val rcmSongViewModel: RecommendSongViewModel by activityViewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(RecommendSongViewModel::class.java))
-                    return RecommendSongViewModel(
-                        SongRepositoryImpl(
-                            SongRemoteDataSource(),
-                            InjectUtils.getSongLocalDataSource(requireContext().applicationContext)
-                        )
-                    ) as T
-                throw IllegalArgumentException("Model class illegal")
-            }
-        }
+        RecommendSongViewModel.Factory(
+            InjectUtils.getSongRepository(requireContext().applicationContext),
+            MusicDatabase.getInstance(requireContext().applicationContext)
+        )
     }
     private val playlistDetailViewModel: PlaylistDetailViewModel by activityViewModels {
         PlaylistDetailViewModel.Factory(
@@ -50,13 +44,14 @@ class RecommendSongFragment : BasePlayMusicFragment() {
     private val homeViewModel: HomeViewModel by activityViewModels {
         HomeViewModel.Factory(
             InjectUtils.getSongRepository(requireContext().applicationContext),
-            InjectUtils.getPlaylistRepository(requireContext().applicationContext)
+            InjectUtils.getPlaylistRepository(requireContext().applicationContext),
+            MusicDatabase.getInstance(requireContext().applicationContext)
         )
     }
 //    private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels()
 
     private lateinit var binding: FragmentRecommendSongBinding
-    private lateinit var adapter: SongAdapter
+    private lateinit var adapter: SongPagingDataAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,7 +69,7 @@ class RecommendSongFragment : BasePlayMusicFragment() {
         super.onViewCreated(view, savedInstanceState)
         //init recycler view
         initRecyclerView()
-        observeViewModel()
+        collectData()
         setupEvent()
     }
 
@@ -90,22 +85,23 @@ class RecommendSongFragment : BasePlayMusicFragment() {
         binding.btnMoreRcmSong.setOnClickListener { navigateToPlaylistDetail() }
     }
 
-    private fun observeViewModel() {
+    private fun collectData() {
         binding.progressRcmSong.visibility = View.VISIBLE
-        rcmSongViewModel.songs.observe(viewLifecycleOwner) { songs ->
-            adapter.updateSongs(songs.subList(0, 10))
-            binding.progressRcmSong.visibility = View.GONE
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                rcmSongViewModel.songs.collectLatest { adapter.submitData(it) }
+            }
         }
     }
 
     private fun initRecyclerView() {
-        adapter = SongAdapter(
+        adapter = SongPagingDataAdapter(
             object : SongAdapter.SongClickListener {
                 override fun onSongClick(song: Song, pos: Int) {
                     playSong(
                         pos,
                         Playlist(namePlaylist = PlaylistEnum.RECOMMENDED.value),
-                        rcmSongViewModel.songs.value?.subList(0, 10) ?: emptyList()
+                        adapter.snapshot().items
                     )
                 }
             },
@@ -129,7 +125,7 @@ class RecommendSongFragment : BasePlayMusicFragment() {
                 playlistId = PlaylistEnum.MORE_RCM_SONG.playlistId
             )
             withContext(Dispatchers.Main) {
-                playlist.updateSongs(homeViewModel.songsLocal.value ?: emptyList())
+             //   playlist.updateSongs(homeViewModel.songsLocal.value ?: emptyList())
                 playlistDetailViewModel.setPlaylist(playlist)
                 findNavController().navigate(R.id.action_navigation_home_to_detail_playlist)
 

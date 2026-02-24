@@ -30,8 +30,8 @@ import com.infix.musicappv1.data.source.local.tracking.TrackingUpdateDao
         SongRecent::class, PlaylistSongCrossRef::class,
         Artist::class, ArtistSongCrossRef::class,
         SongRemoteKeys::class, TrackingUpdate::class],
-    version = 3,
-    autoMigrations = [AutoMigration(from = 2, to = 3)]
+    version = 4,
+   // autoMigrations = [AutoMigration(from = 3, to = 4)]
 )
 @TypeConverters(value = [DateConverter::class])
 abstract class MusicDatabase : RoomDatabase() {
