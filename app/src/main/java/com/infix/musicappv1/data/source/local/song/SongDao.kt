@@ -1,5 +1,6 @@
 package com.infix.musicappv1.data.source.local.song
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -22,11 +23,12 @@ interface SongDao {
 
     @Query(
         """
-        SELECT *
-        FROM songs
+        UPDATE songs
+        SET replay = :replay, counter = :counter
+        WHERE song_id = :songId
     """
     )
-    fun getAllSongsFlow(): Flow<List<Song>>
+    suspend fun updateReplayAndCounter(songId: String, replay: Int, counter: Int)
 
     @Query(
         """
@@ -34,7 +36,24 @@ interface SongDao {
         FROM songs
     """
     )
-    suspend fun getAllSongs(): List<Song>
+    fun getAllSongsPaging(): PagingSource<Int, Song>
+
+    @Query(
+        """
+        SELECT *
+        FROM songs
+        LIMIT :limit
+    """
+    )
+    fun getNSongsPaging(limit: Int = 10): PagingSource<Int, Song>
+
+    @Query(
+        """
+        SELECT *
+        FROM songs
+    """
+    )
+    fun getAllSongs(): Flow<List<Song>>
 
     @Query(
         """
@@ -63,6 +82,14 @@ interface SongDao {
         """
     )
     suspend fun updateFavorite(id: String, isFavorite: Boolean)
+
+    @Query(
+        """
+            DELETE
+            FROM songs
+    """
+    )
+    suspend fun clear()
 
     @Query(
         """

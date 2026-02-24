@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    android:id="@+id/home_nested_scroll_view"
+<ScrollView
+    android:id="@+id/home_scroll_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -58,4 +58,4 @@
             app:layout_constraintTop_toBottomOf="@+id/fcv_album_hot"
             tools:layout="@layout/fragment_recommend_song" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+</ScrollView>

@@ -41,6 +41,7 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
     private val _isDataReady = MutableLiveData(false)
     val isDataReady: LiveData<Boolean> = _isDataReady
 
+    //we must guarantee ref of songs not equals songs in playlist of system
     fun updatePlaylistCurrent(songs: List<Song>, playlistT: Playlist) {
         var playlist = playbackRepository.getPlaylists()[playlistT.namePlaylist]
         if (playlist == null) {

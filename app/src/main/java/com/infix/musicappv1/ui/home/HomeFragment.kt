@@ -1,18 +1,16 @@
 package com.infix.musicappv1.ui.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
-import com.infix.musicappv1.data.source.remote.song.SongRemoteDataSource
+import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentHomeBinding
-import com.infix.musicappv1.ui.home.system_playlist.SystemPlaylistViewModel
 import com.infix.musicappv1.ui.home.rcm_song.RecommendSongViewModel
+import com.infix.musicappv1.ui.home.system_playlist.SystemPlaylistViewModel
 import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.InjectUtils
@@ -24,31 +22,23 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by activityViewModels {
         HomeViewModel.Factory(
             InjectUtils.getSongRepository(requireContext().applicationContext),
-            InjectUtils.getPlaylistRepository(requireContext().applicationContext)
+            InjectUtils.getPlaylistRepository(requireContext().applicationContext),
+            MusicDatabase.getInstance(requireContext().applicationContext)
         )
     }
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels {
         Factory(InjectUtils.getPlaybackRepository(requireContext()))
     }
-
+    private val rcmSongViewModel: RecommendSongViewModel by activityViewModels {
+        RecommendSongViewModel.Factory(
+            InjectUtils.getSongRepository(requireContext().applicationContext),
+            MusicDatabase.getInstance(requireContext().applicationContext)
+        )
+    }
     private val systemPlaylistViewModel: SystemPlaylistViewModel by activityViewModels {
         SystemPlaylistViewModel.Factory(
             InjectUtils.getPlaylistRepository(requireContext().applicationContext)
         )
-    }
-    private val songViewModel: RecommendSongViewModel by activityViewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(RecommendSongViewModel::class.java))
-                    return RecommendSongViewModel(
-                        SongRepositoryImpl(
-                            SongRemoteDataSource(),
-                            InjectUtils.getSongLocalDataSource(requireContext().applicationContext)
-                        )
-                    ) as T
-                throw IllegalArgumentException("Model class illegal")
-            }
-        }
     }
 
     private var isObserve = false
@@ -71,22 +61,34 @@ class HomeFragment : Fragment() {
             setupInitDataTmp()
             isObserve = true
         }
+        if (savedInstanceState != null) {
+            val scrollY = savedInstanceState.getInt(SCROLL_POS_Y, 0)
+            binding.homeScrollView.post {
+                binding.homeScrollView.scrollTo(0, scrollY)
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val scrollY = binding.root.scrollY
+        outState.putInt(SCROLL_POS_Y, scrollY)
     }
 
     private fun setupInitDataTmp() {
-        //album data
-        homeViewModel.playlists.observe(viewLifecycleOwner) { playlists ->
-            systemPlaylistViewModel.setPlaylists(playlists)
-            isAlbumReady = true
+        homeViewModel.songLocal.observe(viewLifecycleOwner) { songs ->
+            isSongsReady = true
             playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady)
         }
-        //song local data
-        homeViewModel.songsLocal.observe(viewLifecycleOwner) { songs ->
-            songs?.let {
-                songViewModel.setSongs(it)
-                isSongsReady = true
-                playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady)
-            }
-        }
+        //album data
+//        homeViewModel.playlists.observe(viewLifecycleOwner) { playlists ->
+//            systemPlaylistViewModel.setPlaylists(playlists)
+//            isAlbumReady = true
+//            playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady)
+//        }
+    }
+
+    companion object {
+        const val SCROLL_POS_Y = "com.infix.musicappv1.ui.home.HomeFragment.SCROLL_POS_Y"
     }
 }

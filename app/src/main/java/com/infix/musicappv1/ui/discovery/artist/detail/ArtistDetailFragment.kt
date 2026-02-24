@@ -12,7 +12,7 @@ import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.FragmentArtistDetailBinding
 import com.infix.musicappv1.ui.BasePlayMusicFragment
-import com.infix.musicappv1.ui.home.rcm_song.SongAdapter
+import com.infix.musicappv1.ui.adapter.SongAdapter
 import com.infix.musicappv1.utils.InjectUtils
 
 class ArtistDetailFragment : BasePlayMusicFragment() {

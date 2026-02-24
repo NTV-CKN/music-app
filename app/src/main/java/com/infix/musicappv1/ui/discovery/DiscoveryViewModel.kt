@@ -11,6 +11,7 @@ import com.infix.musicappv1.data.repository.artist.ArtistRepository
 import com.infix.musicappv1.data.repository.song.SongRepository
 import com.infix.musicappv1.data.source.Result
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class DiscoveryViewModel(
@@ -32,7 +33,7 @@ class DiscoveryViewModel(
     }
 
     private suspend fun insertArtistSongCrossRef() {
-        val songs = songRepository.getAllSongs()
+        val songs = songRepository.getAllSongsFlow().first()
         val artists = artists.value ?: return
         val listArtistSongCrossRef = mutableListOf<ArtistSongCrossRef>()
         //convert map key is name and value is artist

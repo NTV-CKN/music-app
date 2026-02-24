@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
+import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentSystemPlaylistBinding
 import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
 import com.infix.musicappv1.ui.home.HomeViewModel
@@ -32,7 +33,8 @@ class SystemPlaylistFragment : Fragment() {
     private val homeViewModel: HomeViewModel by activityViewModels {
         HomeViewModel.Factory(
             InjectUtils.getSongRepository(requireContext().applicationContext),
-            InjectUtils.getPlaylistRepository(requireContext().applicationContext)
+            InjectUtils.getPlaylistRepository(requireContext().applicationContext),
+            MusicDatabase.getInstance(requireContext().applicationContext)
         )
     }
     private lateinit var binding: FragmentSystemPlaylistBinding
@@ -76,7 +78,7 @@ class SystemPlaylistFragment : Fragment() {
     private fun initRecyclerView() {
         adapter = SystemPlaylistAdapter(object : SystemPlaylistAdapter.SystemPlaylistClick {
             override fun onClick(playlist: Playlist) {
-                playlist.updateSongs(extractSongsByPlaylist(playlist))
+               // playlist.updateSongs(extractSongsByPlaylist(playlist))
                 playlistDetailViewModel.setPlaylist(playlist)
                 findNavController().navigate(R.id.action_navigation_home_to_detail_playlist)
             }
@@ -85,16 +87,17 @@ class SystemPlaylistFragment : Fragment() {
     }
 
     private fun extractSongsByPlaylist(playlist: Playlist): List<Song> {
-        val allSongs = homeViewModel.songsLocal.value ?: return emptyList()
-        val songsMap = allSongs.associateBy { it.id }
-
-        return playlist.songsId.mapNotNull { songId ->
-            songsMap[songId]
-        }
+//        val allSongs = homeViewModel.songsLocal.value ?: return emptyList()
+//        val songsMap = allSongs.associateBy { it.id }
+//
+//        return playlist.songsId.mapNotNull { songId ->
+//            songsMap[songId]
+//        }
+        return emptyList()
     }
 
     private fun navigateToMoreAlbum() {
-        moreSystemPlaylistViewModel.setPlaylists(homeViewModel.playlists.value ?: emptyList())
-        findNavController().navigate(R.id.action_navigation_home_to_navigation_more_album)
+//        moreSystemPlaylistViewModel.setPlaylists(homeViewModel.playlists.value ?: emptyList())
+//        findNavController().navigate(R.id.action_navigation_home_to_navigation_more_album)
     }
 }

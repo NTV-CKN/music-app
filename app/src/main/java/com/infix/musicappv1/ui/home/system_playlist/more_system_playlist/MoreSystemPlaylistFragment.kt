@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
+import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentMoreAlbumBinding
 import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
 import com.infix.musicappv1.ui.home.HomeViewModel
@@ -24,7 +25,8 @@ class MoreSystemPlaylistFragment : Fragment() {
     private val homeViewModel: HomeViewModel by activityViewModels {
         HomeViewModel.Factory(
             InjectUtils.getSongRepository(requireContext().applicationContext),
-            InjectUtils.getPlaylistRepository(requireContext().applicationContext)
+            InjectUtils.getPlaylistRepository(requireContext().applicationContext),
+            MusicDatabase.getInstance(requireContext().applicationContext)
         )
     }
     private val playlistDetailViewModel: PlaylistDetailViewModel by activityViewModels {
@@ -56,7 +58,7 @@ class MoreSystemPlaylistFragment : Fragment() {
         adapter =
             MoreSystemPlaylistAdapter(object : MoreSystemPlaylistAdapter.PlaylistClickListener {
                 override fun onClick(playlist: Playlist) {
-                    playlist.updateSongs(extractSongsByPlaylist(playlist))
+                  //  playlist.updateSongs(extractSongsByPlaylist(playlist))
                     playlistDetailViewModel.setPlaylist(playlist)
                     findNavController().navigate(R.id.action_navigation_more_system_playlist_to_navigation_detail_playlist)
                 }
@@ -66,17 +68,18 @@ class MoreSystemPlaylistFragment : Fragment() {
     }
 
     private fun extractSongsByPlaylist(playlist: Playlist): List<Song> {
-        val songs = homeViewModel.songsLocal.value
-        val result = mutableListOf<Song>()
-        songs?.let { songs ->
-            for (songId in playlist.songsId) {
-                val index = songs.indexOfFirst { song -> song.id == songId }
-                if (index != -1)
-                    result.add(songs[index])
-            }
-        }
-
-        return result
+//        val songs = homeViewModel.songsLocal.value
+//        val result = mutableListOf<Song>()
+//        songs?.let { songs ->
+//            for (songId in playlist.songsId) {
+//                val index = songs.indexOfFirst { song -> song.id == songId }
+//                if (index != -1)
+//                    result.add(songs[index])
+//            }
+//        }
+//
+//        return result
+        return emptyList()
     }
 
     private fun setupEvent() {

@@ -136,10 +136,19 @@ class PlaybackService : MediaSessionService() {
                 super.onIsPlayingChanged(isPlaying)
                 playbackRepository.setIsPlaying(isPlaying)
             }
+
             override fun onPlaybackStateChanged(playbackState: Int) {
                 when (playbackState) {
-                    Player.STATE_IDLE -> Log.d("SVU", "Player đang IDLE - Có thể do chưa gọi prepare() hoặc bị stop")
-                    Player.STATE_BUFFERING -> Log.d("SVU", "Player đang BUFFERING - Đang đợi nạp nhạc...")
+                    Player.STATE_IDLE -> Log.d(
+                        "SVU",
+                        "Player đang IDLE - Có thể do chưa gọi prepare() hoặc bị stop"
+                    )
+
+                    Player.STATE_BUFFERING -> Log.d(
+                        "SVU",
+                        "Player đang BUFFERING - Đang đợi nạp nhạc..."
+                    )
+
                     Player.STATE_READY -> Log.d("SVU", "Player đã SẴN SÀNG")
                     Player.STATE_ENDED -> Log.d("SVU", "Player đã HÁT XONG")
                 }
@@ -163,12 +172,12 @@ class PlaybackService : MediaSessionService() {
         jobUpdateSong?.cancel()
         jobUpdateSong = serviceScope.launch {
             delay(4000)
-            song.apply {
-                replay++
-                counter++
-            }
+//            song.apply {
+//                replay++
+//                counter++
+//            }
             withContext(Dispatchers.IO) {
-                playbackRepository.updateSong(song)
+                playbackRepository.updateSong(song.id, song.replay + 1, song.counter + 1)
             }
         }
     }
