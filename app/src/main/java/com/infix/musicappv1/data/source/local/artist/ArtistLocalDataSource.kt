@@ -1,5 +1,6 @@
 package com.infix.musicappv1.data.source.local.artist
 
+import androidx.paging.PagingSource
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.model.artist.ArtistSongCrossRef
 import com.infix.musicappv1.data.model.artist.ArtistWithSongs
@@ -10,9 +11,14 @@ class ArtistLocalDataSource(
     private val artistDao: ArtistDao,
     private val artistSongDao: ArtistSongDao
 ) : ArtistDataSource.Local {
-    override fun getAllArtists(): Flow<List<Artist>> {
-        return artistDao.getAllArtists()
+    override fun getArtistsPaging(): PagingSource<Int, Artist> {
+        return artistDao.getArtistsPaging()
     }
+
+    override fun getNArtistsPaging(limit: Int): PagingSource<Int, Artist> {
+        return artistDao.getNArtistsPaging(limit)
+    }
+
 
     override fun getLimitArtists(limit: Int): Flow<List<Artist>> {
         return artistDao.getLimitArtists(limit)

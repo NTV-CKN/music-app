@@ -9,8 +9,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.artist.Artist
+import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentInterestArtistBinding
-import com.infix.musicappv1.ui.discovery.artist.ArtistAdapter
+import com.infix.musicappv1.ui.adapter.artist.ArtistAdapter
 import com.infix.musicappv1.ui.discovery.artist.ArtistViewModel
 import com.infix.musicappv1.ui.discovery.artist.detail.ArtistDetailViewModel
 import com.infix.musicappv1.utils.InjectUtils
@@ -23,7 +24,8 @@ class InterestArtistFragment : Fragment() {
     }
     private val artistViewModel: ArtistViewModel by activityViewModels {
         ArtistViewModel.Factory(
-            InjectUtils.getArtistRepository(requireContext().applicationContext)
+            InjectUtils.getArtistRepository(requireContext().applicationContext),
+            MusicDatabase.getInstance(requireContext().applicationContext)
         )
     }
 

@@ -1,25 +1,20 @@
 package com.infix.musicappv1.ui.home.rcm_song.more
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentMoreRecommendSongBinding
 import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
-import com.infix.musicappv1.ui.adapter.SongAdapter
-import com.infix.musicappv1.ui.adapter.SongPagingDataAdapter
+import com.infix.musicappv1.ui.adapter.song.SongAdapter
+import com.infix.musicappv1.ui.adapter.song.SongPagingDataAdapter
 import com.infix.musicappv1.ui.home.HomeViewModel
-import com.infix.musicappv1.ui.home.rcm_song.RecommendSongViewModel
 import com.infix.musicappv1.utils.InjectUtils
 import com.infix.musicappv1.utils.MusicAppUtils
 import kotlinx.coroutines.flow.collectLatest

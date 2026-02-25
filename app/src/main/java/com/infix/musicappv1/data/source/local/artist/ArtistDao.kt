@@ -1,5 +1,6 @@
 package com.infix.musicappv1.data.source.local.artist
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -74,4 +75,17 @@ interface ArtistDao {
     """
     )
     suspend fun clear()
+
+    @Query("""
+        SELECT * 
+        FROM artists
+    """)
+    fun getArtistsPaging(): PagingSource<Int, Artist>
+
+    @Query("""
+        SELECT * 
+        FROM artists
+        LIMIT :limit
+    """)
+    fun getNArtistsPaging(limit: Int = 10): PagingSource<Int, Artist>
 }

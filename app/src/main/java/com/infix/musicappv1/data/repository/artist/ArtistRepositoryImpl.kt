@@ -1,5 +1,6 @@
 package com.infix.musicappv1.data.repository.artist
 
+import androidx.paging.PagingSource
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.model.artist.ArtistSongCrossRef
 import com.infix.musicappv1.data.model.artist.ArtistWithSongs
@@ -16,8 +17,12 @@ class ArtistRepositoryImpl(
         return remote.loadArtistsRemote()
     }
 
-    override fun getAllArtists(): Flow<List<Artist>> {
-        return local.getAllArtists()
+    override fun getArtistsPaging(): PagingSource<Int, Artist> {
+        return local.getArtistsPaging()
+    }
+
+    override fun getNArtistsPaging(limit: Int): PagingSource<Int, Artist> {
+        return local.getNArtistsPaging(limit)
     }
 
     override fun getLimitArtists(limit: Int): Flow<List<Artist>> {
@@ -29,7 +34,7 @@ class ArtistRepositoryImpl(
     }
 
     override fun getLimitInterestArtist(limit: Int): Flow<List<Artist>> {
-       return local.getLimitInterestArtist(limit)
+        return local.getLimitInterestArtist(limit)
     }
 
     override suspend fun delete(vararg artist: Artist) {

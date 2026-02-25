@@ -1,33 +1,52 @@
 package com.infix.musicappv1.ui.discovery.artist
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.artist.Artist
+import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentArtistBinding
+import com.infix.musicappv1.ui.adapter.artist.ArtistAdapter
+import com.infix.musicappv1.ui.adapter.artist.ArtistPagingDataAdapter
 import com.infix.musicappv1.ui.discovery.DiscoveryViewModel
 import com.infix.musicappv1.ui.discovery.artist.detail.ArtistDetailViewModel
 import com.infix.musicappv1.utils.InjectUtils
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import kotlin.getValue
 
 class ArtistFragment : Fragment() {
     private lateinit var binding: FragmentArtistBinding
-    private lateinit var adapter: ArtistAdapter
-    private val discoveryViewModel: DiscoveryViewModel by activityViewModels {
-        DiscoveryViewModel.Factory(
-            InjectUtils.getArtistRepository(requireContext().applicationContext),
-            InjectUtils.getSongRepository(requireContext().applicationContext)
-        )
-    }
+    private val adapter: ArtistPagingDataAdapter = ArtistPagingDataAdapter(
+        object : ArtistPagingDataAdapter.OnArtistClick {
+            override fun onClick(artist: Artist) {
+                artistDetailViewModel.setArtistWithSongsByArtistId(artist.id)
+                findNavController().navigate(R.id.action_navigation_discovery_to_navigate_detail_artist)
+            }
+        },
+        object : ArtistPagingDataAdapter.OnInterestClick {
+            override fun onClick(artist: Artist) {
+                artistViewModel.updateInterestedArtist(
+                    artist.apply { this.isInterested = !this.isInterested }
+                )
+            }
+        }
+    )
     private val artistViewModel: ArtistViewModel by activityViewModels {
         ArtistViewModel.Factory(
-            InjectUtils.getArtistRepository(requireContext().applicationContext)
+            InjectUtils.getArtistRepository(requireContext().applicationContext),
+            MusicDatabase.getInstance(requireContext().applicationContext)
         )
     }
 
@@ -51,7 +70,7 @@ class ArtistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.progressArtist.visibility = View.VISIBLE
         initRecyclerView()
-        setupObserve()
+        setupPagingArtist()
         setupEvent()
     }
 
@@ -63,34 +82,16 @@ class ArtistFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        adapter = ArtistAdapter(
-            object : ArtistAdapter.OnArtistClick {
-                override fun onClick(artist: Artist) {
-                    artistDetailViewModel.setArtistWithSongsByArtistId(artist.id)
-                    findNavController().navigate(R.id.action_navigation_discovery_to_navigate_detail_artist)
-                }
-            },
-            object : ArtistAdapter.OnInterestClick {
-                override fun onClick(artist: Artist) {
-                    artistViewModel.updateInterestedArtist(
-                        artist.apply { this.isInterested = !this.isInterested }
-                    )
-                }
-            }
-        )
-
         binding.includeListArtists.rvArtist.adapter = adapter
     }
 
-    private fun setupObserve() {
-        discoveryViewModel.artists.observe(viewLifecycleOwner) {
-            val sublist = try {
-                it?.subList(0, 10) ?: emptyList()
-            } catch (_: Exception) {
-                emptyList()
+    private fun setupPagingArtist() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                artistViewModel.artists.collectLatest {
+                    adapter.submitData(it)
+                }
             }
-            adapter.updateArtists(sublist)
-            binding.progressArtist.visibility = View.GONE
         }
     }
 }

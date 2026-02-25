@@ -9,7 +9,7 @@ import androidx.fragment.app.activityViewModels
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.databinding.FragmentDiscoveryBinding
-import com.infix.musicappv1.ui.discovery.artist.ArtistAdapter
+import com.infix.musicappv1.ui.adapter.artist.ArtistAdapter
 import com.infix.musicappv1.utils.InjectUtils
 
 class DiscoveryFragment : Fragment() {
@@ -35,6 +35,6 @@ class DiscoveryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        discoveryViewModel.loadArtistsRemote()
+       // discoveryViewModel.loadArtistsRemote()
     }
 }

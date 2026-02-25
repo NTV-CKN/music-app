@@ -1,7 +1,6 @@
 package com.infix.musicappv1.ui.detail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,7 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.FragmentDetailPlaylistBinding
 import com.infix.musicappv1.ui.BasePlayMusicFragment
-import com.infix.musicappv1.ui.adapter.SongAdapter
+import com.infix.musicappv1.ui.adapter.song.SongAdapter
 import com.infix.musicappv1.utils.InjectUtils
 
 class PlaylistDetailFragment : BasePlayMusicFragment() {

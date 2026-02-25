@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LOG_TAG
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
@@ -16,8 +15,8 @@ import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentRecommendSongBinding
 import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
-import com.infix.musicappv1.ui.adapter.SongAdapter
-import com.infix.musicappv1.ui.adapter.SongPagingDataAdapter
+import com.infix.musicappv1.ui.adapter.song.SongAdapter
+import com.infix.musicappv1.ui.adapter.song.SongPagingDataAdapter
 import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.utils.InjectUtils
 import com.infix.musicappv1.utils.MusicAppUtils
