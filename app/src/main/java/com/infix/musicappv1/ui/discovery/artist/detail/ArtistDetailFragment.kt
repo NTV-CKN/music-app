@@ -1,7 +1,6 @@
 package com.infix.musicappv1.ui.discovery.artist.detail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,7 @@ import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.FragmentArtistDetailBinding
 import com.infix.musicappv1.ui.BasePlayMusicFragment
-import com.infix.musicappv1.ui.adapter.SongAdapter
+import com.infix.musicappv1.ui.adapter.song.SongAdapter
 import com.infix.musicappv1.utils.InjectUtils
 
 class ArtistDetailFragment : BasePlayMusicFragment() {
@@ -51,7 +50,7 @@ class ArtistDetailFragment : BasePlayMusicFragment() {
                 binding.tvAmountInterestedArtistDetail.text =
                     getString(R.string.txt_amount_of_interested, artist.interested)
                 binding.tvIsInterestedArtistDetail.text =
-                    getString(R.string.txt_your_interested_artist, artist.isInterested)
+                    getString(R.string.txt_your_interested_artist, ""+artist.isInterested)
 
                 Glide.with(binding.root)
                     .load(artist.avatar)

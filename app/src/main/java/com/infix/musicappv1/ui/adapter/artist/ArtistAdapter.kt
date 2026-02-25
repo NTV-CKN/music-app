@@ -1,4 +1,4 @@
-package com.infix.musicappv1.ui.discovery.artist
+package com.infix.musicappv1.ui.adapter.artist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

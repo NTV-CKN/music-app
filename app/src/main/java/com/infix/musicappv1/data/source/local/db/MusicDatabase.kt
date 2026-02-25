@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.artist.Artist
+import com.infix.musicappv1.data.model.artist.ArtistRemoteKeys
 import com.infix.musicappv1.data.model.artist.ArtistSongCrossRef
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.playlist.PlaylistSongCrossRef
@@ -17,6 +18,7 @@ import com.infix.musicappv1.data.model.song.SongRemoteKeys
 import com.infix.musicappv1.data.model.tracking.TrackingUpdate
 import com.infix.musicappv1.data.source.local.album.AlbumDao
 import com.infix.musicappv1.data.source.local.artist.ArtistDao
+import com.infix.musicappv1.data.source.local.artist.ArtistRemoteKeysDao
 import com.infix.musicappv1.data.source.local.artist.ArtistSongDao
 import com.infix.musicappv1.data.source.local.playlist.PlaylistDao
 import com.infix.musicappv1.data.source.local.playlist.PlaylistSongDao
@@ -26,12 +28,20 @@ import com.infix.musicappv1.data.source.local.song.SongRemoteKeysDao
 import com.infix.musicappv1.data.source.local.tracking.TrackingUpdateDao
 
 @Database(
-    entities = [Album::class, Song::class, Playlist::class,
-        SongRecent::class, PlaylistSongCrossRef::class,
-        Artist::class, ArtistSongCrossRef::class,
-        SongRemoteKeys::class, TrackingUpdate::class],
+    entities = [
+        Album::class,
+        Song::class,
+        Playlist::class,
+        SongRecent::class,
+        PlaylistSongCrossRef::class,
+        Artist::class,
+        ArtistSongCrossRef::class,
+        SongRemoteKeys::class,
+        TrackingUpdate::class,
+        ArtistRemoteKeys::class
+    ],
     version = 4,
-   // autoMigrations = [AutoMigration(from = 3, to = 4)]
+    // autoMigrations = [AutoMigration(from = 3, to = 4)]
 )
 @TypeConverters(value = [DateConverter::class])
 abstract class MusicDatabase : RoomDatabase() {
@@ -44,6 +54,7 @@ abstract class MusicDatabase : RoomDatabase() {
     abstract fun artistSongDao(): ArtistSongDao
     abstract fun songRemoteKeysDao(): SongRemoteKeysDao
     abstract fun trackingUpdateDao(): TrackingUpdateDao
+    abstract fun artistRemoteKeysDao(): ArtistRemoteKeysDao
 
     companion object {
         @Volatile
