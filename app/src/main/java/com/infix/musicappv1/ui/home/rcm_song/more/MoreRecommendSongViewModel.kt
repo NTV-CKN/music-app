@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.infix.musicappv1.data.repository.song.SongRemoteMediator
+import com.infix.musicappv1.data.repository.paging.SongRemoteMediator
 import com.infix.musicappv1.data.repository.song.SongRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 

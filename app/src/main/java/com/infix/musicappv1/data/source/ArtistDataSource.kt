@@ -3,6 +3,7 @@ package com.infix.musicappv1.data.source
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.model.artist.ArtistSongCrossRef
 import com.infix.musicappv1.data.model.artist.ArtistWithSongs
+import com.infix.musicappv1.data.source.remote.PagingParam
 import kotlinx.coroutines.flow.Flow
 
 interface ArtistDataSource {
@@ -20,5 +21,6 @@ interface ArtistDataSource {
 
     interface Remote {
         suspend fun loadArtistsRemote(): Result<List<Artist>>
+        suspend fun loadArtistsPaging(pagingParam: PagingParam): List<Artist>?
     }
 }

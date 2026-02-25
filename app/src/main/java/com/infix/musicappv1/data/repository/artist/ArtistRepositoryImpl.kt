@@ -5,6 +5,7 @@ import com.infix.musicappv1.data.model.artist.ArtistSongCrossRef
 import com.infix.musicappv1.data.model.artist.ArtistWithSongs
 import com.infix.musicappv1.data.source.ArtistDataSource
 import com.infix.musicappv1.data.source.Result
+import com.infix.musicappv1.data.source.remote.PagingParam
 import kotlinx.coroutines.flow.Flow
 
 class ArtistRepositoryImpl(
@@ -49,5 +50,9 @@ class ArtistRepositoryImpl(
 
     override suspend fun getArtistWithSongsByArtistId(artistId: Int): ArtistWithSongs? {
         return local.getArtistWithSongsByArtistId(artistId)
+    }
+
+    override suspend fun loadArtistsPaging(pagingParam: PagingParam): List<Artist>? {
+        return remote.loadArtistsPaging(pagingParam)
     }
 }

@@ -10,7 +10,10 @@ import retrofit2.http.POST
 
 //provide api for album, artist, song
 /*
-paging: https://thantrieu.com/services/services.php/songs
+paging:
+    https://thantrieu.com/services/services.php/songs
+    https://thantrieu.com/services/services.php/artists
+
 https://thantrieu.com/resources/braniumapis/playlist.json
 https://thantrieu.com/resources/braniumapis/songs.json
 https://thantrieu.com/resources/braniumapis/artists.json
@@ -27,4 +30,7 @@ interface MusicService {
 
     @POST("/services/services.php/songs")
     suspend fun loadSongsPaging(@Body pagingParam: PagingParam): Response<SongList>
+
+    @POST("/services/services.php/artists")
+    suspend fun loadArtistsPaging(@Body pagingParam: PagingParam): Response<ArtistList>
 }
