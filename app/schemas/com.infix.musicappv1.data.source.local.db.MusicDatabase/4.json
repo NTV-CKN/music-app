@@ -2,16 +2,16 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "19ed1482caede0547c1573b255c430d3",
+    "identityHash": "84a06ffe1182bda41f6f69a6b8e2f27e",
     "entities": [
       {
         "tableName": "albums",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `size` INTEGER NOT NULL, `artwork` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `size` INTEGER NOT NULL, `artwork` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -365,7 +365,7 @@
       },
       {
         "tableName": "tracking_update",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `song_update_at` INTEGER NOT NULL, `artist_update_at` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `song_update_at` INTEGER NOT NULL, `artist_update_at` INTEGER NOT NULL, `album_update_at` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -382,6 +382,12 @@
           {
             "fieldPath": "artistUpdateAt",
             "columnName": "artist_update_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "albumUpdateAt",
+            "columnName": "album_update_at",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -426,12 +432,44 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "album_remote_keys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`album_id` TEXT NOT NULL, `prev_key` INTEGER, `next_key` INTEGER, PRIMARY KEY(`album_id`))",
+        "fields": [
+          {
+            "fieldPath": "albumId",
+            "columnName": "album_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevKey",
+            "columnName": "prev_key",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextKey",
+            "columnName": "next_key",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "album_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '19ed1482caede0547c1573b255c430d3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '84a06ffe1182bda41f6f69a6b8e2f27e')"
     ]
   }
 }

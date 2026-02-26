@@ -25,6 +25,6 @@ data class Album(
     }
 
     override fun hashCode(): Int {
-        return id
+        return id.hashCode()
     }
 }

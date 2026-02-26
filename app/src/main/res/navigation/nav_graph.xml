@@ -14,7 +14,7 @@
             app:destination="@id/navigation_detail_playlist" />
         <action
             android:id="@+id/action_navigation_home_to_navigation_more_album"
-            app:destination="@id/navigation_more_system_playlist" />
+            app:destination="@id/navigation_more_album" />
         <action
             android:id="@+id/action_navigation_home_to_navigate_more_song_recommend"
             app:destination="@id/navigate_more_song_recommend" />
@@ -52,8 +52,8 @@
         android:name="com.infix.musicappv1.ui.detail.PlaylistDetailFragment"
         tools:layout="@layout/fragment_detail_playlist" />
     <fragment
-        android:id="@+id/navigation_more_system_playlist"
-        android:name="com.infix.musicappv1.ui.home.system_playlist.more_system_playlist.MoreSystemPlaylistFragment"
+        android:id="@+id/navigation_more_album"
+        android:name="com.infix.musicappv1.ui.home.system_playlist.more_album.MoreAlbumFragment"
         tools:layout="@layout/fragment_more_album">
         <action
             android:id="@+id/action_navigation_more_system_playlist_to_navigation_detail_playlist"

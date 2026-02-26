@@ -1,4 +1,4 @@
-package com.infix.musicappv1.ui.home.system_playlist.more_system_playlist
+package com.infix.musicappv1.ui.home.system_playlist.more_album
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -17,11 +17,11 @@ import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
 import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.utils.InjectUtils
 
-class MoreSystemPlaylistFragment : Fragment() {
+class MoreAlbumFragment : Fragment() {
     private lateinit var binding: FragmentMoreAlbumBinding
-    private lateinit var adapter: MoreSystemPlaylistAdapter
+    private lateinit var adapter: MoreAlbumAdapter
 
-    private val moreSystemPlaylistViewModel: MoreSystemPlaylistViewModel by activityViewModels()
+    private val moreSystemPlaylistViewModel: MoreAlbumViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by activityViewModels {
         HomeViewModel.Factory(
             InjectUtils.getSongRepository(requireContext().applicationContext),
@@ -56,7 +56,7 @@ class MoreSystemPlaylistFragment : Fragment() {
 
     private fun setupRecyclerView() {
         adapter =
-            MoreSystemPlaylistAdapter(object : MoreSystemPlaylistAdapter.PlaylistClickListener {
+            MoreAlbumAdapter(object : MoreAlbumAdapter.AlbumClickListener {
                 override fun onClick(playlist: Playlist) {
                   //  playlist.updateSongs(extractSongsByPlaylist(playlist))
                     playlistDetailViewModel.setPlaylist(playlist)

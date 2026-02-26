@@ -37,14 +37,14 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fcv_album_hot"
-            android:name="com.infix.musicappv1.ui.home.system_playlist.SystemPlaylistFragment"
+            android:name="com.infix.musicappv1.ui.home.system_playlist.AlbumFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_top_8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title_home"
-            tools:layout="@layout/fragment_system_playlist" />
+            tools:layout="@layout/fragment_album" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fcv_recommend_song"

@@ -1,29 +1,29 @@
-package com.infix.musicappv1.ui.home.system_playlist
+package com.infix.musicappv1.ui.home.system_playlist.more_album
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.infix.musicappv1.R
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
-import com.infix.musicappv1.databinding.ItemSystemPlaylistBinding
+import com.infix.musicappv1.databinding.ItemMoreAlbumBinding
 
-class SystemPlaylistAdapter(
-    private val onSystemPlaylistClick: SystemPlaylistClick
-) : RecyclerView.Adapter<SystemPlaylistAdapter.ViewHolder>() {
+class MoreAlbumAdapter(
+    private val onAlbumClick: AlbumClickListener
+) : RecyclerView.Adapter<MoreAlbumAdapter.ViewHolder>() {
     private val playlists = mutableListOf<Playlist>()
 
-    inner class ViewHolder(private val binding: ItemSystemPlaylistBinding) :
+    inner class ViewHolder(private val binding: ItemMoreAlbumBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(playlist: Playlist) {
-            binding.tvTitleSystemPlaylist.text = playlist.namePlaylist
+            binding.tvTitleAlbumMoreAlbum.text = playlist.namePlaylist
             Glide.with(binding.root)
                 .load(playlist.artwork)
                 .error(R.drawable.ic_song_24)
-                .into(binding.imgItemSystemPlaylist)
+                .into(binding.imgArtworkMoreAlbum)
             //click listener
             binding.root.setOnClickListener {
-                onSystemPlaylistClick.onClick(playlist)
+                onAlbumClick.onClick(playlist)
             }
         }
     }
@@ -32,7 +32,7 @@ class SystemPlaylistAdapter(
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        val binding = ItemSystemPlaylistBinding.inflate(
+        val binding = ItemMoreAlbumBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -40,13 +40,16 @@ class SystemPlaylistAdapter(
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int
+    ) {
         holder.bind(playlists[position])
     }
 
     override fun getItemCount(): Int = playlists.size
 
-    fun updatePlaylists(playlists: List<Playlist>) {
+    fun updateAlbums(playlists: List<Playlist>) {
         val oldSize = this.playlists.size
         this.playlists.clear()
         this.playlists.addAll(playlists)
@@ -56,7 +59,7 @@ class SystemPlaylistAdapter(
         notifyItemRangeChanged(0, this.playlists.size)
     }
 
-    interface SystemPlaylistClick {
+    interface AlbumClickListener {
         fun onClick(playlist: Playlist)
     }
 }

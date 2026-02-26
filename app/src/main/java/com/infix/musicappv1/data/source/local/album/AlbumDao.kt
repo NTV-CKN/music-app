@@ -1,5 +1,6 @@
 package com.infix.musicappv1.data.source.local.album
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -15,4 +16,17 @@ interface AlbumDao {
         DELETE FROM albums
     """)
     suspend fun clear()
+
+    @Query("""
+        SELECT * 
+        FROM albums
+    """)
+    fun loadAlbumsPaging(): PagingSource<Int, Album>
+
+    @Query("""
+        SELECT * 
+        FROM albums
+        LIMIT :limit
+    """)
+    fun loadNAlbumsPaging(limit: Int = 9): PagingSource<Int, Album>
 }

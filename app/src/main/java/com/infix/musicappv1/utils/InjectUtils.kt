@@ -2,6 +2,8 @@ package com.infix.musicappv1.utils
 
 import android.content.Context
 import com.infix.musicappv1.data.repository.PlaybackRepository
+import com.infix.musicappv1.data.repository.album.AlbumRepository
+import com.infix.musicappv1.data.repository.album.AlbumRepositoryImpl
 import com.infix.musicappv1.data.repository.artist.ArtistRepository
 import com.infix.musicappv1.data.repository.artist.ArtistRepositoryImpl
 import com.infix.musicappv1.data.repository.playlist.PlaylistRepository
@@ -10,11 +12,13 @@ import com.infix.musicappv1.data.repository.song.SongRepository
 import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
 import com.infix.musicappv1.data.repository.song_recent.SongRecentRepository
 import com.infix.musicappv1.data.repository.song_recent.SongRecentRepositoryImpl
+import com.infix.musicappv1.data.source.local.album.AlbumLocalDataSource
 import com.infix.musicappv1.data.source.local.artist.ArtistLocalDataSource
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.data.source.local.playlist.PlaylistLocalDataSource
 import com.infix.musicappv1.data.source.local.recent.SongRecentLocalSource
 import com.infix.musicappv1.data.source.local.song.SongLocalDataSource
+import com.infix.musicappv1.data.source.remote.album.AlbumRemoteDataSource
 import com.infix.musicappv1.data.source.remote.artist.ArtistRemoteDataSource
 import com.infix.musicappv1.data.source.remote.playlist.PlaylistRemoteDataSource
 import com.infix.musicappv1.data.source.remote.song.SongRemoteDataSource
@@ -60,6 +64,14 @@ object InjectUtils {
         return ArtistRepositoryImpl(
             ArtistLocalDataSource(db.artistDao()),
             ArtistRemoteDataSource()
+        )
+    }
+
+    fun getAlbumRepository(context: Context): AlbumRepository {
+        val db = MusicDatabase.getInstance(context.applicationContext)
+        return AlbumRepositoryImpl(
+            AlbumRemoteDataSource(),
+            AlbumLocalDataSource(db.albumDao())
         )
     }
 }

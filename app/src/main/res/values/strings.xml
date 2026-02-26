@@ -76,4 +76,5 @@
     <string name="txt_top_40_song">Top 40 songs most heard</string>
     <string name="txt_interested_artist">Interested artist</string>
     <string name="txt_more_rcm_song">More recommend songs</string>
+    <string name="txt_album">Album</string>
 </resources>
