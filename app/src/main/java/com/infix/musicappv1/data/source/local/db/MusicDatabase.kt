@@ -1,7 +1,6 @@
 package com.infix.musicappv1.data.source.local.db
 
 import android.content.Context
-import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -9,7 +8,6 @@ import androidx.room.TypeConverters
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.model.artist.ArtistRemoteKeys
-import com.infix.musicappv1.data.model.artist.ArtistSongCrossRef
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.playlist.PlaylistSongCrossRef
 import com.infix.musicappv1.data.model.recent.SongRecent
@@ -19,7 +17,6 @@ import com.infix.musicappv1.data.model.tracking.TrackingUpdate
 import com.infix.musicappv1.data.source.local.album.AlbumDao
 import com.infix.musicappv1.data.source.local.artist.ArtistDao
 import com.infix.musicappv1.data.source.local.artist.ArtistRemoteKeysDao
-import com.infix.musicappv1.data.source.local.artist.ArtistSongDao
 import com.infix.musicappv1.data.source.local.playlist.PlaylistDao
 import com.infix.musicappv1.data.source.local.playlist.PlaylistSongDao
 import com.infix.musicappv1.data.source.local.recent.SongRecentDao
@@ -35,7 +32,6 @@ import com.infix.musicappv1.data.source.local.tracking.TrackingUpdateDao
         SongRecent::class,
         PlaylistSongCrossRef::class,
         Artist::class,
-        ArtistSongCrossRef::class,
         SongRemoteKeys::class,
         TrackingUpdate::class,
         ArtistRemoteKeys::class
@@ -51,7 +47,6 @@ abstract class MusicDatabase : RoomDatabase() {
     abstract fun albumDao(): AlbumDao
     abstract fun playlistSongDao(): PlaylistSongDao
     abstract fun artistDao(): ArtistDao
-    abstract fun artistSongDao(): ArtistSongDao
     abstract fun songRemoteKeysDao(): SongRemoteKeysDao
     abstract fun trackingUpdateDao(): TrackingUpdateDao
     abstract fun artistRemoteKeysDao(): ArtistRemoteKeysDao

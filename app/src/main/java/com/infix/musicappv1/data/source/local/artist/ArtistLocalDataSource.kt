@@ -2,14 +2,11 @@ package com.infix.musicappv1.data.source.local.artist
 
 import androidx.paging.PagingSource
 import com.infix.musicappv1.data.model.artist.Artist
-import com.infix.musicappv1.data.model.artist.ArtistSongCrossRef
-import com.infix.musicappv1.data.model.artist.ArtistWithSongs
 import com.infix.musicappv1.data.source.ArtistDataSource
 import kotlinx.coroutines.flow.Flow
 
 class ArtistLocalDataSource(
-    private val artistDao: ArtistDao,
-    private val artistSongDao: ArtistSongDao
+    private val artistDao: ArtistDao
 ) : ArtistDataSource.Local {
     override fun getArtistsPaging(): PagingSource<Int, Artist> {
         return artistDao.getArtistsPaging()
@@ -32,6 +29,10 @@ class ArtistLocalDataSource(
         return artistDao.getLimitArtistInterested(limit)
     }
 
+    override suspend fun getArtistById(artistId: Int): Artist? {
+       return artistDao.getArtistById(artistId)
+    }
+
     override suspend fun delete(vararg artist: Artist) {
         artistDao.delete(*artist)
     }
@@ -43,13 +44,5 @@ class ArtistLocalDataSource(
 
     override suspend fun insert(vararg artist: Artist) {
         artistDao.insert(*artist)
-    }
-
-    override suspend fun insertArtistSongCrossRef(vararg artistSongCrossRef: ArtistSongCrossRef) {
-        artistSongDao.insert(*artistSongCrossRef)
-    }
-
-    override suspend fun getArtistWithSongsByArtistId(artistId: Int): ArtistWithSongs? {
-        return artistDao.getArtistWithSongsByArtistId(artistId)
     }
 }

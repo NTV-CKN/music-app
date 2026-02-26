@@ -70,7 +70,6 @@ class RecommendSongFragment : BasePlayMusicFragment() {
     }
 
     private fun collectData() {
-        binding.progressRcmSong.visibility = View.VISIBLE
         lifecycleScope.launch {
             rcmSongViewModel.songs.collectLatest { adapter.submitData(it) }
         }
