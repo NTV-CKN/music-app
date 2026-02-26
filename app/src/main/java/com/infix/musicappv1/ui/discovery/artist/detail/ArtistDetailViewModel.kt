@@ -4,24 +4,47 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.infix.musicappv1.data.model.artist.ArtistWithSongs
+import com.infix.musicappv1.data.model.artist.Artist
+import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.artist.ArtistRepository
-import com.infix.musicappv1.ui.discovery.DiscoveryViewModel
+import com.infix.musicappv1.data.source.Result
+import com.infix.musicappv1.data.source.remote.param.SearchParam
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
 class ArtistDetailViewModel(
     private val artistRepository: ArtistRepository
 ) : ViewModel() {
-    private val _artistWithSongs = MutableLiveData<ArtistWithSongs?>()
-    val artistWithSongs: LiveData<ArtistWithSongs?> = _artistWithSongs
+    private var artist: Artist? = null
+    //use shared flow cause ArtistDetailViewModel is share with fragments, so when
+    //user access ArtistDetailFragment, adapter will update double songs (songs of old value and songs of new value)
+    private val _songs = MutableSharedFlow<List<Song>?>()
+    val songs: SharedFlow<List<Song>?> = _songs
 
-    fun setArtistWithSongsByArtistId(artistId: Int) {
+    //cause we paging song and full song if only user scroll reached at More recommend song
+    //So we get songs of name artist with API to avoid song not full but artist detail click
+    fun setArtistWithSongsByArtistName(artistId: Int, name: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _artistWithSongs.postValue(artistRepository.getArtistWithSongsByArtistId(artistId))
+            this@ArtistDetailViewModel.artist = artistRepository.getArtistById(artistId)
+            val result = artistRepository.loadSongsByNameArtist(
+                SearchParam(
+                    queryType = SearchParam.QUERY_TYPE_SEARCH,
+                    query = name
+                )
+            )
+
+            if (result is Result.Success)
+                _songs.emit(result.data)
+            else
+                _songs.emit(emptyList())
         }
     }
+
+    fun getArtist() = artist
 
     class Factory(
         private val artistRepository: ArtistRepository

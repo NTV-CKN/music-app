@@ -6,10 +6,8 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import androidx.room.Update
 import com.infix.musicappv1.data.model.artist.Artist
-import com.infix.musicappv1.data.model.artist.ArtistWithSongs
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -22,6 +20,13 @@ interface ArtistDao {
 
     @Update
     suspend fun update(vararg artist: Artist)
+
+    @Query("""
+        SELECT * 
+        FROM artists
+        WHERE artist_id = :artistId
+    """)
+    fun getArtistById(artistId: Int): Artist?
 
     @Query(
         """
@@ -58,16 +63,6 @@ interface ArtistDao {
     """
     )
     fun getAllArtistInterested(): Flow<List<Artist>>
-
-    @Transaction
-    @Query(
-        """
-        SELECT *
-        FROM artists
-        WHERE artist_id = :artistId
-    """
-    )
-    suspend fun getArtistWithSongsByArtistId(artistId: Int): ArtistWithSongs?
 
     @Query(
         """

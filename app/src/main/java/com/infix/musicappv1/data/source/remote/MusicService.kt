@@ -7,12 +7,16 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 //provide api for album, artist, song
 /*
 paging:
     https://thantrieu.com/services/services.php/songs
     https://thantrieu.com/services/services.php/artists
+
+get song by name artist or name song
+https://thantrieu.com/services/services.php?queryType=search&query=mr. siro
 
 https://thantrieu.com/resources/braniumapis/playlist.json
 https://thantrieu.com/resources/braniumapis/songs.json
@@ -33,4 +37,10 @@ interface MusicService {
 
     @POST("/services/services.php/artists")
     suspend fun loadArtistsPaging(@Body pagingParam: PagingParam): Response<ArtistList>
+
+    @GET("/services/services.php")
+    suspend fun getSongsOfArtist(
+        @Query("queryType") queryType: String,
+        @Query("query") nameArtist: String
+    ): Response<SongList>
 }

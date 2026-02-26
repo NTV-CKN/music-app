@@ -56,7 +56,7 @@ class InterestArtistFragment : Fragment() {
         adapter = ArtistAdapter(
             object : ArtistAdapter.OnArtistClick {
                 override fun onClick(artist: Artist) {
-                    artistDetailViewModel.setArtistWithSongsByArtistId(artist.id)
+                    artistDetailViewModel.setArtistWithSongsByArtistName(artist.id, artist.name)
                     findNavController().navigate(R.id.action_navigation_discovery_to_navigate_detail_artist)
                 }
             },
