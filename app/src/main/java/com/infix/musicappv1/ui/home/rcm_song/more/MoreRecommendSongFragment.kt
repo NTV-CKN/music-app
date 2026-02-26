@@ -33,7 +33,7 @@ class MoreRecommendSongFragment : BasePlayMusicFragment() {
     private val homeViewModel: HomeViewModel by activityViewModels {
         HomeViewModel.Factory(
             InjectUtils.getSongRepository(requireContext().applicationContext),
-            InjectUtils.getPlaylistRepository(requireContext().applicationContext),
+            InjectUtils.getAlbumRepository(requireContext().applicationContext),
             MusicDatabase.getInstance(requireContext().applicationContext)
         )
     }

@@ -77,6 +77,7 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
         }
     }
 
+    //data only ready when song and album not null and media controller bind completed
     fun setIsDataReady(boolean: Boolean) {
         _isDataReady.value = boolean
     }
@@ -97,6 +98,7 @@ class PlayingSongSharedViewModel(private val playbackRepository: PlaybackReposit
                     val indexToPlay = songs.indexOfFirst { song -> song.id == songId }
 
                     withContext(Dispatchers.Main) {
+//                        Log.d("SSSS", "sssss")
 //                        MiniPlayerFragment.trackOldPlaylist = playlistCurrent
                         playbackRepository.updatePlaylist(playlistCurrent)
                         playbackRepository.updateIndexToPlay(indexToPlay)

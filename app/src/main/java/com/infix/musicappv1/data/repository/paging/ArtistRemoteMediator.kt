@@ -10,7 +10,7 @@ import com.infix.musicappv1.data.model.artist.ArtistRemoteKeys
 import com.infix.musicappv1.data.model.tracking.TrackingUpdate
 import com.infix.musicappv1.data.repository.artist.ArtistRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
-import com.infix.musicappv1.data.source.remote.PagingParam
+import com.infix.musicappv1.data.source.remote.param.PagingParam
 import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalPagingApi::class)

@@ -1,4 +1,4 @@
-package com.infix.musicappv1.data.source.remote
+package com.infix.musicappv1.data.source.remote.param
 
 import com.google.gson.annotations.SerializedName
 

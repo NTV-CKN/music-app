@@ -143,7 +143,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
 
         //playlist current
         playingSongSharedViewModel.currentPlaylist.observe(viewLifecycleOwner) {
-            Log.d("MiniPlayerFragment", "PlayListCurrent1")
+            Log.d("MiniPlayerFragment", "PlayListCurrent1 ")
             if (it == null) return@observe
             Log.d(
                 "MiniPlayerFragment",

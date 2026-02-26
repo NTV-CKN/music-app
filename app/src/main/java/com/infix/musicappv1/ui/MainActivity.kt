@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.DisplayMetrics
 import android.util.DisplayMetrics.DENSITY_DEFAULT
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels

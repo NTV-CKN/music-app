@@ -4,7 +4,7 @@ import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.source.ArtistDataSource
 import com.infix.musicappv1.data.source.Result
-import com.infix.musicappv1.data.source.remote.PagingParam
+import com.infix.musicappv1.data.source.remote.param.PagingParam
 import com.infix.musicappv1.data.source.remote.RetrofitHelper
 import com.infix.musicappv1.data.source.remote.param.SearchParam
 

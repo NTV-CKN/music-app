@@ -9,7 +9,9 @@ data class TrackingUpdate(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @ColumnInfo("song_update_at")
-    val songUpdateAt: Long,
+    val songUpdateAt: Long = 0,
     @ColumnInfo("artist_update_at")
-    val artistUpdateAt: Long
+    val artistUpdateAt: Long = 0,
+    @ColumnInfo("album_update_at")
+    val albumUpdateAt: Long = 0
 )

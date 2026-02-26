@@ -1,7 +1,6 @@
 package com.infix.musicappv1.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,9 @@ import androidx.fragment.app.activityViewModels
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentHomeBinding
 import com.infix.musicappv1.ui.home.rcm_song.RecommendSongViewModel
-import com.infix.musicappv1.ui.home.system_playlist.SystemPlaylistViewModel
+import com.infix.musicappv1.ui.home.system_playlist.AlbumViewModel
 import com.infix.musicappv1.ui.viewmodels.Factory
+import com.infix.musicappv1.ui.viewmodels.PlaybackViewModel
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.InjectUtils
 
@@ -19,27 +19,33 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private var isSongsReady = false
     private var isAlbumReady = false
+    private var isMediaControllerReady = false
+
     private val homeViewModel: HomeViewModel by activityViewModels {
         HomeViewModel.Factory(
             InjectUtils.getSongRepository(requireContext().applicationContext),
-            InjectUtils.getPlaylistRepository(requireContext().applicationContext),
+            InjectUtils.getAlbumRepository(requireContext().applicationContext),
             MusicDatabase.getInstance(requireContext().applicationContext)
         )
     }
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels {
         Factory(InjectUtils.getPlaybackRepository(requireContext()))
     }
-    private val rcmSongViewModel: RecommendSongViewModel by activityViewModels {
-        RecommendSongViewModel.Factory(
-            InjectUtils.getSongRepository(requireContext().applicationContext),
-            MusicDatabase.getInstance(requireContext().applicationContext)
-        )
-    }
-    private val systemPlaylistViewModel: SystemPlaylistViewModel by activityViewModels {
-        SystemPlaylistViewModel.Factory(
-            InjectUtils.getPlaylistRepository(requireContext().applicationContext)
-        )
-    }
+
+    private val playbackViewModel: PlaybackViewModel by activityViewModels()
+//    private val rcmSongViewModel: RecommendSongViewModel by activityViewModels {
+//        RecommendSongViewModel.Factory(
+//            InjectUtils.getSongRepository(requireContext().applicationContext),
+//            MusicDatabase.getInstance(requireContext().applicationContext)
+//        )
+//    }
+//    private val albumViewModel: AlbumViewModel by activityViewModels {
+//        AlbumViewModel.Factory(
+//            InjectUtils.getAlbumRepository(requireContext().applicationContext),
+//            MusicDatabase.getInstance(requireContext().applicationContext)
+//        )
+//    }
+
 
     private var isObserve = false
 
@@ -76,16 +82,25 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupInitDataTmp() {
+        //media controller
+        playbackViewModel.mediaController.observe(viewLifecycleOwner) {
+            it?:return@observe
+            isMediaControllerReady = true
+            playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady && isMediaControllerReady)
+        }
+
+        //song data
         homeViewModel.songLocal.observe(viewLifecycleOwner) { songs ->
+            songs ?: return@observe
             isSongsReady = true
-            playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady)
+            playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady && isMediaControllerReady)
         }
         //album data
-//        homeViewModel.playlists.observe(viewLifecycleOwner) { playlists ->
-//            systemPlaylistViewModel.setPlaylists(playlists)
-//            isAlbumReady = true
-//            playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady)
-//        }
+        homeViewModel.albumLocal.observe(viewLifecycleOwner) { albums ->
+            albums ?: return@observe
+            isAlbumReady = true
+            playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady && isMediaControllerReady)
+        }
     }
 
     companion object {

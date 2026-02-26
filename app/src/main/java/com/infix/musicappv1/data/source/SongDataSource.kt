@@ -3,7 +3,7 @@ package com.infix.musicappv1.data.source
 import androidx.paging.PagingSource
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongList
-import com.infix.musicappv1.data.source.remote.PagingParam
+import com.infix.musicappv1.data.source.remote.param.PagingParam
 import kotlinx.coroutines.flow.Flow
 
 interface SongDataSource {
