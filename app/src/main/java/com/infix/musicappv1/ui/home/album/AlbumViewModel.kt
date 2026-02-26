@@ -1,4 +1,4 @@
-package com.infix.musicappv1.ui.home.system_playlist
+package com.infix.musicappv1.ui.home.album
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

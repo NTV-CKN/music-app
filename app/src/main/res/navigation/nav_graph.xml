@@ -53,10 +53,10 @@
         tools:layout="@layout/fragment_detail_playlist" />
     <fragment
         android:id="@+id/navigation_more_album"
-        android:name="com.infix.musicappv1.ui.home.system_playlist.more_album.MoreAlbumFragment"
+        android:name="com.infix.musicappv1.ui.home.album.more_album.MoreAlbumFragment"
         tools:layout="@layout/fragment_more_album">
         <action
-            android:id="@+id/action_navigation_more_system_playlist_to_navigation_detail_playlist"
+            android:id="@+id/action_navigation_more_album_to_navigation_detail_playlist"
             app:destination="@id/navigation_detail_playlist" />
     </fragment>
     <fragment

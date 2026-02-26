@@ -1,4 +1,4 @@
-package com.infix.musicappv1.ui.home.system_playlist
+package com.infix.musicappv1.ui.home.album
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,8 +17,6 @@ import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentAlbumBinding
 import com.infix.musicappv1.ui.adapter.album.AlbumPagingDataAdapter
 import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
-import com.infix.musicappv1.ui.home.HomeViewModel
-import com.infix.musicappv1.ui.home.system_playlist.more_album.MoreAlbumViewModel
 import com.infix.musicappv1.utils.InjectUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -35,14 +33,7 @@ class AlbumFragment : Fragment() {
             InjectUtils.getPlaylistRepository(requireContext().applicationContext)
         )
     }
-    private val moreSystemPlaylistViewModel: MoreAlbumViewModel by activityViewModels()
-    private val homeViewModel: HomeViewModel by activityViewModels {
-        HomeViewModel.Factory(
-            InjectUtils.getSongRepository(requireContext().applicationContext),
-            InjectUtils.getAlbumRepository(requireContext().applicationContext),
-            MusicDatabase.getInstance(requireContext().applicationContext)
-        )
-    }
+
     private lateinit var binding: FragmentAlbumBinding
     private lateinit var adapter: AlbumPagingDataAdapter
 
@@ -98,7 +89,6 @@ class AlbumFragment : Fragment() {
     }
 
     private fun navigateToMoreAlbum() {
-//        moreSystemPlaylistViewModel.setPlaylists(homeViewModel.playlists.value ?: emptyList())
-//        findNavController().navigate(R.id.action_navigation_home_to_navigation_more_album)
+        findNavController().navigate(R.id.action_navigation_home_to_navigation_more_album)
     }
 }

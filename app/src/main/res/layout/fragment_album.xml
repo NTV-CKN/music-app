@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.home.system_playlist.AlbumFragment">
+    tools:context=".ui.home.album.AlbumFragment">
 
     <TextView
         android:id="@+id/tv_label_album"

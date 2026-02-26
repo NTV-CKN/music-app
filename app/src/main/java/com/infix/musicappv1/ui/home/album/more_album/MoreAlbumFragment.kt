@@ -1,34 +1,39 @@
-package com.infix.musicappv1.ui.home.system_playlist.more_album
+package com.infix.musicappv1.ui.home.album.more_album
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.infix.musicappv1.R
+import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.playlist.Playlist
-import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentMoreAlbumBinding
+import com.infix.musicappv1.ui.adapter.album.MoreAlbumPagingDataAdapter
 import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
-import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.utils.InjectUtils
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class MoreAlbumFragment : Fragment() {
     private lateinit var binding: FragmentMoreAlbumBinding
-    private lateinit var adapter: MoreAlbumAdapter
+    private lateinit var adapter: MoreAlbumPagingDataAdapter
 
-    private val moreSystemPlaylistViewModel: MoreAlbumViewModel by activityViewModels()
-    private val homeViewModel: HomeViewModel by activityViewModels {
-        HomeViewModel.Factory(
-            InjectUtils.getSongRepository(requireContext().applicationContext),
+    private val moreAlbumViewModel: MoreAlbumViewModel by viewModels {
+        MoreAlbumViewModel.Factory(
             InjectUtils.getAlbumRepository(requireContext().applicationContext),
             MusicDatabase.getInstance(requireContext().applicationContext)
         )
     }
+
     private val playlistDetailViewModel: PlaylistDetailViewModel by activityViewModels {
         PlaylistDetailViewModel.Factory(
             InjectUtils.getPlaylistRepository(requireContext().applicationContext)
@@ -51,40 +56,33 @@ class MoreAlbumFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbarMoreAlbum.setupWithNavController(findNavController())
         setupRecyclerView()
-        setupEvent()
+        setupPagingAlbum()
     }
 
     private fun setupRecyclerView() {
         adapter =
-            MoreAlbumAdapter(object : MoreAlbumAdapter.AlbumClickListener {
-                override fun onClick(playlist: Playlist) {
-                  //  playlist.updateSongs(extractSongsByPlaylist(playlist))
-                    playlistDetailViewModel.setPlaylist(playlist)
-                    findNavController().navigate(R.id.action_navigation_more_system_playlist_to_navigation_detail_playlist)
+            MoreAlbumPagingDataAdapter(object : MoreAlbumPagingDataAdapter.AlbumClickListener {
+                override fun onClick(album: Album) {
+                    //  playlist.updateSongs(extractSongsByPlaylist(playlist))
+                    playlistDetailViewModel.setPlaylist(
+                        Playlist(
+                            playlistId = album.id.toInt(),
+                            namePlaylist = album.name,
+                            artwork = album.artwork
+                        )
+                    )
+                    findNavController().navigate(R.id.action_navigation_more_album_to_navigation_detail_playlist)
                 }
             })
 
         binding.rvMoreAlbum.adapter = adapter
     }
 
-    private fun extractSongsByPlaylist(playlist: Playlist): List<Song> {
-//        val songs = homeViewModel.songsLocal.value
-//        val result = mutableListOf<Song>()
-//        songs?.let { songs ->
-//            for (songId in playlist.songsId) {
-//                val index = songs.indexOfFirst { song -> song.id == songId }
-//                if (index != -1)
-//                    result.add(songs[index])
-//            }
-//        }
-//
-//        return result
-        return emptyList()
-    }
-
-    private fun setupEvent() {
-        moreSystemPlaylistViewModel.playlists.observe(viewLifecycleOwner) { albums ->
-            adapter.updateAlbums(albums)
+    private fun setupPagingAlbum() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                moreAlbumViewModel.albums.collectLatest { adapter.submitData(it) }
+            }
         }
     }
 }
