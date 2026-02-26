@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.infix.musicappv1.data.model.album.Album
+import com.infix.musicappv1.data.model.album.AlbumRemoteKeys
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.model.artist.ArtistRemoteKeys
 import com.infix.musicappv1.data.model.playlist.Playlist
@@ -15,6 +16,7 @@ import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongRemoteKeys
 import com.infix.musicappv1.data.model.tracking.TrackingUpdate
 import com.infix.musicappv1.data.source.local.album.AlbumDao
+import com.infix.musicappv1.data.source.local.album.AlbumRemoteKeysDao
 import com.infix.musicappv1.data.source.local.artist.ArtistDao
 import com.infix.musicappv1.data.source.local.artist.ArtistRemoteKeysDao
 import com.infix.musicappv1.data.source.local.playlist.PlaylistDao
@@ -34,7 +36,8 @@ import com.infix.musicappv1.data.source.local.tracking.TrackingUpdateDao
         Artist::class,
         SongRemoteKeys::class,
         TrackingUpdate::class,
-        ArtistRemoteKeys::class
+        ArtistRemoteKeys::class,
+        AlbumRemoteKeys::class
     ],
     version = 4,
     // autoMigrations = [AutoMigration(from = 3, to = 4)]
@@ -50,6 +53,7 @@ abstract class MusicDatabase : RoomDatabase() {
     abstract fun songRemoteKeysDao(): SongRemoteKeysDao
     abstract fun trackingUpdateDao(): TrackingUpdateDao
     abstract fun artistRemoteKeysDao(): ArtistRemoteKeysDao
+    abstract fun albumRemoteKeysDao(): AlbumRemoteKeysDao
 
     companion object {
         @Volatile

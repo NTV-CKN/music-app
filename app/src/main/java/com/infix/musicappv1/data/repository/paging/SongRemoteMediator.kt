@@ -11,7 +11,7 @@ import com.infix.musicappv1.data.model.song.SongRemoteKeys
 import com.infix.musicappv1.data.model.tracking.TrackingUpdate
 import com.infix.musicappv1.data.repository.song.SongRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
-import com.infix.musicappv1.data.source.remote.PagingParam
+import com.infix.musicappv1.data.source.remote.param.PagingParam
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
 

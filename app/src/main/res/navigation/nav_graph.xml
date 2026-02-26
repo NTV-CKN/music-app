@@ -71,7 +71,11 @@
     <fragment
         android:id="@+id/navigate_more_artist"
         android:name="com.infix.musicappv1.ui.discovery.artist.more.MoreArtistFragment"
-        tools:layout="@layout/fragment_more_artist" />
+        tools:layout="@layout/fragment_more_artist" >
+        <action
+            android:id="@+id/action_navigate_more_artist_to_navigate_detail_artist"
+            app:destination="@id/navigate_detail_artist" />
+    </fragment>
     <fragment
         android:id="@+id/navigate_detail_artist"
         android:name="com.infix.musicappv1.ui.discovery.artist.detail.ArtistDetailFragment"

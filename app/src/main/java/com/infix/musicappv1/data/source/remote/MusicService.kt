@@ -1,8 +1,10 @@
 package com.infix.musicappv1.data.source.remote
 
+import com.infix.musicappv1.data.model.album.AlbumList
 import com.infix.musicappv1.data.model.artist.ArtistList
 import com.infix.musicappv1.data.model.playlist.PlaylistList
 import com.infix.musicappv1.data.model.song.SongList
+import com.infix.musicappv1.data.source.remote.param.PagingParam
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -14,6 +16,7 @@ import retrofit2.http.Query
 paging:
     https://thantrieu.com/services/services.php/songs
     https://thantrieu.com/services/services.php/artists
+    https://thantrieu.com/services/services.php/albums
 
 get song by name artist or name song
 https://thantrieu.com/services/services.php?queryType=search&query=mr. siro
@@ -37,6 +40,9 @@ interface MusicService {
 
     @POST("/services/services.php/artists")
     suspend fun loadArtistsPaging(@Body pagingParam: PagingParam): Response<ArtistList>
+
+    @POST("/services/services.php/albums")
+    suspend fun loadAlbumsPaging(@Body pagingParam: PagingParam): Response<AlbumList>
 
     @GET("/services/services.php")
     suspend fun getSongsOfArtist(

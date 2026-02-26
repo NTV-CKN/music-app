@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "albums", indices = [Index(value = ["name"], unique = true)])
 data class Album(
     @PrimaryKey
-   var id: Int = 0,
+   var id: String = "",
     var name: String = "",
     @Ignore
     var songs: List<String> = emptyList(),

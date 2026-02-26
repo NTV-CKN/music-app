@@ -1,6 +1,5 @@
 package com.infix.musicappv1.data.model.playlist
 
-import android.util.Log
 import androidx.media3.common.MediaItem
 import androidx.room.ColumnInfo
 import androidx.room.Entity

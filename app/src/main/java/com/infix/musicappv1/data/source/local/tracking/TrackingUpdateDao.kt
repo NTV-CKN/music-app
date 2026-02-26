@@ -30,4 +30,12 @@ interface TrackingUpdateDao {
     """
     )
     suspend fun getLastUpdateArtist(): Long?
+
+    @Query("""
+        SELECT album_update_at
+        FROM tracking_update
+        ORDER BY album_update_at DESC
+        LIMIT 1
+    """)
+    suspend fun getLastUpdateAlbum(): Long?
 }
