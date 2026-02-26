@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.infix.musicappv1.data.model.album.Album
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AlbumDao {
@@ -22,6 +23,12 @@ interface AlbumDao {
         FROM albums
     """)
     fun loadAlbumsPaging(): PagingSource<Int, Album>
+
+    @Query("""
+        SELECT * 
+        FROM albums
+    """)
+    fun loadAllAlbumFlow(): Flow<List<Album>>
 
     @Query("""
         SELECT * 
