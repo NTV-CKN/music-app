@@ -2,7 +2,6 @@
 
     <PreferenceCategory app:title="@string/txt_languages">
         <ListPreference
-            app:defaultValue="vi"
             app:entries="@array/array_languages_entities"
             app:entryValues="@array/array_languages_values"
             app:key="choose_language"
@@ -14,7 +13,6 @@
     <PreferenceCategory app:title="@string/txt_application_theme">
 
         <SwitchPreferenceCompat
-            app:defaultValue="false"
             app:key="dark_mode"
             app:title="@string/txt_dark_mode" />
 

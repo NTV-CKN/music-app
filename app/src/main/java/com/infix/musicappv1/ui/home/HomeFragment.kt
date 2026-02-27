@@ -75,14 +75,17 @@ class HomeFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val scrollY = binding.root.scrollY
-        outState.putInt(SCROLL_POS_Y, scrollY)
+        //cause when app config change but not in home, when app change again => Error uninitialize
+        if (::binding.isInitialized) {
+            val scrollY = binding.root.scrollY
+            outState.putInt(SCROLL_POS_Y, scrollY)
+        }
     }
 
     private fun setupInitDataTmp() {
         //media controller
         playbackViewModel.mediaController.observe(viewLifecycleOwner) {
-            it?:return@observe
+            it ?: return@observe
             isMediaControllerReady = true
             playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady && isMediaControllerReady)
         }
