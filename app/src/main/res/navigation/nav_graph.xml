@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_navigation_home_to_navigate_more_song_recommend"
             app:destination="@id/navigate_more_song_recommend" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigate_album_detail"
+            app:destination="@id/navigate_album_detail" />
     </fragment>
     <fragment
         android:id="@+id/navigation_discovery"
@@ -53,11 +56,11 @@
         tools:layout="@layout/fragment_detail_playlist" />
     <fragment
         android:id="@+id/navigation_more_album"
-        android:name="com.infix.musicappv1.ui.home.system_playlist.more_album.MoreAlbumFragment"
+        android:name="com.infix.musicappv1.ui.home.album.more_album.MoreAlbumFragment"
         tools:layout="@layout/fragment_more_album">
         <action
-            android:id="@+id/action_navigation_more_system_playlist_to_navigation_detail_playlist"
-            app:destination="@id/navigation_detail_playlist" />
+            android:id="@+id/action_navigation_more_album_to_navigate_album_detail"
+            app:destination="@id/navigate_album_detail" />
     </fragment>
     <fragment
         android:id="@+id/navigate_more_your_playlist"
@@ -90,4 +93,9 @@
         android:name="com.infix.musicappv1.ui.home.rcm_song.more.MoreRecommendSongFragment"
         android:label="fragment_more_recommend_song"
         tools:layout="@layout/fragment_more_recommend_song" />
+    <fragment
+        android:id="@+id/navigate_album_detail"
+        android:name="com.infix.musicappv1.ui.home.album.detail.AlbumDetailFragment"
+        android:label="fragment_album_detail"
+        tools:layout="@layout/fragment_album_detail" />
 </navigation>

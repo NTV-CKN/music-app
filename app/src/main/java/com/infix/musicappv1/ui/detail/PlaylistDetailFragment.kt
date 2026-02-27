@@ -15,6 +15,7 @@ import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.adapter.song.SongAdapter
 import com.infix.musicappv1.utils.InjectUtils
 
+//show songs of playlist in room
 class PlaylistDetailFragment : BasePlayMusicFragment() {
     private lateinit var binding: FragmentDetailPlaylistBinding
     private lateinit var songAdapter: SongAdapter

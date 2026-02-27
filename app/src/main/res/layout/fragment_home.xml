@@ -37,7 +37,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fcv_album_hot"
-            android:name="com.infix.musicappv1.ui.home.system_playlist.AlbumFragment"
+            android:name="com.infix.musicappv1.ui.home.album.AlbumFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_top_8"

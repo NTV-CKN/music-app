@@ -20,6 +20,8 @@ paging:
 
 get song by name artist or name song
 https://thantrieu.com/services/services.php?queryType=search&query=mr. siro
+get song by album id
+https://thantrieu.com/services/services.php?queryType=albumWithSongs&albumId=10001
 
 https://thantrieu.com/resources/braniumapis/playlist.json
 https://thantrieu.com/resources/braniumapis/songs.json
@@ -48,5 +50,11 @@ interface MusicService {
     suspend fun getSongsOfArtist(
         @Query("queryType") queryType: String,
         @Query("query") nameArtist: String
+    ): Response<SongList>
+
+    @GET("/services/services.php")
+    suspend fun getSongsByAlbumId(
+        @Query("queryType") queryType: String,
+        @Query("albumId") albumId: Int
     ): Response<SongList>
 }
