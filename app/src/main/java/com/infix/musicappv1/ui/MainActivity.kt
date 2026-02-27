@@ -180,6 +180,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    //restore playlist play lastest, if song get from API but still not save in room yet,
+    //restore may not load full song of this playlist
     private suspend fun restorePrevSession() {
         val dataPref = datastorePrefSession.data.first()
         val playlistId = dataPref[KEY_ID_PLAYLIST]

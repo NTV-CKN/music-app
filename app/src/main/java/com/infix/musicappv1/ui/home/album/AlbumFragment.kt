@@ -17,6 +17,7 @@ import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentAlbumBinding
 import com.infix.musicappv1.ui.adapter.album.AlbumPagingDataAdapter
 import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
+import com.infix.musicappv1.ui.home.album.detail.AlbumDetailViewModel
 import com.infix.musicappv1.utils.InjectUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -28,9 +29,10 @@ class AlbumFragment : Fragment() {
             MusicDatabase.getInstance(requireContext().applicationContext)
         )
     }
-    private val playlistDetailViewModel: PlaylistDetailViewModel by activityViewModels {
-        PlaylistDetailViewModel.Factory(
-            InjectUtils.getPlaylistRepository(requireContext().applicationContext)
+
+    private val albumDetailViewModel: AlbumDetailViewModel by activityViewModels {
+        AlbumDetailViewModel.Factory(
+            InjectUtils.getAlbumRepository(requireContext().applicationContext)
         )
     }
 
@@ -74,15 +76,8 @@ class AlbumFragment : Fragment() {
     private fun initRecyclerView() {
         adapter = AlbumPagingDataAdapter(object : AlbumPagingDataAdapter.AlbumClickListener {
             override fun onClick(album: Album) {
-                // playlist.updateSongs(extractSongsByPlaylist(playlist))
-                playlistDetailViewModel.setPlaylist(
-                    Playlist(
-                        playlistId = album.id.toInt(),
-                        namePlaylist = album.name,
-                        artwork = album.artwork
-                    )
-                )
-                findNavController().navigate(R.id.action_navigation_home_to_detail_playlist)
+                albumDetailViewModel.setAlbum(album)
+                findNavController().navigate(R.id.action_navigation_home_to_navigate_album_detail)
             }
         })
         binding.rvAlbum.adapter = adapter

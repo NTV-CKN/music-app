@@ -7,5 +7,6 @@ data class SearchParam(
 
     companion object{
         const val QUERY_TYPE_SEARCH = "search"
+        const val QUERY_TYPE_ALBUM_WITH_SONG = "albumWithSongs"
     }
 }

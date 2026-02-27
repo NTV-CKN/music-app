@@ -10,7 +10,6 @@ import androidx.paging.cachedIn
 import com.infix.musicappv1.data.repository.album.AlbumRepository
 import com.infix.musicappv1.data.repository.paging.AlbumRemoteMediator
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
-import com.infix.musicappv1.ui.home.album.AlbumViewModel
 
 class MoreAlbumViewModel(
     private val albumRepository: AlbumRepository,
