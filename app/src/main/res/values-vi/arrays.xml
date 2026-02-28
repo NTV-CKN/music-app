@@ -1,0 +1,11 @@
+<resources>
+    <string-array name="array_languages_entities">
+        <item>Việt Nam</item>
+        <item>Tiếng Anh</item>
+    </string-array>
+
+    <string-array name="array_languages_values">
+        <item>vi</item>
+        <item>en</item>
+    </string-array>
+</resources>
