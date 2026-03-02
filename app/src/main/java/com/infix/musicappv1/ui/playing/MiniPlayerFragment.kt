@@ -33,9 +33,12 @@ import com.infix.musicappv1.utils.MusicAppUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MiniPlayerFragment : Fragment(), View.OnClickListener {
+    @Inject
+    lateinit var permissionRepository: PermissionRepository
     private var fractionDisk: Float = 0.0f
     private lateinit var binding: FragmentMiniPlayerBinding
     private lateinit var animatorBtnPressed: Animator
@@ -203,7 +206,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
                     return@observe
                 trackOldPlaylist = playingSongSharedViewModel.getPlaylistTrackCurrent()
                 Log.d("MiniPlayerFragment", "MEDIA ${indexMediaCur} IT ${it}")
-                if (it > -1 && it < controller!!.mediaItemCount && PermissionRepository.getInstance().isGrantedNotification.value ?: false) {
+                if (it > -1 && it < controller!!.mediaItemCount && permissionRepository.isGrantedNotification.value ?: false) {
                     controller!!.seekTo(it, 0)
                     controller!!.prepare()
                     controller!!.play()
@@ -249,7 +252,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
     private fun pausePlayMusic() {
         miniPlayerViewModel.isPlaying.value?.let { isPlaying ->
             controller ?: return@let
-            if (PermissionRepository.getInstance().isGrantedNotification.value ?: false)
+            if (permissionRepository.isGrantedNotification.value ?: false)
                 if (isPlaying)
                     controller!!.pause()
                 else
@@ -259,7 +262,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
 
     private fun skipNextMusic() {
         val mediaController = controller ?: return
-        if (PermissionRepository.getInstance().isGrantedNotification.value ?: false)
+        if (permissionRepository.isGrantedNotification.value ?: false)
             if (mediaController.hasNextMediaItem()) {
                 mediaController.seekToNextMediaItem()
                 animatorRotatingDisk.end()
@@ -269,7 +272,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
     private fun updateSongFavorite() {
         val songCurrent = playingSongSharedViewModel.playingSongLivedata.value?.song
         songCurrent?.let { song ->
-            if (PermissionRepository.getInstance().isGrantedNotification.value ?: false) {
+            if (permissionRepository.isGrantedNotification.value ?: false) {
                 val isFavorite = !song.favorite
                 song.favorite = isFavorite
                 playingSongSharedViewModel.updateSongFavorite(song.id, isFavorite)

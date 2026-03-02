@@ -2,8 +2,11 @@ package com.infix.musicappv1.data.repository
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PermissionRepository {
+@Singleton
+class PermissionRepository @Inject constructor() {
     //save state permission notification
     private val _isGrantedNotification = MutableStateFlow<Boolean?>(null)
     val isGrantedNotification: StateFlow<Boolean?> = _isGrantedNotification
@@ -19,18 +22,18 @@ class PermissionRepository {
     fun setGrantedNotification(bool: Boolean) {
         _isGrantedNotification.value = bool
     }
-
-    companion object {
-        @Volatile
-        private var instance: PermissionRepository? = null
-        fun getInstance(): PermissionRepository {
-            if (instance == null) {
-                synchronized(this) {
-                    if (instance == null)
-                        instance = PermissionRepository()
-                }
-            }
-            return instance!!
-        }
-    }
+//
+//    companion object {
+//        @Volatile
+//        private var instance: PermissionRepository? = null
+//        fun getInstance(): PermissionRepository {
+//            if (instance == null) {
+//                synchronized(this) {
+//                    if (instance == null)
+//                        instance = PermissionRepository()
+//                }
+//            }
+//            return instance!!
+//        }
+//    }
 }

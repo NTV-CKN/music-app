@@ -40,6 +40,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 //data store pref (Guarantee must only one instance for one file
 val Context.datastorePrefSession by preferencesDataStore(name = PREF_PREV_SESSION)
@@ -47,10 +48,13 @@ val Context.datastorePrefSession by preferencesDataStore(name = PREF_PREV_SESSIO
 @AndroidEntryPoint
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var permissionRepository: PermissionRepository
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by viewModels()
-//    private val homeViewModel: HomeViewModel by viewModels {
+
+    //    private val homeViewModel: HomeViewModel by viewModels {
 //        HomeViewModel.Factory(
 //            InjectUtils.getSongRepository(this.applicationContext),
 //            InjectUtils.getPlaylistRepository(this.applicationContext),
@@ -60,7 +64,7 @@ class MainActivity : AppCompatActivity() {
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        PermissionRepository.getInstance().setGrantedNotification(isGranted)
+        permissionRepository.setGrantedNotification(isGranted)
         if (!isGranted) {
             Snackbar.make(
                 binding.root,
@@ -135,13 +139,13 @@ class MainActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 //notification
                 launch {
-                    PermissionRepository.getInstance().askPermissionNotification.collectLatest {
+                    permissionRepository.askPermissionNotification.collectLatest {
                         val isGranted =
-                            PermissionRepository.getInstance().isGrantedNotification.value
+                            permissionRepository.isGrantedNotification.value
                         if (it == null || isGranted == null) return@collectLatest
                         if (!isGranted && it) {
                             showAskPermission(Manifest.permission.POST_NOTIFICATIONS)
-                            PermissionRepository.getInstance().setAskPermissionNotification(false)
+                            permissionRepository.setAskPermissionNotification(false)
                         }
                     }
                 }//end coroutine notification

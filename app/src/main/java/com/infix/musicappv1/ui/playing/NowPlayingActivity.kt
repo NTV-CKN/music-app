@@ -41,9 +41,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Listener {
+    @Inject
+    lateinit var permissionRepository: PermissionRepository
     private var seekbarJob: Job? = null
     private lateinit var binding: ActivityNowPlayingBinding
     private var mediaController: MediaController? = null
@@ -113,7 +116,7 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
 
     override fun onResume() {
         super.onResume()
-        if (!(PermissionRepository.getInstance().isGrantedNotification.value ?: true)) {
+        if (!(permissionRepository.isGrantedNotification.value ?: true)) {
             onBackPressedDispatcher.onBackPressed()
         }
     }

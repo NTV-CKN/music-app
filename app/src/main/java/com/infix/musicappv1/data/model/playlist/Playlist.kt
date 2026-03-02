@@ -1,6 +1,8 @@
 package com.infix.musicappv1.data.model.playlist
 
+import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
@@ -52,7 +54,15 @@ data class Playlist(
 
     private fun updateMediaItems(songs: List<Song>) {
         this.mediaItems.clear()
-        songs.forEach { song -> this.mediaItems.add(MediaItem.fromUri(song.source))
+        songs.forEach { song ->
+            val mediaItem = MediaItem.Builder()
+                .setUri(song.source)
+                .setMediaMetadata(
+                    MediaMetadata.Builder()
+                        .setArtworkUri(song.image.toUri())
+                        .build()
+                ).build()
+            this.mediaItems.add(mediaItem)
         }
     }
 

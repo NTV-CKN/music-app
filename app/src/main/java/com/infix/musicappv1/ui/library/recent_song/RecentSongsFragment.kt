@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.recent.SongRecent
+import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentRecentSongsBinding
 import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
@@ -21,9 +22,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecentSongsFragment : BasePlayMusicFragment() {
+    @Inject
+    lateinit var permissionRepository: PermissionRepository
     private var navigatePlaylistDetailJob: Job? = null
     private lateinit var binding: FragmentRecentSongsBinding
     private lateinit var adapter: RecentSongAdapter
@@ -77,8 +81,7 @@ class RecentSongsFragment : BasePlayMusicFragment() {
                 override fun onClick(recentSong: SongRecent) {
                     showDialogSongOptionMenu(recentSong)
                 }
-
-            }
+            }, permissionRepository
         )
 
         val recyclerView = binding.includeSongList.rvSongList
