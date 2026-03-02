@@ -8,11 +8,13 @@ plugins {
 
 android {
     namespace = "com.infix.musicappv1"
+    //noinspection GradleDependency
     compileSdk = 35
 
     defaultConfig {
         applicationId = "com.infix.musicappv1"
         minSdk = 26
+        //noinspection OldTargetApi
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -74,7 +76,7 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.activity)
     ksp(libs.androidx.room.compiler)
-    val paging_version = "3.3.0"
+    //val paging_version = "3.3.0"
     implementation(libs.androidx.paging.runtime.ktx)
 
     // --- 4. Navigation Component ---

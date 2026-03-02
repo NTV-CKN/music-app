@@ -1,8 +1,6 @@
 package com.infix.musicappv1.data.source.local.db
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.infix.musicappv1.data.model.album.Album
@@ -55,24 +53,24 @@ abstract class MusicDatabase : RoomDatabase() {
     abstract fun artistRemoteKeysDao(): ArtistRemoteKeysDao
     abstract fun albumRemoteKeysDao(): AlbumRemoteKeysDao
 
-    companion object {
-        @Volatile
-        private var instance: MusicDatabase? = null
-
-        fun getInstance(context: Context): MusicDatabase {
-            if (instance == null) {
-                synchronized(this) {
-                    if (instance == null) {
-                        instance = Room.databaseBuilder(
-                            context.applicationContext,
-                            MusicDatabase::class.java,
-                            "mydb"
-                        ).fallbackToDestructiveMigration()
-                            .build()
-                    }
-                }
-            }
-            return instance!!
-        }
-    }
+//    companion object {
+//        @Volatile
+//        private var instance: MusicDatabase? = null
+//
+//        fun getInstance(context: Context): MusicDatabase {
+//            if (instance == null) {
+//                synchronized(this) {
+//                    if (instance == null) {
+//                        instance = Room.databaseBuilder(
+//                            context.applicationContext,
+//                            MusicDatabase::class.java,
+//                            "mydb"
+//                        ).fallbackToDestructiveMigration()
+//                            .build()
+//                    }
+//                }
+//            }
+//            return instance!!
+//        }
+//    }
 }
