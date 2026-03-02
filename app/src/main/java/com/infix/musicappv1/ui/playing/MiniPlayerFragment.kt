@@ -4,8 +4,12 @@ import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.animation.ObjectAnimator
 import android.app.Activity
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,16 +18,21 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.session.MediaController
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentMiniPlayerBinding
-import com.infix.musicappv1.ui.viewmodels.PlaybackViewModel
+import com.infix.musicappv1.media.MediaControllerService
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.MusicAppUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MiniPlayerFragment : Fragment(), View.OnClickListener {
@@ -32,10 +41,31 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
     private lateinit var animatorBtnPressed: Animator
     private lateinit var animatorRotatingDisk: ObjectAnimator
     private var controller: MediaController? = null
-    private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels()
-    private val playbackViewModel: PlaybackViewModel by activityViewModels()
 
+    private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels()
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels()
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(
+            name: ComponentName?,
+            service: IBinder?
+        ) {
+            if (service == null || controller != null) return
+            //guarantee update new controller if mediacontroller is null
+            viewLifecycleOwner.lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    val binder =
+                        service as? MediaControllerService.BinderImpl ?: return@repeatOnLifecycle
+                    binder.controllerFlow.collectLatest { controllerTmp ->
+                        controller = controllerTmp
+                    }
+                }
+            }
+        }
+        override fun onServiceDisconnected(name: ComponentName?) {
+            controller = null
+        }
+    }
 
     private val nowPlayingLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -44,7 +74,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
             result.data?.let { intent ->
                 fractionDisk = intent.getFloatExtra(MusicAppUtils.KEY_FRACTION_EXTRA, fractionDisk)
 
-                val mediaController = playbackViewModel.mediaController.value ?: return@let
+                val mediaController = controller ?: return@let
                 animatorRotatingDisk.start()
                 animatorRotatingDisk.setCurrentFraction(fractionDisk)
                 if (!mediaController.isPlaying) {
@@ -74,6 +104,21 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         setupEvent()
 //        animatorRotatingDisk.setc
     }
+
+    override fun onStart() {
+        super.onStart()
+        requireActivity().bindService(
+            Intent(requireContext(), MediaControllerService::class.java),
+            serviceConnection,
+            Context.BIND_AUTO_CREATE
+        )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        requireActivity().unbindService(serviceConnection)
+    }
+
 
     private fun setupEvent() {
         binding.includeItemMiniPlayer.btnPausePlayMiniPlayer.setOnClickListener(this)
@@ -115,10 +160,6 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setObserve() {
-        //controller
-        playbackViewModel.mediaController.observe(viewLifecycleOwner) {
-            controller = it
-        }
         //playing song
         playingSongSharedViewModel.playingSongLivedata.observe(viewLifecycleOwner) { playingSong ->
             val song = playingSong?.song
@@ -154,7 +195,7 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         //current index to play
         playingSongSharedViewModel.indexToPlay.observe(viewLifecycleOwner) { indexToPlay ->
             indexToPlay?.indexToPlay?.let {
-                val controller = playbackViewModel.mediaController.value ?: return@observe
+                controller ?: return@observe
                 val indexMediaCur = playingSongSharedViewModel.getMediaItemIndexCurrent()
                 // if old playlist same current playlist and index both same -> ignore
 
@@ -162,10 +203,10 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
                     return@observe
                 trackOldPlaylist = playingSongSharedViewModel.getPlaylistTrackCurrent()
                 Log.d("MiniPlayerFragment", "MEDIA ${indexMediaCur} IT ${it}")
-                if (it > -1 && it < controller.mediaItemCount && PermissionRepository.getInstance().isGrantedNotification.value ?: false) {
-                    controller.seekTo(it, 0)
-                    controller.prepare()
-                    controller.play()
+                if (it > -1 && it < controller!!.mediaItemCount && PermissionRepository.getInstance().isGrantedNotification.value ?: false) {
+                    controller!!.seekTo(it, 0)
+                    controller!!.prepare()
+                    controller!!.play()
                 }
             }
         }
@@ -207,17 +248,17 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
 
     private fun pausePlayMusic() {
         miniPlayerViewModel.isPlaying.value?.let { isPlaying ->
-            val controller = playbackViewModel.mediaController.value ?: return@let
+            controller ?: return@let
             if (PermissionRepository.getInstance().isGrantedNotification.value ?: false)
                 if (isPlaying)
-                    controller.pause()
+                    controller!!.pause()
                 else
-                    controller.play()
+                    controller!!.play()
         }
     }
 
     private fun skipNextMusic() {
-        val mediaController = playbackViewModel.mediaController.value ?: return
+        val mediaController = controller ?: return
         if (PermissionRepository.getInstance().isGrantedNotification.value ?: false)
             if (mediaController.hasNextMediaItem()) {
                 mediaController.seekToNextMediaItem()
