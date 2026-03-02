@@ -6,8 +6,9 @@ import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
 import com.infix.musicappv1.data.source.PlaylistDataSource
 import com.infix.musicappv1.data.source.Result
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class PlaylistRepositoryImpl(
+class PlaylistRepositoryImpl @Inject constructor(
     private val local: PlaylistDataSource.Local,
     private val remote: PlaylistDataSource.Remote
 ) : PlaylistRepository {

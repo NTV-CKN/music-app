@@ -6,8 +6,9 @@ import com.infix.musicappv1.data.source.Result
 import com.infix.musicappv1.data.source.SongDataSource
 import com.infix.musicappv1.data.source.remote.param.PagingParam
 import com.infix.musicappv1.data.source.remote.RetrofitHelper
+import javax.inject.Inject
 
-class SongRemoteDataSource : SongDataSource.Remote {
+class SongRemoteDataSource @Inject constructor() : SongDataSource.Remote {
     override suspend fun loadSongs(pagingParam: PagingParam): SongList? {
         val response = RetrofitHelper.musicService.loadSongsPaging(pagingParam)
         Log.d("SongRemoteDataSource", "response: " + response.body())

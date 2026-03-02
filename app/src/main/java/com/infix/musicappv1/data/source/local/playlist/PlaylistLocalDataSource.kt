@@ -5,8 +5,9 @@ import com.infix.musicappv1.data.model.playlist.PlaylistSongCrossRef
 import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
 import com.infix.musicappv1.data.source.PlaylistDataSource
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class PlaylistLocalDataSource(
+class PlaylistLocalDataSource @Inject constructor(
     private val playlistDao: PlaylistDao,
     private val playlistSongDao: PlaylistSongDao
 ) : PlaylistDataSource.Local {
