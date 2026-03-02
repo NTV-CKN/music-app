@@ -4,8 +4,9 @@ import androidx.paging.PagingSource
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.source.ArtistDataSource
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class ArtistLocalDataSource(
+class ArtistLocalDataSource @Inject constructor(
     private val artistDao: ArtistDao
 ) : ArtistDataSource.Local {
     override fun getArtistsPaging(): PagingSource<Int, Artist> {

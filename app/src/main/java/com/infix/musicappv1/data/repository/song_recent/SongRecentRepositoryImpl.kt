@@ -4,8 +4,9 @@ import com.infix.musicappv1.data.model.recent.SongRecent
 import com.infix.musicappv1.data.source.SongRecentDataSource
 import com.infix.musicappv1.data.source.local.recent.SongRecentLocalSource
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class SongRecentRepositoryImpl(
+class SongRecentRepositoryImpl @Inject constructor(
     private val local: SongRecentDataSource.Local
 ) : SongRecentRepository {
     override fun getSongRecentsDb(limit: Int): Flow<List<SongRecent>?> {

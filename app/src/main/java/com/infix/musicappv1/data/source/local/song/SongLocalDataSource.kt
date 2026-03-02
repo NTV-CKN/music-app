@@ -4,8 +4,9 @@ import androidx.paging.PagingSource
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.source.SongDataSource
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class SongLocalDataSource(
+class SongLocalDataSource @Inject constructor(
     private val songDao: SongDao
 ) : SongDataSource.Local {
     override suspend fun update(vararg song: Song) {

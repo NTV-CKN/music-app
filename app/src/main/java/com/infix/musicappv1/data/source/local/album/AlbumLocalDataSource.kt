@@ -4,8 +4,9 @@ import androidx.paging.PagingSource
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.source.AlbumDataSource
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class AlbumLocalDataSource(
+class AlbumLocalDataSource @Inject constructor(
     private val albumDao: AlbumDao
 ): AlbumDataSource.Local {
     override fun loadAlbumsPaging(): PagingSource<Int, Album> {
