@@ -4,11 +4,12 @@ import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.source.ArtistDataSource
 import com.infix.musicappv1.data.source.Result
-import com.infix.musicappv1.data.source.remote.param.PagingParam
 import com.infix.musicappv1.data.source.remote.RetrofitHelper
+import com.infix.musicappv1.data.source.remote.param.PagingParam
 import com.infix.musicappv1.data.source.remote.param.SearchParam
+import javax.inject.Inject
 
-class ArtistRemoteDataSource : ArtistDataSource.Remote {
+class ArtistRemoteDataSource @Inject constructor() : ArtistDataSource.Remote {
     override suspend fun loadArtistsRemote(): Result<List<Artist>> {
         val response = RetrofitHelper.musicService.loadArtists()
         return if (response.isSuccessful) {

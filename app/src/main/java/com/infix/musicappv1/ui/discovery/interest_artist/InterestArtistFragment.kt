@@ -9,29 +9,20 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.artist.Artist
-import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentInterestArtistBinding
 import com.infix.musicappv1.ui.adapter.artist.ArtistAdapter
 import com.infix.musicappv1.ui.discovery.artist.ArtistViewModel
 import com.infix.musicappv1.ui.discovery.artist.detail.ArtistDetailViewModel
-import com.infix.musicappv1.utils.InjectUtils
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class InterestArtistFragment : Fragment() {
     private lateinit var binding: FragmentInterestArtistBinding
     private lateinit var adapter: ArtistAdapter
-    private val interestArtistViewModel: InterestArtistViewModel by activityViewModels {
-        InterestArtistViewModel.Factory(InjectUtils.getArtistRepository(requireContext().applicationContext))
-    }
-    private val artistViewModel: ArtistViewModel by activityViewModels {
-        ArtistViewModel.Factory(
-            InjectUtils.getArtistRepository(requireContext().applicationContext),
-            MusicDatabase.getInstance(requireContext().applicationContext)
-        )
-    }
+    private val interestArtistViewModel: InterestArtistViewModel by activityViewModels()
+    private val artistViewModel: ArtistViewModel by activityViewModels()
 
-    private val artistDetailViewModel: ArtistDetailViewModel by activityViewModels {
-        ArtistDetailViewModel.Factory(InjectUtils.getArtistRepository(requireContext().applicationContext))
-    }
+    private val artistDetailViewModel: ArtistDetailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

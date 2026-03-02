@@ -3,7 +3,6 @@ package com.infix.musicappv1.ui.adapter.song
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -18,7 +17,8 @@ import com.infix.musicappv1.databinding.ItemSongBinding
 
 class SongPagingDataAdapter(
     private val onSongClick: SongAdapter.SongClickListener,
-    private val onOptionClick: SongAdapter.OptionSongClickListener
+    private val onOptionClick: SongAdapter.OptionSongClickListener,
+    private val permissionRepository: PermissionRepository
 ) : PagingDataAdapter<Song, SongPagingDataAdapter.ViewHolder>(DiffUtils()) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -78,13 +78,12 @@ class SongPagingDataAdapter(
                             binding.root.context,
                             Manifest.permission.POST_NOTIFICATIONS
                         ) == PackageManager.PERMISSION_GRANTED
-                    PermissionRepository.getInstance()
-                        .setGrantedNotification(notificationGranted)
+
+                        permissionRepository.setGrantedNotification(notificationGranted)
                     if (notificationGranted)
                         onSongClick.onSongClick(song, position)
 
-                    PermissionRepository.getInstance()
-                        .setAskPermissionNotification(!notificationGranted)
+                    permissionRepository.setAskPermissionNotification(!notificationGranted)
                 } else
                     onSongClick.onSongClick(song, position)
             }

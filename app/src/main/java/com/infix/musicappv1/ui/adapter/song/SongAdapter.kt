@@ -15,7 +15,8 @@ import com.infix.musicappv1.databinding.ItemSongBinding
 
 class SongAdapter(
     private val onSongClick: SongClickListener,
-    private val onOptionClick: OptionSongClickListener
+    private val onOptionClick: OptionSongClickListener,
+    private val permissionRepository: PermissionRepository
 ) : RecyclerView.Adapter<SongAdapter.ViewHolder>() {
     private val songs = mutableListOf<Song>()
 
@@ -36,12 +37,11 @@ class SongAdapter(
                             binding.root.context,
                             Manifest.permission.POST_NOTIFICATIONS
                         ) == PackageManager.PERMISSION_GRANTED
-                    PermissionRepository.Companion.getInstance().setGrantedNotification(notificationGranted)
+                    permissionRepository.setGrantedNotification(notificationGranted)
                     if (notificationGranted)
                         onSongClick.onSongClick(song, position)
 
-                    PermissionRepository.Companion.getInstance()
-                        .setAskPermissionNotification(!notificationGranted)
+                    permissionRepository.setAskPermissionNotification(!notificationGranted)
                 } else
                     onSongClick.onSongClick(song, position)
             }

@@ -14,31 +14,21 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.album.Album
-import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentMoreAlbumBinding
 import com.infix.musicappv1.ui.adapter.album.MoreAlbumPagingDataAdapter
 import com.infix.musicappv1.ui.home.album.detail.AlbumDetailViewModel
-import com.infix.musicappv1.utils.InjectUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MoreAlbumFragment : Fragment() {
     private lateinit var binding: FragmentMoreAlbumBinding
     private lateinit var adapter: MoreAlbumPagingDataAdapter
 
-    private val moreAlbumViewModel: MoreAlbumViewModel by viewModels {
-        MoreAlbumViewModel.Factory(
-            InjectUtils.getAlbumRepository(requireContext().applicationContext),
-            MusicDatabase.getInstance(requireContext().applicationContext)
-        )
-    }
+    private val moreAlbumViewModel: MoreAlbumViewModel by viewModels()
 
-    private val albumDetailViewModel: AlbumDetailViewModel by activityViewModels {
-        AlbumDetailViewModel.Factory(
-            InjectUtils.getAlbumRepository(requireContext().applicationContext)
-        )
-    }
-
+    private val albumDetailViewModel: AlbumDetailViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

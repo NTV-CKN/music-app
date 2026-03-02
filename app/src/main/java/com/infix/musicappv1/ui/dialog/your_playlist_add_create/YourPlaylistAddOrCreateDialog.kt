@@ -15,12 +15,13 @@ import com.infix.musicappv1.ui.dialog.song_option_menu.SongOptionMenuDialog
 import com.infix.musicappv1.ui.library.your_playlist.PlaylistCustomAdapter
 import com.infix.musicappv1.ui.library.your_playlist.YourPlaylistViewModel
 import com.infix.musicappv1.ui.library.your_playlist.more_your_playlist.MoreYourPlaylistViewModel
-import com.infix.musicappv1.utils.InjectUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 //this dialog creates a new playlist custom. If a user select an playlist custom existing, it
 // extract song id from fragment result (SongOptionMenuDialog) and save into PlaylistSong
 class YourPlaylistAddOrCreateDialog : DialogFragment() {
@@ -31,19 +32,10 @@ class YourPlaylistAddOrCreateDialog : DialogFragment() {
     private var addSongToPlaylistJob: Job? = null
 
     //create playlist custom
-    private val yourPlaylistViewModel: YourPlaylistViewModel by activityViewModels {
-        YourPlaylistViewModel.Factory(
-            InjectUtils.getPlaylistRepository(requireContext().applicationContext),
-            requireContext().applicationContext
-        )
-    }
+    private val yourPlaylistViewModel: YourPlaylistViewModel by activityViewModels()
 
     //get playlists custom (limit+offset)
-    private val moreYourPlaylistViewModel: MoreYourPlaylistViewModel by activityViewModels {
-        MoreYourPlaylistViewModel.Factory(
-            InjectUtils.getPlaylistRepository(requireContext().applicationContext)
-        )
-    }
+    private val moreYourPlaylistViewModel: MoreYourPlaylistViewModel by activityViewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DialogFragmentYourPlaylistAddOrCreateBinding.inflate(layoutInflater)

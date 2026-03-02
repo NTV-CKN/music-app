@@ -8,10 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.infix.musicappv1.data.model.now_playing.PlayingSong
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.repository.PlaybackRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NowPlayingViewModel(
+@HiltViewModel
+class NowPlayingViewModel @Inject constructor(
     private val playbackRepository: PlaybackRepository
 ) : ViewModel() {
     val playlistCurrent: LiveData<Playlist?> = playbackRepository.currentPlaylist.asLiveData()

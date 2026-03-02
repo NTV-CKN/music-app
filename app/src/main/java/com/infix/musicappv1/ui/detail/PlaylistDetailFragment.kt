@@ -10,21 +10,22 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.song.Song
+import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentDetailPlaylistBinding
 import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.adapter.song.SongAdapter
-import com.infix.musicappv1.utils.InjectUtils
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 //show songs of playlist in room
 class PlaylistDetailFragment : BasePlayMusicFragment() {
+    @Inject
+    lateinit var permissionRepository: PermissionRepository
     private lateinit var binding: FragmentDetailPlaylistBinding
     private lateinit var songAdapter: SongAdapter
 
-    private val playlistDetailViewModel: PlaylistDetailViewModel by activityViewModels {
-        PlaylistDetailViewModel.Factory(
-            InjectUtils.getPlaylistRepository(requireContext().applicationContext)
-        )
-    }
+    private val playlistDetailViewModel: PlaylistDetailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,7 +78,7 @@ class PlaylistDetailFragment : BasePlayMusicFragment() {
                 override fun onOptionClick(song: Song) {
                     showDialogSongOptionMenu(song)
                 }
-            }
+            }, permissionRepository
         )
 
         binding.includePlaylistDetail.includeSongList.rvSongList.adapter = songAdapter

@@ -12,21 +12,23 @@ import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
+import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentArtistDetailBinding
 import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.adapter.song.SongAdapter
-import com.infix.musicappv1.utils.InjectUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ArtistDetailFragment : BasePlayMusicFragment() {
+    @Inject
+    lateinit var permissionRepository: PermissionRepository
     private var songs: List<Song>? = null
     private lateinit var binding: FragmentArtistDetailBinding
     private lateinit var adapter: SongAdapter
-    private val artistDetailViewModel: ArtistDetailViewModel by activityViewModels {
-        ArtistDetailViewModel.Factory(InjectUtils.getArtistRepository(requireContext().applicationContext))
-    }
-
+    private val artistDetailViewModel: ArtistDetailViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -96,7 +98,7 @@ class ArtistDetailFragment : BasePlayMusicFragment() {
                 override fun onOptionClick(song: Song) {
                     showDialogSongOptionMenu(song)
                 }
-            }
+            }, permissionRepository
         )
 
         binding.includeSongList.rvSongList.adapter = adapter

@@ -17,7 +17,8 @@ import com.infix.musicappv1.utils.MusicAppUtils
 
 class RecentSongAdapter(
     private val songRecentClick: OnRecentSongClick,
-    private val onMenuClick: OnMenuOptionClick
+    private val onMenuClick: OnMenuOptionClick,
+    private val permissionRepository: PermissionRepository
 ) : RecyclerView.Adapter<RecentSongAdapter.ViewHolder>() {
     private val songRecents = mutableListOf<SongRecent>()
 
@@ -40,12 +41,11 @@ class RecentSongAdapter(
                             binding.root.context,
                             Manifest.permission.POST_NOTIFICATIONS
                         ) == PackageManager.PERMISSION_GRANTED
-                    PermissionRepository.getInstance().setGrantedNotification(notificationGranted)
+                   permissionRepository.setGrantedNotification(notificationGranted)
                     if (notificationGranted)
                         songRecentClick.onClick(songRecent, pos)
 
-                    PermissionRepository.getInstance()
-                        .setAskPermissionNotification(!notificationGranted)
+                            permissionRepository.setAskPermissionNotification(!notificationGranted)
                 } else
                     songRecentClick.onClick(songRecent, pos)
             }

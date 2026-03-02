@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.DisplayMetrics
 import android.util.DisplayMetrics.DENSITY_DEFAULT
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -27,34 +26,35 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.ActivityMainBinding
 import com.infix.musicappv1.ui.MainActivity.Companion.PREF_PREV_SESSION
-import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
-import com.infix.musicappv1.utils.InjectUtils
 import com.infix.musicappv1.utils.MusicAppUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 //data store pref (Guarantee must only one instance for one file
 val Context.datastorePrefSession by preferencesDataStore(name = PREF_PREV_SESSION)
 
+@AndroidEntryPoint
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var permissionRepository: PermissionRepository
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-    private val playingSongSharedViewModel: PlayingSongSharedViewModel by viewModels {
-        Factory(InjectUtils.getPlaybackRepository(this))
-    }
-//    private val homeViewModel: HomeViewModel by viewModels {
+    private val playingSongSharedViewModel: PlayingSongSharedViewModel by viewModels()
+
+    //    private val homeViewModel: HomeViewModel by viewModels {
 //        HomeViewModel.Factory(
 //            InjectUtils.getSongRepository(this.applicationContext),
 //            InjectUtils.getPlaylistRepository(this.applicationContext),
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        PermissionRepository.getInstance().setGrantedNotification(isGranted)
+        permissionRepository.setGrantedNotification(isGranted)
         if (!isGranted) {
             Snackbar.make(
                 binding.root,
@@ -139,13 +139,13 @@ class MainActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 //notification
                 launch {
-                    PermissionRepository.getInstance().askPermissionNotification.collectLatest {
+                    permissionRepository.askPermissionNotification.collectLatest {
                         val isGranted =
-                            PermissionRepository.getInstance().isGrantedNotification.value
+                            permissionRepository.isGrantedNotification.value
                         if (it == null || isGranted == null) return@collectLatest
                         if (!isGranted && it) {
                             showAskPermission(Manifest.permission.POST_NOTIFICATIONS)
-                            PermissionRepository.getInstance().setAskPermissionNotification(false)
+                            permissionRepository.setAskPermissionNotification(false)
                         }
                     }
                 }//end coroutine notification

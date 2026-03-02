@@ -3,11 +3,13 @@ package com.infix.musicappv1.ui.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.repository.playlist.PlaylistRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class PlaylistDetailViewModel(
+@HiltViewModel
+class PlaylistDetailViewModel @Inject constructor(
     private val playlistRepository: PlaylistRepository
 ) : ViewModel() {
     //limit offset when open playlist detail fragment and update for _playlist
@@ -22,13 +24,13 @@ class PlaylistDetailViewModel(
         return playlistRepository.getPlaylistWithName(name)
     }
 
-    class Factory(private val playlistRepository: PlaylistRepository) :
-        ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(PlaylistDetailViewModel::class.java))
-                return PlaylistDetailViewModel(playlistRepository) as T
-
-            throw IllegalArgumentException("Model class is not legal")
-        }
-    }
+//    class Factory(private val playlistRepository: PlaylistRepository) :
+//        ViewModelProvider.Factory {
+//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//            if (modelClass.isAssignableFrom(PlaylistDetailViewModel::class.java))
+//                return PlaylistDetailViewModel(playlistRepository) as T
+//
+//            throw IllegalArgumentException("Model class is not legal")
+//        }
+//    }
 }

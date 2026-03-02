@@ -10,36 +10,28 @@ import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
-import com.infix.musicappv1.data.repository.song.SongRepositoryImpl
-import com.infix.musicappv1.data.source.remote.song.SongRemoteDataSource
+import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentFavoriteSongsBinding
 import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
-import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
 import com.infix.musicappv1.ui.adapter.song.SongAdapter
-import com.infix.musicappv1.utils.InjectUtils
+import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FavoriteSongsFragment : BasePlayMusicFragment() {
+    @Inject
+    lateinit var permissionRepository: PermissionRepository
     private var navigatePlaylistDetailJob: Job? = null
     private lateinit var binding: FragmentFavoriteSongsBinding
     private lateinit var adapter: SongAdapter
-    private val favoriteSongsViewModel: FavoriteSongsViewModel by activityViewModels {
-        FavoriteSongsViewModel.Factory(
-            SongRepositoryImpl(
-                SongRemoteDataSource(),
-                InjectUtils.getSongLocalDataSource(requireContext().applicationContext)
-            )
-        )
-    }
-    private val playlistDetailViewModel: PlaylistDetailViewModel by activityViewModels {
-        PlaylistDetailViewModel.Factory(
-            InjectUtils.getPlaylistRepository(requireContext().applicationContext)
-        )
-    }
+    private val favoriteSongsViewModel: FavoriteSongsViewModel by activityViewModels()
+    private val playlistDetailViewModel: PlaylistDetailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,8 +82,7 @@ class FavoriteSongsFragment : BasePlayMusicFragment() {
                 override fun onOptionClick(song: Song) {
                     showDialogSongOptionMenu(song)
                 }
-
-            }
+            }, permissionRepository
         )
 
         binding.includeSongList.rvSongList.adapter = adapter

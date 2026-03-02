@@ -12,22 +12,23 @@ import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
+import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentAlbumDetailBinding
 import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.adapter.song.SongAdapter
-import com.infix.musicappv1.utils.InjectUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 //cause song paging so ROOM cannot provide full song for one of albums, we need load songs of album specified with API
 class AlbumDetailFragment : BasePlayMusicFragment() {
+    @Inject
+    lateinit var permissionRepository: PermissionRepository
     private lateinit var binding: FragmentAlbumDetailBinding
     private lateinit var adapter: SongAdapter
-    private val albumDetailViewModel: AlbumDetailViewModel by activityViewModels {
-        AlbumDetailViewModel.Factory(
-            InjectUtils.getAlbumRepository(requireContext().applicationContext)
-        )
-    }
+    private val albumDetailViewModel: AlbumDetailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,8 +77,7 @@ class AlbumDetailFragment : BasePlayMusicFragment() {
                 override fun onOptionClick(song: Song) {
                     showDialogSongOptionMenu(song)
                 }
-
-            }
+            }, permissionRepository
         )
 
         binding.includeDetaiAlbum.includeSongList.rvSongList.adapter = adapter

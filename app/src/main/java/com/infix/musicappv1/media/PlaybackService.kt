@@ -5,7 +5,6 @@ import android.content.Intent
 import android.util.Log
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.MediaItem
-import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
@@ -15,7 +14,7 @@ import com.infix.musicappv1.data.model.recent.SongRecent
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.ui.playing.NowPlayingActivity
-import com.infix.musicappv1.utils.InjectUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -23,11 +22,14 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PlaybackService : MediaSessionService() {
     private lateinit var mediaSession: MediaSession
     private lateinit var listener: Player.Listener
-    private lateinit var playbackRepository: PlaybackRepository
+    @Inject
+    lateinit var playbackRepository: PlaybackRepository
     private lateinit var serviceScope: CoroutineScope
     private lateinit var openNowPlayingPI: PendingIntent
 
@@ -42,7 +44,6 @@ class PlaybackService : MediaSessionService() {
 
     override fun onCreate() {
         super.onCreate()
-        playbackRepository = InjectUtils.getPlaybackRepository(this)
         initScope()
         initSessionAndPlayer()
         addListener()

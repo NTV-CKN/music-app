@@ -1,7 +1,6 @@
 package com.infix.musicappv1.ui.library.recent_song
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,28 +12,27 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.recent.SongRecent
+import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentRecentSongsBinding
 import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
-import com.infix.musicappv1.utils.InjectUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class RecentSongsFragment : BasePlayMusicFragment() {
+    @Inject
+    lateinit var permissionRepository: PermissionRepository
     private var navigatePlaylistDetailJob: Job? = null
     private lateinit var binding: FragmentRecentSongsBinding
     private lateinit var adapter: RecentSongAdapter
-    private val songRecentViewModel: RecentSongsViewModel by activityViewModels {
-        RecentSongsViewModel.Factory(InjectUtils.getSongRecentRepository(requireContext().applicationContext))
-    }
-    private val playlistDetailViewModel: PlaylistDetailViewModel by activityViewModels {
-        PlaylistDetailViewModel.Factory(
-            InjectUtils.getPlaylistRepository(requireContext().applicationContext)
-        )
-    }
+    private val songRecentViewModel: RecentSongsViewModel by activityViewModels()
+    private val playlistDetailViewModel: PlaylistDetailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,8 +81,7 @@ class RecentSongsFragment : BasePlayMusicFragment() {
                 override fun onClick(recentSong: SongRecent) {
                     showDialogSongOptionMenu(recentSong)
                 }
-
-            }
+            }, permissionRepository
         )
 
         val recyclerView = binding.includeSongList.rvSongList

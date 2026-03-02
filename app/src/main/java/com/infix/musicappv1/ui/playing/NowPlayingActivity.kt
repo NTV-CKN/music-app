@@ -1,12 +1,16 @@
+@file:Suppress("DEPRECATION")
+
 package com.infix.musicappv1.ui.playing
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.animation.ObjectAnimator
-import android.app.Activity
+import android.content.ComponentName
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.View
 import android.widget.SeekBar
@@ -15,9 +19,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.C
-import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.Timeline
 import androidx.media3.session.MediaController
@@ -25,33 +30,63 @@ import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
-import com.infix.musicappv1.data.repository.PlaybackRepository
-import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.ActivityNowPlayingBinding
-import com.infix.musicappv1.ui.viewmodels.Factory
-import com.infix.musicappv1.ui.viewmodels.PlaybackViewModel
+import com.infix.musicappv1.media.MediaControllerService
 import com.infix.musicappv1.utils.FormatTimeUtils
-import com.infix.musicappv1.utils.InjectUtils
 import com.infix.musicappv1.utils.MusicAppUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Listener {
+    @Inject
+    lateinit var permissionRepository: PermissionRepository
     private var seekbarJob: Job? = null
     private lateinit var binding: ActivityNowPlayingBinding
     private var mediaController: MediaController? = null
-    private val playbackViewModel: PlaybackViewModel by viewModels()
-    private val nowPlayingViewModel: NowPlayingViewModel by viewModels {
-        Factory(
-            InjectUtils.getPlaybackRepository(this)
-        )
-    }
+    private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
     private lateinit var animatorBtnPressed: Animator
     private lateinit var animatorRotatingDisk: ObjectAnimator
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(
+            name: ComponentName?,
+            service: IBinder?
+        ) {
+            //guarantee if controller not null and if we observe with anonymous object
+            //app will be wrong behavior
+            if (service == null || mediaController != null) return
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    val binder =
+                        service as? MediaControllerService.BinderImpl ?: return@repeatOnLifecycle
+                    binder.controllerFlow.collectLatest { controllerTmp ->
+                        if(controllerTmp == null) return@collectLatest
+                        mediaController = controllerTmp
+                        addListenerMediaController()
+                        //setup repeat mode
+                        updateIconRepeatMode()
+                        //setup mode shuffle
+                        updateIconShuffle()
+                        //set max duration for seekbar when user first access now playing
+                        //cause with callback onTimeLineChange will be not trigger if user access now playing
+                        setMaxDurationForSeekbar()
+                    }
+                }
+            }
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            mediaController = null
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,9 +104,19 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
         setupSeekbar()
     }
 
+    override fun onStart() {
+        super.onStart()
+        bindService(
+            Intent(this, MediaControllerService::class.java),
+            serviceConnection,
+            BIND_AUTO_CREATE
+        )
+    }
+
+
     override fun onResume() {
         super.onResume()
-        if(!(PermissionRepository.getInstance().isGrantedNotification.value?:true)) {
+        if (!(permissionRepository.isGrantedNotification.value ?: true)) {
             onBackPressedDispatcher.onBackPressed()
         }
     }
@@ -90,12 +135,18 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
                 overridePendingTransition(R.anim.fade_in, R.anim.slide_down)
     }
 
+    override fun onStop() {
+        super.onStop()
+        unbindService(serviceConnection)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         mediaController?.removeListener(this)
         seekbarJob?.cancel()
     }
 
+    @Deprecated("This method has been deprecated in favor of using the\n      {@link OnBackPressedDispatcher} via {@link #getOnBackPressedDispatcher()}.\n      The OnBackPressedDispatcher controls how back button events are dispatched\n      to one or more {@link OnBackPressedCallback} objects.")
     override fun onBackPressed() {
         animatorRotatingDisk.pause()
         val resultIntent = Intent().putExtra(
@@ -134,26 +185,16 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
     }
 
     private fun setupObserver() {
-        //setup media controller
-        playbackViewModel.mediaController.observe(this) {
-            it?.let { controller ->
-                mediaController = controller
-                addListenerMediaController()
-                //setup repeat mode
-                updateIconRepeatMode()
-                //setup mode shuffle
-                updateIconShuffle()
-            }
-        }
-
         //playing song
         nowPlayingViewModel.playingSongLivedata.observe(this) {
             it?.let {
                 binding.seekbarNowPlaying.progress = 0
                 showInfoSong(it.song)
-                animatorRotatingDisk.start()
-                //set max duration for seekbar
+                //when user next or prev, playing song change and we need update max duration
                 setMaxDurationForSeekbar()
+                val isPlaying = nowPlayingViewModel.isPlaying.value ?: false
+                animatorRotatingDisk.start()
+                if(!isPlaying) animatorRotatingDisk.pause()
             }
         }
         //is playing
@@ -258,7 +299,7 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
     }
 
     private fun setMaxDurationForSeekbar() {
-        val controller = playbackViewModel.mediaController.value ?: return
+        val controller = mediaController  ?: return
         val duration = controller.duration
         if (duration != C.TIME_UNSET) {
             val totalDuration = FormatTimeUtils.getMinuteAndSecond(duration)
@@ -271,6 +312,9 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
         }
     }
 
+    //callback Media
+    //we override this callback cause when user next/prev song, we need catch event and
+    //setup a new time total
     override fun onTimelineChanged(timeline: Timeline, reason: Int) {
         super.onTimelineChanged(timeline, reason)
         Log.d("NowPlayingActivity", "TimelineChanged")
@@ -335,7 +379,7 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
 
     private fun playPauseSong() {
         val isPlaying = nowPlayingViewModel.isPlaying.value ?: return
-        val controller = playbackViewModel.mediaController.value ?: return
+        val controller = mediaController ?: return
         var icPauseNext: Int
         if (isPlaying) {
             icPauseNext = R.drawable.ic_play_circle_48px
