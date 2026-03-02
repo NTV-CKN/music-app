@@ -8,8 +8,9 @@ import com.infix.musicappv1.data.source.Result
 import com.infix.musicappv1.data.source.remote.param.PagingParam
 import com.infix.musicappv1.data.source.remote.param.SearchParam
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class ArtistRepositoryImpl(
+class ArtistRepositoryImpl @Inject constructor(
     private val local: ArtistDataSource.Local,
     private val remote: ArtistDataSource.Remote
 ) : ArtistRepository {

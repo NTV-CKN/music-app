@@ -1,7 +1,6 @@
 package com.infix.musicappv1.ui.discovery.artist
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
@@ -11,10 +10,13 @@ import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.repository.artist.ArtistRepository
 import com.infix.musicappv1.data.repository.paging.ArtistRemoteMediator
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ArtistViewModel(
+@HiltViewModel
+class ArtistViewModel @Inject constructor(
     private val artistRepository: ArtistRepository,
     private val musicDb: MusicDatabase
 ) : ViewModel() {
@@ -32,16 +34,16 @@ class ArtistViewModel(
         }
     }
 
-    class Factory(
-        private val artistRepository: ArtistRepository,
-        private val musicDb: MusicDatabase
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(ArtistViewModel::class.java))
-                return ArtistViewModel(artistRepository, musicDb) as T
-            throw IllegalArgumentException("Model class is not suit")
-        }
-    }
+//    class Factory(
+//        private val artistRepository: ArtistRepository,
+//        private val musicDb: MusicDatabase
+//    ) : ViewModelProvider.Factory {
+//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//            if (modelClass.isAssignableFrom(ArtistViewModel::class.java))
+//                return ArtistViewModel(artistRepository, musicDb) as T
+//            throw IllegalArgumentException("Model class is not suit")
+//        }
+//    }
 
     companion object {
         const val ARTIST_SIZE = 10

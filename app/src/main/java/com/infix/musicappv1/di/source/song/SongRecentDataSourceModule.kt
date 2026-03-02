@@ -10,8 +10,12 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-abstract class SongRecentLocalDataSourceModule {
+abstract class SongRecentDataSourceModule {
     @Binds
     @ActivityRetainedScoped
     abstract fun getSongRecentLocalDataSource(local: SongRecentLocalSource): SongRecentDataSource.Local
+
+//    @Binds
+//    @ActivityRetainedScoped
+//    abstract fun getSongRecentRemoteDataSource(remote: SongRecentRemoteSource): SongRecentDataSource.Local
 }

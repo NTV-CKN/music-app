@@ -1,12 +1,10 @@
 package com.infix.musicappv1.ui.library.your_playlist
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
@@ -16,13 +14,16 @@ import com.infix.musicappv1.data.repository.playlist.PlaylistRepository
 import com.infix.musicappv1.ui.MainActivity
 import com.infix.musicappv1.ui.datastorePrefSession
 import com.infix.musicappv1.utils.MusicAppUtils
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import java.util.Date
+import javax.inject.Inject
 
-@SuppressLint("StaticFieldLeak")
-class YourPlaylistViewModel(
+@HiltViewModel
+class YourPlaylistViewModel @Inject constructor(
     //require application context
-   private val context: Context,
+    @param:ApplicationContext private val context: Context,
     private val playlistRepository: PlaylistRepository
 ) : ViewModel() {
     val playlistCustoms: LiveData<List<PlaylistWithSongs>?> =
@@ -56,14 +57,14 @@ class YourPlaylistViewModel(
         }
     }
 
-    class Factory(
-        private val playlistRepository: PlaylistRepository,
-        private val context: Context
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(YourPlaylistViewModel::class.java))
-                return YourPlaylistViewModel(context, playlistRepository) as T
-            throw IllegalArgumentException("Model class is not suit")
-        }
-    }
+//    class Factory(
+//        private val playlistRepository: PlaylistRepository,
+//        private val context: Context
+//    ) : ViewModelProvider.Factory {
+//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//            if (modelClass.isAssignableFrom(YourPlaylistViewModel::class.java))
+//                return YourPlaylistViewModel(context, playlistRepository) as T
+//            throw IllegalArgumentException("Model class is not suit")
+//        }
+//    }
 }

@@ -1,12 +1,11 @@
 package com.infix.musicappv1.ui.library.your_playlist
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,23 +14,17 @@ import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
 import com.infix.musicappv1.databinding.FragmentYourPlaylistBinding
 import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
 import com.infix.musicappv1.ui.library.your_playlist.dialog.CreatePlaylistDialog
-import com.infix.musicappv1.utils.InjectUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class YourPlaylistFragment : Fragment() {
     private lateinit var binding: FragmentYourPlaylistBinding
     private lateinit var adapter: PlaylistCustomAdapter
-    private val yourPlaylistViewModel: YourPlaylistViewModel by activityViewModels {
-        YourPlaylistViewModel.Factory(
-            InjectUtils.getPlaylistRepository(requireContext().applicationContext),
-            requireContext().applicationContext
-        )
-    }
-    private val playlistDetailViewModel: PlaylistDetailViewModel by activityViewModels {
-        PlaylistDetailViewModel.Factory(InjectUtils.getPlaylistRepository(requireContext().applicationContext))
-    }
+    private val yourPlaylistViewModel: YourPlaylistViewModel by activityViewModels()
+    private val playlistDetailViewModel: PlaylistDetailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

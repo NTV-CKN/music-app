@@ -10,36 +10,21 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.artist.Artist
-import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentMoreArtistBinding
-import com.infix.musicappv1.ui.adapter.artist.ArtistAdapter
 import com.infix.musicappv1.ui.adapter.artist.ArtistPagingDataAdapter
 import com.infix.musicappv1.ui.discovery.artist.ArtistViewModel
 import com.infix.musicappv1.ui.discovery.artist.detail.ArtistDetailViewModel
-import com.infix.musicappv1.utils.InjectUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MoreArtistFragment : Fragment() {
     private lateinit var adapter: ArtistPagingDataAdapter
     private lateinit var binding: FragmentMoreArtistBinding
-    private val moreArtistViewModel: MoreArtistViewModel by activityViewModels {
-        MoreArtistViewModel.Factory(
-            InjectUtils.getArtistRepository(requireContext().applicationContext),
-            MusicDatabase.getInstance(requireContext().applicationContext)
-        )
-    }
-    private val artistViewModel: ArtistViewModel by activityViewModels {
-        ArtistViewModel.Factory(
-            InjectUtils.getArtistRepository(requireContext().applicationContext),
-            MusicDatabase.getInstance(requireContext().applicationContext)
-        )
-    }
-
-    private val artistDetailViewModel: ArtistDetailViewModel by activityViewModels {
-        ArtistDetailViewModel.Factory(InjectUtils.getArtistRepository(requireContext().applicationContext))
-    }
-
+    private val moreArtistViewModel: MoreArtistViewModel by activityViewModels()
+    private val artistViewModel: ArtistViewModel by activityViewModels()
+    private val artistDetailViewModel: ArtistDetailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

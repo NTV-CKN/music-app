@@ -3,7 +3,6 @@ package com.infix.musicappv1.ui.playing
 import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.animation.ObjectAnimator
-import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -17,7 +16,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.C
-import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.Timeline
 import androidx.media3.session.MediaController
@@ -25,31 +23,24 @@ import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
-import com.infix.musicappv1.data.repository.PlaybackRepository
-import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.ActivityNowPlayingBinding
-import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlaybackViewModel
 import com.infix.musicappv1.utils.FormatTimeUtils
-import com.infix.musicappv1.utils.InjectUtils
 import com.infix.musicappv1.utils.MusicAppUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Listener {
     private var seekbarJob: Job? = null
     private lateinit var binding: ActivityNowPlayingBinding
     private var mediaController: MediaController? = null
     private val playbackViewModel: PlaybackViewModel by viewModels()
-    private val nowPlayingViewModel: NowPlayingViewModel by viewModels {
-        Factory(
-            InjectUtils.getPlaybackRepository(this)
-        )
-    }
+    private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
     private lateinit var animatorBtnPressed: Animator
     private lateinit var animatorRotatingDisk: ObjectAnimator
 

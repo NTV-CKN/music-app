@@ -6,29 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentHomeBinding
-import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlaybackViewModel
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
-import com.infix.musicappv1.utils.InjectUtils
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private var isSongsReady = false
     private var isAlbumReady = false
     private var isMediaControllerReady = false
 
-    private val homeViewModel: HomeViewModel by activityViewModels {
-        HomeViewModel.Factory(
-            InjectUtils.getSongRepository(requireContext().applicationContext),
-            InjectUtils.getAlbumRepository(requireContext().applicationContext),
-            MusicDatabase.getInstance(requireContext().applicationContext)
-        )
-    }
-    private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels {
-        Factory(InjectUtils.getPlaybackRepository(requireContext()))
-    }
+    private val homeViewModel: HomeViewModel by activityViewModels()
+    private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels()
 
     private val playbackViewModel: PlaybackViewModel by activityViewModels()
 //    private val rcmSongViewModel: RecommendSongViewModel by activityViewModels {

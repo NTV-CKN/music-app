@@ -15,9 +15,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
-import kotlin.collections.set
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PlaybackRepository private constructor(
+@Singleton
+class PlaybackRepository @Inject constructor(
     private val db: MusicDatabase
 ) {
     //observe song transition
@@ -140,21 +142,21 @@ class PlaybackRepository private constructor(
         val indexToPlay: Int?,
         val eventId: Long = System.nanoTime()
     )
-
-    companion object {
-        @Volatile
-        private var instance: PlaybackRepository? = null
-        fun getInstance(
-            db: MusicDatabase
-        ): PlaybackRepository {
-            if (instance == null) {
-                synchronized(this) {
-                }
-                if (instance == null)
-                    instance =
-                        PlaybackRepository(db)
-            }
-            return instance!!
-        }
-    }
+//
+//    companion object {
+//        @Volatile
+//        private var instance: PlaybackRepository? = null
+//        fun getInstance(
+//            db: MusicDatabase
+//        ): PlaybackRepository {
+//            if (instance == null) {
+//                synchronized(this) {
+//                }
+//                if (instance == null)
+//                    instance =
+//                        PlaybackRepository(db)
+//            }
+//            return instance!!
+//        }
+//    }
 }

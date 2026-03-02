@@ -1,7 +1,6 @@
 package com.infix.musicappv1.ui.library.recent_song
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,24 +16,19 @@ import com.infix.musicappv1.databinding.FragmentRecentSongsBinding
 import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
-import com.infix.musicappv1.utils.InjectUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class RecentSongsFragment : BasePlayMusicFragment() {
     private var navigatePlaylistDetailJob: Job? = null
     private lateinit var binding: FragmentRecentSongsBinding
     private lateinit var adapter: RecentSongAdapter
-    private val songRecentViewModel: RecentSongsViewModel by activityViewModels {
-        RecentSongsViewModel.Factory(InjectUtils.getSongRecentRepository(requireContext().applicationContext))
-    }
-    private val playlistDetailViewModel: PlaylistDetailViewModel by activityViewModels {
-        PlaylistDetailViewModel.Factory(
-            InjectUtils.getPlaylistRepository(requireContext().applicationContext)
-        )
-    }
+    private val songRecentViewModel: RecentSongsViewModel by activityViewModels()
+    private val playlistDetailViewModel: PlaylistDetailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

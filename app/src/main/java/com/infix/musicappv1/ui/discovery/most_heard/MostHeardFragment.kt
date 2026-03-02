@@ -13,14 +13,13 @@ import com.infix.musicappv1.databinding.FragmentMostHeardBinding
 import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.adapter.song.SongAdapter
-import com.infix.musicappv1.utils.InjectUtils
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MostHeardFragment : BasePlayMusicFragment() {
     private lateinit var binding: FragmentMostHeardBinding
     private lateinit var adapter: SongAdapter
-    private val mostHeardViewModel: MostHeardViewModel by viewModels {
-        MostHeardViewModel.Factory(InjectUtils.getSongRepository(requireContext().applicationContext))
-    }
+    private val mostHeardViewModel: MostHeardViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

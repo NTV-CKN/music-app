@@ -5,11 +5,12 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.setFragmentResult
 import com.infix.musicappv1.R
 import com.infix.musicappv1.databinding.DialogFragmentCreatePlaylistBinding
 import com.infix.musicappv1.ui.library.your_playlist.YourPlaylistFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CreatePlaylistDialog : DialogFragment() {
     private lateinit var binding: DialogFragmentCreatePlaylistBinding
 

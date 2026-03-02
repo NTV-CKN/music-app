@@ -1,6 +1,5 @@
 package com.infix.musicappv1.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,11 +11,14 @@ import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.enums.PlaylistEnum
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class PlayingSongSharedViewModel(private val playbackRepository: PlaybackRepository) : ViewModel() {
+@HiltViewModel
+class PlayingSongSharedViewModel @Inject constructor(private val playbackRepository: PlaybackRepository) : ViewModel() {
     val currentPlaylist: LiveData<Playlist?> = playbackRepository.currentPlaylist.asLiveData()
     val indexToPlay: LiveData<PlaybackRepository.IndexToPlayDate?> =
         playbackRepository.indexToPlay.asLiveData()

@@ -4,8 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.infix.musicappv1.data.repository.artist.ArtistRepository
 import com.infix.musicappv1.data.repository.song.SongRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class DiscoveryViewModel(
+@HiltViewModel
+class DiscoveryViewModel @Inject constructor(
     private val artistRepository: ArtistRepository,
     private val songRepository: SongRepository
 ) : ViewModel() {
@@ -61,14 +64,14 @@ class DiscoveryViewModel(
 //        }
 //    }
 
-    class Factory(
-        private val artistRepository: ArtistRepository,
-        private val songRepository: SongRepository
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(DiscoveryViewModel::class.java))
-                return DiscoveryViewModel(artistRepository, songRepository) as T
-            throw IllegalArgumentException("Model class is not suit")
-        }
-    }
+//    class Factory(
+//        private val artistRepository: ArtistRepository,
+//        private val songRepository: SongRepository
+//    ) : ViewModelProvider.Factory {
+//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//            if (modelClass.isAssignableFrom(DiscoveryViewModel::class.java))
+//                return DiscoveryViewModel(artistRepository, songRepository) as T
+//            throw IllegalArgumentException("Model class is not suit")
+//        }
+//    }
 }

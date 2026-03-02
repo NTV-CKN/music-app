@@ -7,41 +7,35 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.media3.session.MediaController
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.repository.PermissionRepository
-import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.databinding.FragmentMiniPlayerBinding
-import com.infix.musicappv1.ui.viewmodels.Factory
 import com.infix.musicappv1.ui.viewmodels.PlaybackViewModel
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
-import com.infix.musicappv1.utils.InjectUtils
 import com.infix.musicappv1.utils.MusicAppUtils
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MiniPlayerFragment : Fragment(), View.OnClickListener {
     private var fractionDisk: Float = 0.0f
     private lateinit var binding: FragmentMiniPlayerBinding
     private lateinit var animatorBtnPressed: Animator
     private lateinit var animatorRotatingDisk: ObjectAnimator
     private var controller: MediaController? = null
-    private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels {
-        val db = MusicDatabase.getInstance(requireContext().applicationContext)
-        Factory(InjectUtils.getPlaybackRepository(requireContext()))
-    }
+    private val miniPlayerViewModel: MiniPlayerViewModel by activityViewModels()
     private val playbackViewModel: PlaybackViewModel by activityViewModels()
 
-    private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels {
-        Factory(InjectUtils.getPlaybackRepository(requireContext()))
-    }
+    private val playingSongSharedViewModel: PlayingSongSharedViewModel by activityViewModels()
 
     private val nowPlayingLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()

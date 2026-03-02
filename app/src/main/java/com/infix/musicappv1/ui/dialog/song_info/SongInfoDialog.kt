@@ -1,8 +1,6 @@
 package com.infix.musicappv1.ui.dialog.song_info
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +11,9 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.FragmentSongInfoDialogBinding
 import com.infix.musicappv1.utils.FormatTimeUtils
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SongInfoDialog : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentSongInfoDialogBinding
     private val songInfoViewModel: SongInfoDialogViewModel by activityViewModels()

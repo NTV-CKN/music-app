@@ -10,8 +10,11 @@ import androidx.paging.cachedIn
 import com.infix.musicappv1.data.repository.album.AlbumRepository
 import com.infix.musicappv1.data.repository.paging.AlbumRemoteMediator
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class MoreAlbumViewModel(
+@HiltViewModel
+class MoreAlbumViewModel @Inject constructor(
     private val albumRepository: AlbumRepository,
     private val musicDb: MusicDatabase
 ) : ViewModel() {
