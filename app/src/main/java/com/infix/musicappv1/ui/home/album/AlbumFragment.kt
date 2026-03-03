@@ -14,6 +14,7 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.databinding.FragmentAlbumBinding
 import com.infix.musicappv1.ui.adapter.album.AlbumPagingDataAdapter
+import com.infix.musicappv1.ui.home.HomeFragmentDirections
 import com.infix.musicappv1.ui.home.album.detail.AlbumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -73,6 +74,6 @@ class AlbumFragment : Fragment() {
     }
 
     private fun navigateToMoreAlbum() {
-        findNavController().navigate(R.id.action_navigation_home_to_navigation_more_album)
+        findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToNavigationMoreAlbum())
     }
 }

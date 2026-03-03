@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.databinding.FragmentInterestArtistBinding
 import com.infix.musicappv1.ui.adapter.artist.ArtistAdapter
+import com.infix.musicappv1.ui.discovery.DiscoveryFragmentDirections
 import com.infix.musicappv1.ui.discovery.artist.ArtistViewModel
 import com.infix.musicappv1.ui.discovery.artist.detail.ArtistDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,7 +48,7 @@ class InterestArtistFragment : Fragment() {
             object : ArtistAdapter.OnArtistClick {
                 override fun onClick(artist: Artist) {
                     artistDetailViewModel.setArtistWithSongsByArtistName(artist.id, artist.name)
-                    findNavController().navigate(R.id.action_navigation_discovery_to_navigate_detail_artist)
+                    findNavController().navigate(DiscoveryFragmentDirections.actionNavigationDiscoveryToNavigateDetailArtist())
                 }
             },
             object : ArtistAdapter.OnInterestClick {

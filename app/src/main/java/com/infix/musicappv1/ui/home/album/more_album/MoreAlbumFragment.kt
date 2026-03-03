@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.databinding.FragmentMoreAlbumBinding
 import com.infix.musicappv1.ui.adapter.album.MoreAlbumPagingDataAdapter
@@ -53,7 +52,7 @@ class MoreAlbumFragment : Fragment() {
             MoreAlbumPagingDataAdapter(object : MoreAlbumPagingDataAdapter.AlbumClickListener {
                 override fun onClick(album: Album) {
                     albumDetailViewModel.setAlbum(album)
-                    findNavController().navigate(R.id.action_navigation_more_album_to_navigate_album_detail)
+                    findNavController().navigate(MoreAlbumFragmentDirections.actionNavigationMoreAlbumToNavigateAlbumDetail())
                 }
             })
 

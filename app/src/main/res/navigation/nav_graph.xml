@@ -11,16 +11,32 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_navigation_home_to_detail_playlist"
-            app:destination="@id/navigation_detail_playlist" />
+            app:destination="@id/navigation_detail_playlist"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right"/>
         <action
             android:id="@+id/action_navigation_home_to_navigation_more_album"
-            app:destination="@id/navigation_more_album" />
+            app:destination="@id/navigation_more_album"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right"/>
         <action
             android:id="@+id/action_navigation_home_to_navigate_more_song_recommend"
-            app:destination="@id/navigate_more_song_recommend" />
+            app:destination="@id/navigate_more_song_recommend"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right"/>
         <action
             android:id="@+id/action_navigation_home_to_navigate_album_detail"
-            app:destination="@id/navigate_album_detail" />
+            app:destination="@id/navigate_album_detail"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_discovery"
@@ -28,13 +44,25 @@
         tools:layout="@layout/fragment_discovery">
         <action
             android:id="@+id/action_navigation_discovery_to_navigate_more_artist"
-            app:destination="@id/navigate_more_artist" />
+            app:destination="@id/navigate_more_artist"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right"/>
         <action
             android:id="@+id/action_navigation_discovery_to_navigate_detail_artist"
-            app:destination="@id/navigate_detail_artist" />
+            app:destination="@id/navigate_detail_artist"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right"/>
         <action
             android:id="@+id/action_navigation_discovery_to_navigate_more_song_most_heard"
-            app:destination="@id/navigate_more_song_most_heard" />
+            app:destination="@id/navigate_more_song_most_heard"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_library"
@@ -42,10 +70,18 @@
         tools:layout="@layout/fragment_library">
         <action
             android:id="@+id/action_navigation_library_to_navigation_detail_playlist"
-            app:destination="@id/navigation_detail_playlist" />
+            app:destination="@id/navigation_detail_playlist"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right"/>
         <action
             android:id="@+id/action_navigation_library_to_navigate_more_your_playlist"
-            app:destination="@id/navigate_more_your_playlist" />
+            app:destination="@id/navigate_more_your_playlist"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right"/>
     </fragment>
 
     <fragment
@@ -58,7 +94,11 @@
         tools:layout="@layout/fragment_more_album">
         <action
             android:id="@+id/action_navigation_more_album_to_navigate_album_detail"
-            app:destination="@id/navigate_album_detail" />
+            app:destination="@id/navigate_album_detail"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right"/>
     </fragment>
     <fragment
         android:id="@+id/navigate_more_your_playlist"
@@ -67,7 +107,11 @@
         tools:layout="@layout/fragment_more_your_playlist">
         <action
             android:id="@+id/action_navigate_more_your_playlist_to_navigation_detail_playlist"
-            app:destination="@id/navigation_detail_playlist" />
+            app:destination="@id/navigation_detail_playlist"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right"/>
     </fragment>
     <fragment
         android:id="@+id/navigate_more_artist"
@@ -75,7 +119,11 @@
         tools:layout="@layout/fragment_more_artist" >
         <action
             android:id="@+id/action_navigate_more_artist_to_navigate_detail_artist"
-            app:destination="@id/navigate_detail_artist" />
+            app:destination="@id/navigate_detail_artist"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right"/>
     </fragment>
     <fragment
         android:id="@+id/navigate_detail_artist"

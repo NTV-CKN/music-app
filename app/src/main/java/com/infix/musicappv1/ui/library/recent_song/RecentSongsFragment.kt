@@ -9,7 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.recent.SongRecent
 import com.infix.musicappv1.data.repository.PermissionRepository
@@ -17,6 +16,7 @@ import com.infix.musicappv1.databinding.FragmentRecentSongsBinding
 import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
+import com.infix.musicappv1.ui.library.LibraryFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -111,7 +111,7 @@ class RecentSongsFragment : BasePlayMusicFragment() {
             withContext(Dispatchers.Main) {
                 playlist.updateSongs(songRecentViewModel.songRecents.value ?: emptyList())
                 playlistDetailViewModel.setPlaylist(playlist)
-                findNavController().navigate(R.id.action_navigation_library_to_navigation_detail_playlist)
+                findNavController().navigate(LibraryFragmentDirections.actionNavigationLibraryToNavigationDetailPlaylist())
 
             }
         }

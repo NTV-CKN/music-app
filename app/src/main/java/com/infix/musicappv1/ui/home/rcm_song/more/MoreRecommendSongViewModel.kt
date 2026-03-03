@@ -17,7 +17,7 @@ class MoreRecommendSongViewModel @Inject constructor(
 ) : ViewModel() {
     @OptIn(ExperimentalPagingApi::class)
     val songs = Pager(
-        PagingConfig(initialLoadSize = 20, prefetchDistance = 5, pageSize = 20),
+        PagingConfig(initialLoadSize = 20, prefetchDistance = 5, pageSize = 20, enablePlaceholders = false),
         remoteMediator = SongRemoteMediator(songRepository, musicDb)
     ) {
         songRepository.getAllSongsPaging()

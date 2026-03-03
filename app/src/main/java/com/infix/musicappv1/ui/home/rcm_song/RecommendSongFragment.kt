@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
@@ -17,6 +16,7 @@ import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.adapter.song.SongAdapter
 import com.infix.musicappv1.ui.adapter.song.SongPagingDataAdapter
+import com.infix.musicappv1.ui.home.HomeFragmentDirections
 import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.utils.MusicAppUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,6 +95,6 @@ class RecommendSongFragment : BasePlayMusicFragment() {
     }
 
     private fun navigateToPlaylistDetail() {
-        findNavController().navigate(R.id.action_navigation_home_to_navigate_more_song_recommend)
+        findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToNavigateMoreSongRecommend())
     }
 }

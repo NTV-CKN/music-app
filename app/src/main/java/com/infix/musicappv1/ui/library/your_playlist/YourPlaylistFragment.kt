@@ -13,6 +13,7 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
 import com.infix.musicappv1.databinding.FragmentYourPlaylistBinding
 import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
+import com.infix.musicappv1.ui.library.LibraryFragmentDirections
 import com.infix.musicappv1.ui.library.your_playlist.dialog.CreatePlaylistDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -85,7 +86,7 @@ class YourPlaylistFragment : Fragment() {
                 override fun onClick(playlistWithSongs: PlaylistWithSongs) {
                     playlistWithSongs.playlist.updateSongs(playlistWithSongs.songs)
                     playlistDetailViewModel.setPlaylist(playlistWithSongs.playlist)
-                    findNavController().navigate(R.id.action_navigation_library_to_navigation_detail_playlist)
+                    findNavController().navigate(LibraryFragmentDirections.actionNavigationLibraryToNavigateMoreYourPlaylist())
                 }
 
             },
