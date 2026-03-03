@@ -47,17 +47,15 @@ class SongPagingDataAdapter(
             oldItem: Song,
             newItem: Song
         ): Boolean {
-//            Log.d("SSSS", "" + oldItem + " " + newItem)
-            return oldItem.id == newItem.id
+            //Log.d("SSSS", "" + oldItem.id + " " + newItem.id)
+            return oldItem.id == newItem.id && oldItem.title == newItem.title
         }
 
         override fun areContentsTheSame(
             oldItem: Song,
             newItem: Song
         ): Boolean {
-            return oldItem.id == newItem.id
-                    && oldItem.title == newItem.title
-                    && oldItem.album == newItem.album
+            return oldItem == newItem
         }
     }
 
