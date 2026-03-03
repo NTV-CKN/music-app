@@ -12,7 +12,8 @@ import com.infix.musicappv1.data.model.tracking.TrackingUpdate
 import com.infix.musicappv1.data.repository.song.SongRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.data.source.remote.param.PagingParam
-import java.lang.Exception
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalPagingApi::class)
@@ -20,6 +21,7 @@ class SongRemoteMediator(
     private val songRepository: SongRepository,
     private val musicDb: MusicDatabase
 ) : RemoteMediator<Int, Song>() {
+    private var trackOffset: Int? = null
 
     override suspend fun initialize(): InitializeAction {
         val lastSongUpdate = musicDb.trackingUpdateDao().getLastUpdateSongs() ?: 0
@@ -34,7 +36,10 @@ class SongRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, Song>
     ): MediatorResult {
-        Log.d("SongRemoteMediator", "Load type: "+loadType.name)
+        Log.d(
+            "SongRemoteMediator",
+            "Load type: " + loadType.name + ", coroutine: ${Thread.currentThread().name}"
+        )
         val numPage = when (loadType) {
             LoadType.REFRESH -> {
                 //refresh page current
@@ -54,38 +59,46 @@ class SongRemoteMediator(
             }
         }
 
-        return try {
-            Log.d("SongRemoteMediator", "Offset: "+ numPage *state.config.pageSize  + ", limit: " + state.config.pageSize)
-            val songsRemote = songRepository.loadSongsPaging(
-                PagingParam(offset = numPage * state.config.pageSize, limit = state.config.pageSize)
-            )?.songs ?: emptyList()
-            val endOfReach = songsRemote.isEmpty() || songsRemote.size < state.config.pageSize
-//            Log.d("SongRemoteMediator", "is end of reach: $endOfReach")
-            musicDb.withTransaction {
-                if (loadType == LoadType.REFRESH) {
-                    musicDb.songRemoteKeysDao().clear()
-                    musicDb.songDao().clear()
-                }
-                val nextKey = if (endOfReach) null else numPage + 1
-                val prevKey = if (numPage == 0) null else numPage - 1
-                val remoteKeys = songsRemote.map { song ->
-                    SongRemoteKeys(song.id, prevKey, nextKey)
-                }
+        val pagingParam =
+            PagingParam(offset = numPage * state.config.pageSize, limit = state.config.pageSize)
 
-                musicDb.songRemoteKeysDao().insert(*remoteKeys.toTypedArray())
-                songRepository.insert(*songsRemote.toTypedArray())
-                musicDb.trackingUpdateDao().insert(
-                    TrackingUpdate(
-                        songUpdateAt = System.currentTimeMillis(),
-                        artistUpdateAt = 0
-                    )
+
+        val songsRemote = songRepository.loadSongsPaging(pagingParam)?.songs ?: emptyList()
+
+        return withContext(Dispatchers.IO) {
+            try {
+                Log.d(
+                    "SongRemoteMediator",
+                    "Offset: " + numPage * state.config.pageSize + ", limit: " + state.config.pageSize
                 )
-            }
+                val endOfReach = songsRemote.isEmpty() || songsRemote.size < state.config.pageSize
+//            Log.d("SongRemoteMediator", "is end of reach: $endOfReach")
+                musicDb.withTransaction {
+                    if (loadType == LoadType.REFRESH) {
+                        musicDb.songRemoteKeysDao().clear()
+                        musicDb.songDao().clear()
+                    }
+                    val nextKey = if (endOfReach) null else numPage + 1
+                    val prevKey = if (numPage == 0) null else numPage - 1
+                    val remoteKeys = songsRemote.map { song ->
+                        SongRemoteKeys(song.id, prevKey, nextKey)
+                    }
 
-            MediatorResult.Success(endOfPaginationReached = endOfReach)
-        } catch (e: Exception) {
-            Log.d("SongRemoteMediator", e.message ?: "Unknow")
-            MediatorResult.Error(e)
+                    musicDb.songRemoteKeysDao().insert(*remoteKeys.toTypedArray())
+                    songRepository.insert(*songsRemote.toTypedArray())
+                    musicDb.trackingUpdateDao().insert(
+                        TrackingUpdate(
+                            songUpdateAt = System.currentTimeMillis(),
+                            artistUpdateAt = 0
+                        )
+                    )
+                }
+
+                MediatorResult.Success(endOfPaginationReached = endOfReach)
+            } catch (e: Exception) {
+                Log.d("SongRemoteMediator", e.message ?: "Unknow")
+                MediatorResult.Error(e)
+            }
         }
     }
 

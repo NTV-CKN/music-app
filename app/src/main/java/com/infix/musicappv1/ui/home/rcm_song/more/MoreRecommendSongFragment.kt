@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
@@ -74,6 +76,8 @@ class MoreRecommendSongFragment : BasePlayMusicFragment() {
             }, permissionRepository
         )
 
+        binding.includeSongList.rvSongList.layoutManager = SongPagingDataAdapter.WrapContentLinearLayoutManager(requireContext())
+
         binding.includeSongList.rvSongList.adapter = adapter
     }
 
@@ -84,8 +88,10 @@ class MoreRecommendSongFragment : BasePlayMusicFragment() {
     }
 
     private fun observePagingData() {
-        lifecycleScope.launch {
-            moreRcmSongViewModel.songs.collectLatest { adapter.submitData(it) }
+      viewLifecycleOwner.lifecycleScope.launch {
+          repeatOnLifecycle(Lifecycle.State.STARTED) {
+              moreRcmSongViewModel.songs.collectLatest { adapter.submitData(it) }
+          }
         }
     }
 }

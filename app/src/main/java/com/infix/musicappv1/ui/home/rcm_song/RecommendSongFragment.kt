@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
@@ -63,8 +65,10 @@ class RecommendSongFragment : BasePlayMusicFragment() {
     }
 
     private fun collectData() {
-        lifecycleScope.launch {
-            rcmSongViewModel.songs.collectLatest { adapter.submitData(it) }
+       viewLifecycleOwner.lifecycleScope.launch {
+           repeatOnLifecycle(Lifecycle.State.STARTED) {
+               rcmSongViewModel.songs.collectLatest { adapter.submitData(it) }
+           }
         }
     }
 
