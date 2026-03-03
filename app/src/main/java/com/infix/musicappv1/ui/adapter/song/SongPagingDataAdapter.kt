@@ -43,11 +43,16 @@ class SongPagingDataAdapter(
     }
 
     class DiffUtils : DiffUtil.ItemCallback<Song>() {
+        //if true => check content => false (rebind this viewHolder) => true (nothing)
+        //if false => remove old item and insert new item
         override fun areItemsTheSame(
             oldItem: Song,
             newItem: Song
         ): Boolean {
             //Log.d("SSSS", "" + oldItem.id + " " + newItem.id)
+            //if load too fast and data wrong create behavior, maybe has duplicate song id
+            //so this callback will return true => RecyclerView move item this song at oldpos to new pos => crash
+            //We add compare with title to guarantee two songs is same and return right true or false
             return oldItem.id == newItem.id && oldItem.title == newItem.title
         }
 
