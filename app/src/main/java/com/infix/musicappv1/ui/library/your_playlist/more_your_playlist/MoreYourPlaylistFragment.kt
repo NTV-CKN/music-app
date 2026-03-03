@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.PlaylistWithSongs
 import com.infix.musicappv1.databinding.FragmentMoreYourPlaylistBinding
 import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
@@ -46,7 +45,7 @@ class MoreYourPlaylistFragment : Fragment() {
                 override fun onClick(playlistWithSongs: PlaylistWithSongs) {
                     playlistWithSongs.playlist.updateSongs(playlistWithSongs.songs)
                     playlistDetailViewModel.setPlaylist(playlistWithSongs.playlist)
-                    findNavController().navigate(R.id.action_navigate_more_your_playlist_to_navigation_detail_playlist)
+                    findNavController().navigate(MoreYourPlaylistFragmentDirections.actionNavigateMoreYourPlaylistToNavigationDetailPlaylist())
                 }
 
             },

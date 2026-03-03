@@ -14,6 +14,7 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.databinding.FragmentArtistBinding
 import com.infix.musicappv1.ui.adapter.artist.ArtistPagingDataAdapter
+import com.infix.musicappv1.ui.discovery.DiscoveryFragmentDirections
 import com.infix.musicappv1.ui.discovery.artist.detail.ArtistDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -63,7 +64,7 @@ class ArtistFragment : Fragment() {
     private fun setupEvent() {
         //more artist
         binding.tvLabelArtist.setOnClickListener {
-            findNavController().navigate(R.id.action_navigation_discovery_to_navigate_more_artist)
+            findNavController().navigate(DiscoveryFragmentDirections.actionNavigationDiscoveryToNavigateMoreArtist())
         }
     }
 

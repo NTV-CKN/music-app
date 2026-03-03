@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
@@ -14,6 +13,7 @@ import com.infix.musicappv1.databinding.FragmentMostHeardBinding
 import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.adapter.song.SongAdapter
+import com.infix.musicappv1.ui.discovery.DiscoveryFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -41,7 +41,7 @@ class MostHeardFragment : BasePlayMusicFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.progressSongMostHeard.visibility = View.VISIBLE
         binding.tvLabelMostHeard.setOnClickListener {
-            findNavController().navigate(R.id.action_navigation_discovery_to_navigate_more_song_most_heard)
+            findNavController().navigate(DiscoveryFragmentDirections.actionNavigationDiscoveryToNavigateMoreSongMostHeard())
         }
         initRecycleView()
         setupObserve()
