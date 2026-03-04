@@ -20,7 +20,7 @@ class MoreAlbumViewModel @Inject constructor(
 ) : ViewModel() {
     @OptIn(ExperimentalPagingApi::class)
     val albums = Pager(
-        PagingConfig(initialLoadSize = 20, pageSize = 20, prefetchDistance = 5),
+        PagingConfig(initialLoadSize = 20, pageSize = 20),
         remoteMediator = AlbumRemoteMediator(albumRepository, musicDb)
     ) {
         albumRepository.loadAlbumsPaging()

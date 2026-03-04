@@ -21,20 +21,21 @@ open class Song(
 ) {
 
 
+
+    override fun toString(): String {
+        return "Song(id='$id', title='$title', album='$album', artist='$artist', source='$source', image='$image', duration=$duration, favorite=$favorite, counter=$counter, replay=$replay)"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+        if (other !is Song) return false
 
-        other as Song
+        if (id != other.id) return false
 
-        return id == other.id
+        return true
     }
 
     override fun hashCode(): Int {
         return id.hashCode()
-    }
-
-    override fun toString(): String {
-        return "Song(id='$id', title='$title', album='$album', artist='$artist', source='$source', image='$image', duration=$duration, favorite=$favorite, counter=$counter, replay=$replay)"
     }
 }

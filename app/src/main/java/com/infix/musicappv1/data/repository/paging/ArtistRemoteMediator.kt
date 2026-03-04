@@ -11,6 +11,8 @@ import com.infix.musicappv1.data.model.tracking.TrackingUpdate
 import com.infix.musicappv1.data.repository.artist.ArtistRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.data.source.remote.param.PagingParam
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalPagingApi::class)
@@ -43,40 +45,42 @@ class ArtistRemoteMediator(
             }
         }
 
-        return try {
-            val artists = artistRepository.loadArtistsPaging(
-                PagingParam(offset = numPage * state.config.pageSize, limit = state.config.pageSize)
-            ) ?: emptyList()
+        return withContext(Dispatchers.IO) {
+            try {
+                val artists = artistRepository.loadArtistsPaging(
+                    PagingParam(offset = numPage * state.config.pageSize, limit = state.config.pageSize)
+                ) ?: emptyList()
 
-            val endOfReach = artists.isEmpty() || artists.size < state.config.pageSize
-            val prevKey = if (numPage == 0) null else numPage - 1
-            val nextKey = if (endOfReach) null else numPage + 1
-            musicDb.withTransaction {
-                if(loadType == LoadType.REFRESH) {
-                    musicDb.artistDao().clear()
-                    musicDb.artistRemoteKeysDao().clear()
-                }
+                val endOfReach = artists.isEmpty() || artists.size < state.config.pageSize
+                val prevKey = if (numPage == 0) null else numPage - 1
+                val nextKey = if (endOfReach) null else numPage + 1
+                musicDb.withTransaction {
+                    if(loadType == LoadType.REFRESH) {
+                        musicDb.artistDao().clear()
+                        musicDb.artistRemoteKeysDao().clear()
+                    }
 
-                val remoteKeys = artists.map {
-                    ArtistRemoteKeys(
-                        it.id,
-                        prevKey,
-                        nextKey
+                    val remoteKeys = artists.map {
+                        ArtistRemoteKeys(
+                            it.id,
+                            prevKey,
+                            nextKey
+                        )
+                    }
+
+                    musicDb.artistDao().insert(*artists.toTypedArray())
+                    musicDb.artistRemoteKeysDao().insert(*remoteKeys.toTypedArray())
+                    musicDb.trackingUpdateDao().insert(
+                        TrackingUpdate(
+                            songUpdateAt = 0,
+                            artistUpdateAt = System.currentTimeMillis()
+                        )
                     )
                 }
-
-                musicDb.artistDao().insert(*artists.toTypedArray())
-                musicDb.artistRemoteKeysDao().insert(*remoteKeys.toTypedArray())
-                musicDb.trackingUpdateDao().insert(
-                    TrackingUpdate(
-                        songUpdateAt = 0,
-                        artistUpdateAt = System.currentTimeMillis()
-                    )
-                )
+                MediatorResult.Success(endOfReach)
+            } catch (ex: Exception) {
+                MediatorResult.Error(ex)
             }
-            MediatorResult.Success(endOfReach)
-        } catch (ex: Exception) {
-            MediatorResult.Error(ex)
         }
     }
 
