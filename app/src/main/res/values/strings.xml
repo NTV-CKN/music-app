@@ -66,4 +66,8 @@
     <string name="txt_application_language">Application language</string>
     <string name="txt_application_theme">Application theme</string>
     <string name="txt_dark_mode">Dark mode</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_history_search_keys">History search keys</string>
+    <string name="txt_recent_searched_songs">Recent searched songs</string>
 </resources>
