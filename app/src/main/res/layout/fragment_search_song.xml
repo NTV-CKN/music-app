@@ -30,14 +30,16 @@
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fcv_history_search_song"
-        android:name="com.infix.musicappv1.ui.search.history.SearchSongHistoryFragment"
+        android:id="@+id/fragmentContainerView"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        tools:layout="@layout/fragment_search_song_history"
+        app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_search_song" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar_search_song"
+        app:navGraph="@navigation/nav_search_song" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
