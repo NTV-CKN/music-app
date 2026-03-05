@@ -10,6 +10,8 @@ import com.infix.musicappv1.data.model.artist.ArtistRemoteKeys
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.playlist.PlaylistSongCrossRef
 import com.infix.musicappv1.data.model.recent.SongRecent
+import com.infix.musicappv1.data.model.search.RecentSearchSong
+import com.infix.musicappv1.data.model.search.SearchKeySong
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongRemoteKeys
 import com.infix.musicappv1.data.model.tracking.TrackingUpdate
@@ -20,6 +22,8 @@ import com.infix.musicappv1.data.source.local.artist.ArtistRemoteKeysDao
 import com.infix.musicappv1.data.source.local.playlist.PlaylistDao
 import com.infix.musicappv1.data.source.local.playlist.PlaylistSongDao
 import com.infix.musicappv1.data.source.local.recent.SongRecentDao
+import com.infix.musicappv1.data.source.local.search.song.RecentSearchSongDao
+import com.infix.musicappv1.data.source.local.search.song.SearchKeySongDao
 import com.infix.musicappv1.data.source.local.song.SongDao
 import com.infix.musicappv1.data.source.local.song.SongRemoteKeysDao
 import com.infix.musicappv1.data.source.local.tracking.TrackingUpdateDao
@@ -35,7 +39,9 @@ import com.infix.musicappv1.data.source.local.tracking.TrackingUpdateDao
         SongRemoteKeys::class,
         TrackingUpdate::class,
         ArtistRemoteKeys::class,
-        AlbumRemoteKeys::class
+        AlbumRemoteKeys::class,
+        SearchKeySong::class,
+        RecentSearchSong::class
     ],
     version = 4,
     // autoMigrations = [AutoMigration(from = 3, to = 4)]
@@ -52,25 +58,6 @@ abstract class MusicDatabase : RoomDatabase() {
     abstract fun trackingUpdateDao(): TrackingUpdateDao
     abstract fun artistRemoteKeysDao(): ArtistRemoteKeysDao
     abstract fun albumRemoteKeysDao(): AlbumRemoteKeysDao
-
-//    companion object {
-//        @Volatile
-//        private var instance: MusicDatabase? = null
-//
-//        fun getInstance(context: Context): MusicDatabase {
-//            if (instance == null) {
-//                synchronized(this) {
-//                    if (instance == null) {
-//                        instance = Room.databaseBuilder(
-//                            context.applicationContext,
-//                            MusicDatabase::class.java,
-//                            "mydb"
-//                        ).fallbackToDestructiveMigration()
-//                            .build()
-//                    }
-//                }
-//            }
-//            return instance!!
-//        }
-//    }
+    abstract fun recentSearchSongDao(): RecentSearchSongDao
+    abstract fun searchKeySongDao(): SearchKeySongDao
 }
