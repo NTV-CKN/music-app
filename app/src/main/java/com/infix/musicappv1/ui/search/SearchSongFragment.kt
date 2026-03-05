@@ -5,27 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import com.infix.musicappv1.R
+import com.infix.musicappv1.databinding.FragmentSearchSongBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SearchSongFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = SearchSongFragment()
-    }
-
-    private val viewModel: SearchSongViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
+    private lateinit var binding: FragmentSearchSongBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_search_song, container, false)
+        binding = FragmentSearchSongBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+        return binding.root
     }
 }

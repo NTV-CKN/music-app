@@ -1,0 +1,22 @@
+package com.infix.musicappv1.data.source.local.search.song
+
+import com.infix.musicappv1.data.model.search.SearchKeySong
+import com.infix.musicappv1.data.source.SearchKeySongDataSource
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+
+class SearchKeySongLocalDataSource @Inject constructor(
+    private val searchKeySongDao: SearchKeySongDao
+) : SearchKeySongDataSource.Local {
+    override fun getSearchKeySong(limit: Int): Flow<List<SearchKeySong>> {
+        return searchKeySongDao.getSearchKeySong(limit)
+    }
+
+    override fun clearAll() {
+        searchKeySongDao.clear()
+    }
+
+    override fun trimSearchKeySong(keepLimit: Int) {
+        searchKeySongDao.trimSearchKeySong(keepLimit)
+    }
+}

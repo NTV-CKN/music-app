@@ -10,6 +10,8 @@ import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.data.source.local.playlist.PlaylistDao
 import com.infix.musicappv1.data.source.local.playlist.PlaylistSongDao
 import com.infix.musicappv1.data.source.local.recent.SongRecentDao
+import com.infix.musicappv1.data.source.local.search.song.RecentSearchSongDao
+import com.infix.musicappv1.data.source.local.search.song.SearchKeySongDao
 import com.infix.musicappv1.data.source.local.song.SongDao
 import com.infix.musicappv1.data.source.local.song.SongRemoteKeysDao
 import com.infix.musicappv1.data.source.local.tracking.TrackingUpdateDao
@@ -23,7 +25,7 @@ import javax.inject.Singleton
 @Suppress("unused")
 @Module
 @InstallIn(SingletonComponent::class)
-object  MusicDatabaseModule {
+object MusicDatabaseModule {
     //cached object music database and double check - safe thread
     @Provides
     @Singleton
@@ -61,8 +63,16 @@ object  MusicDatabaseModule {
     fun provideTrackingUpdateDao(db: MusicDatabase): TrackingUpdateDao = db.trackingUpdateDao()
 
     @Provides
-    fun provideArtistRemoteKeysDao(db: MusicDatabase): ArtistRemoteKeysDao = db.artistRemoteKeysDao()
+    fun provideArtistRemoteKeysDao(db: MusicDatabase): ArtistRemoteKeysDao =
+        db.artistRemoteKeysDao()
 
     @Provides
     fun provideAlbumRemoteKeysDao(db: MusicDatabase): AlbumRemoteKeysDao = db.albumRemoteKeysDao()
+
+    @Provides
+    fun provideRecentSearchSongDao(db: MusicDatabase): RecentSearchSongDao =
+        db.recentSearchSongDao()
+
+    @Provides
+    fun provideSearchKeySongDao(db: MusicDatabase): SearchKeySongDao = db.searchKeySongDao()
 }
