@@ -1,22 +1,22 @@
-package com.infix.musicappv1.ui.search.history
+package com.infix.musicappv1.ui.search.history.recent_song_search
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.infix.musicappv1.databinding.FragmentSearchSongKeyBinding
+import com.infix.musicappv1.databinding.FragmentSearchSongRecentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SearchSongKeyFragment : Fragment() {
-    private lateinit var binding: FragmentSearchSongKeyBinding
+class SearchSongRecentFragment : Fragment() {
+    private lateinit var binding: FragmentSearchSongRecentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSearchSongKeyBinding.inflate(
+        binding = FragmentSearchSongRecentBinding.inflate(
             inflater,
             container,
             false

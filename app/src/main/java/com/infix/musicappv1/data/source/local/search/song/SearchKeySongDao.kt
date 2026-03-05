@@ -1,7 +1,6 @@
 package com.infix.musicappv1.data.source.local.search.song
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Query
 import com.infix.musicappv1.data.model.search.SearchKeySong
 import kotlinx.coroutines.flow.Flow
@@ -28,6 +27,6 @@ interface SearchKeySongDao {
     """)
     fun trimSearchKeySong(keepLimit: Int = 30)
 
-    @Delete
+    @Query("DELETE FROM search_key_songs")
     fun clear()
 }

@@ -1,21 +1,38 @@
 package com.infix.musicappv1.ui.library
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.infix.musicappv1.R
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.infix.musicappv1.databinding.FragmentLibraryBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LibraryFragment : Fragment() {
+    private lateinit var binding: FragmentLibraryBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_library, container, false)
+    ): View {
+        binding = FragmentLibraryBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+        return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setEvent()
+    }
 
+    private fun setEvent() {
+        binding.btnSearchLibrary.setOnClickListener {
+            findNavController().navigate(LibraryFragmentDirections.actionNavigationLibraryToNavigateSearchSong())
+        }
+    }
 }

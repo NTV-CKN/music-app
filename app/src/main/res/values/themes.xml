@@ -16,6 +16,7 @@
         <item name="android:searchHintIcon">@drawable/ic_search_24px</item>
         <item name="android:tint">@color/black</item>
         <item name="closeIcon">@drawable/ic_close</item>
+        <item name="closeIconTint">@color/red</item>
     </style>
     
     <style name="KeySearchSongStyle" parent="Theme.Material3.DayNight.NoActionBar">

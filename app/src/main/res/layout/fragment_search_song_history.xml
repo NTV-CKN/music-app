@@ -9,7 +9,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcv_history_search_song"
-        android:name="com.infix.musicappv1.ui.search.history.SearchSongKeyFragment"
+        android:name="com.infix.musicappv1.ui.search.history.key_song.SearchSongKeyFragment"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_160dp"
         app:layout_constraintBottom_toBottomOf="@id/guideline"
@@ -27,7 +27,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView2"
-        android:name="com.infix.musicappv1.ui.search.history.SearchSongRecentFragment"
+        android:name="com.infix.musicappv1.ui.search.history.recent_song_search.SearchSongRecentFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
