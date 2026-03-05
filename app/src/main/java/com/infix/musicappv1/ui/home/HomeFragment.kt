@@ -15,6 +15,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.session.MediaController
+import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.databinding.FragmentHomeBinding
 import com.infix.musicappv1.media.MediaControllerService
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
@@ -75,6 +76,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupEvent()
         if (!isObserve) {
             setupInitDataTmp()
             isObserve = true
@@ -84,6 +86,12 @@ class HomeFragment : Fragment() {
             binding.homeScrollView.post {
                 binding.homeScrollView.scrollTo(0, scrollY)
             }
+        }
+    }
+
+    private fun setupEvent() {
+        binding.btnSearchHome.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToNavigateSearchSong())
         }
     }
 

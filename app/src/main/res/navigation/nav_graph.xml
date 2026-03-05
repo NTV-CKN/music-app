@@ -37,6 +37,9 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_right"/>
+        <action
+            android:id="@+id/action_navigation_home_to_navigate_search_song"
+            app:destination="@id/navigate_search_song" />
     </fragment>
     <fragment
         android:id="@+id/navigation_discovery"
@@ -63,6 +66,9 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_right"/>
+        <action
+            android:id="@+id/action_navigation_discovery_to_navigate_search_song"
+            app:destination="@id/navigate_search_song" />
     </fragment>
     <fragment
         android:id="@+id/navigation_library"
@@ -82,6 +88,9 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_right"/>
+        <action
+            android:id="@+id/action_navigation_library_to_navigate_search_song"
+            app:destination="@id/navigate_search_song" />
     </fragment>
 
     <fragment
@@ -147,4 +156,9 @@
     <fragment
         android:id="@+id/navigation_settings"
         android:name="com.infix.musicappv1.ui.settings.SettingsFragment" />
+    <fragment
+        android:id="@+id/navigate_search_song"
+        android:name="com.infix.musicappv1.ui.search.SearchSongFragment"
+        android:label="fragment_search_song"
+        tools:layout="@layout/fragment_search_song" />
 </navigation>
