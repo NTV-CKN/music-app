@@ -1,4 +1,4 @@
-package com.infix.musicappv1.ui.playing
+package com.infix.musicappv1.ui.playing.mini_player
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
@@ -28,6 +28,7 @@ import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentMiniPlayerBinding
 import com.infix.musicappv1.media.MediaControllerService
+import com.infix.musicappv1.ui.playing.now_playing.NowPlayingActivity
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.MusicAppUtils
 import dagger.hilt.android.AndroidEntryPoint

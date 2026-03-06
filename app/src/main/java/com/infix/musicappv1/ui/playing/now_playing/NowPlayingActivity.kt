@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION")
 
-package com.infix.musicappv1.ui.playing
+package com.infix.musicappv1.ui.playing.now_playing
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Listener {
+class NowPlayingActivity : AppCompatActivity(), View.OnClickListener {
     @Inject
     lateinit var permissionRepository: PermissionRepository
     private var seekbarJob: Job? = null
@@ -56,8 +56,10 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
     private lateinit var animatorBtnPressed: Animator
     private lateinit var animatorRotatingDisk: ObjectAnimator
     private val songOptionMenuViewModel: SongOptionMenuViewModel by viewModels()
+    private lateinit var callbackMediaController: Player.Listener
 
-
+    //temp
+    private val processEventNowPlaying = ProcessEventNowPlayingImpl()
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(
             name: ComponentName?,
@@ -90,7 +92,6 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
             mediaController = null
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,7 +147,7 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaController?.removeListener(this)
+        mediaController?.removeListener(callbackMediaController)
         seekbarJob?.cancel()
     }
 
@@ -281,52 +282,10 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-
         })
     }
 
-    private fun showInfoSong(song: Song?) {
-        song?.let {
-            Glide.with(binding.root)
-                .load(song.image)
-                .error(R.drawable.ic_song_24)
-                .circleCrop()
-                .into(binding.imgArtSongNowPlaying)
-            binding.tvNameAlbumNowPlaying.text = nowPlayingViewModel.getNamePlaylist()
-            binding.tvNameArtistNowPlaying.text = song.artist
-            binding.tvTitleSongNowPlaying.text = song.title
-        }
-    }
-
-    private fun addListenerMediaController() {
-        mediaController?.addListener(this)
-    }
-
-    private fun setMaxDurationForSeekbar() {
-        val controller = mediaController ?: return
-        val duration = controller.duration
-        if (duration != C.TIME_UNSET) {
-            val totalDuration = FormatTimeUtils.getMinuteAndSecond(duration)
-            binding.seekbarNowPlaying.max = duration.toInt()
-            binding.tvLabelTotalTime.text = totalDuration
-        } else {
-            Log.d("NowPlayingActivity", "MAX 0")
-            binding.tvLabelTotalTime.text = FormatTimeUtils.getMinuteAndSecond(0)
-            binding.seekbarNowPlaying.max = 0
-        }
-    }
-
-    //callback Media
-    //we override this callback cause when user next/prev song, we need catch event and
-    //setup a new time total
-    override fun onTimelineChanged(timeline: Timeline, reason: Int) {
-        super.onTimelineChanged(timeline, reason)
-        Log.d("NowPlayingActivity", "TimelineChanged")
-        if (binding.seekbarNowPlaying.max == 0 && (mediaController?.duration ?: 0L) > 0L)
-        //set max duration for seekbar
-            setMaxDurationForSeekbar()
-    }
-
+    //TODO: event widgets are clicked
     override fun onClick(v: View?) {
         animatorBtnPressed.setTarget(v)
         animatorBtnPressed.start()
@@ -342,70 +301,103 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
     }
 
     private fun addFavorite() {
-        val isFavorite = nowPlayingViewModel.isFavorite.value ?: return
-        val songCurrent = nowPlayingViewModel.playingSongLivedata.value?.song ?: return
-        songCurrent.favorite = !isFavorite
-        nowPlayingViewModel.updateFavorite(songCurrent.id, !isFavorite)
+        processEventNowPlaying.handleAddFavorite(nowPlayingViewModel) { isSuccess, data ->
+            val map = data as? Map<*, *>
+            if (isSuccess && map != null) {
+                nowPlayingViewModel.updateFavorite(
+                    map["id"] as? String ?: return@handleAddFavorite,
+                    map["isFavorite"] as? Boolean ?: return@handleAddFavorite
+                )
+            }
+        }
     }
 
     private fun repeatSongOrPlaylist() {
-        mediaController?.let { controller ->
-            val nowMode = controller.repeatMode
-            controller.repeatMode = when (nowMode) {
-                Player.REPEAT_MODE_ALL -> Player.REPEAT_MODE_ONE
-                Player.REPEAT_MODE_OFF -> Player.REPEAT_MODE_ALL
-                Player.REPEAT_MODE_ONE -> Player.REPEAT_MODE_OFF
-                else -> Player.REPEAT_MODE_OFF
-            }
-
-            updateIconRepeatMode()
+        processEventNowPlaying.handleToggleRepeat(mediaController) { isSuccess, _ ->
+            if (isSuccess)
+                updateIconRepeatMode()
         }
     }
 
     private fun shuffleSong() {
-        val isEnable = mediaController?.shuffleModeEnabled ?: return
-        mediaController?.shuffleModeEnabled = !isEnable
-        updateIconShuffle()
+        processEventNowPlaying.handleToggleShuffle(mediaController) { isSuccess, _ ->
+            if (isSuccess) updateIconShuffle()
+        }
     }
 
     private fun skipPrev() {
-        mediaController?.let { controller ->
-            if (controller.hasPreviousMediaItem())
-                controller.seekToPrevious()
-        }
+        processEventNowPlaying.handleSkipPrevious(mediaController) { _, _ -> }
     }
 
     private fun skipNext() {
-        mediaController?.let { controller ->
-            if (controller.hasNextMediaItem())
-                controller.seekToNext()
-        }
+        processEventNowPlaying.handleSkipNext(mediaController) { _, _ -> }
     }
 
     private fun playPauseSong() {
-        val isPlaying = nowPlayingViewModel.isPlaying.value ?: return
-        val controller = mediaController ?: return
-        var icPauseNext: Int
-        if (isPlaying) {
-            icPauseNext = R.drawable.ic_play_circle_48px
-            controller.pause()
-        } else {
-            icPauseNext = R.drawable.ic_pause_circle_48px
-            controller.prepare()
-            controller.play()
+        processEventNowPlaying.handlePlayPause(
+            nowPlayingViewModel.isPlaying.value,
+            mediaController
+        ) { _, icPauseNext ->
+            val ic = icPauseNext as? Int ?: return@handlePlayPause
+            binding.btnPausePlayNowPlaying.setImageResource(ic)
         }
-
-        binding.btnPausePlayNowPlaying.setImageResource(icPauseNext)
     }
 
     private fun showDialogSongOptionMenu() {
-        val song =
-            nowPlayingViewModel.playingSongLivedata.value?.song ?: return
-        songOptionMenuViewModel.setSong(song)
-        SongOptionMenuDialog().show(
-            this.supportFragmentManager,
-            SongOptionMenuDialog.TAG
-        )
+        processEventNowPlaying.handleShowOptions(
+            nowPlayingViewModel.playingSongLivedata.value
+        ) { isSuccess, data ->
+            val song = data as? Song
+            if (isSuccess && song != null) {
+                songOptionMenuViewModel.setSong(song)
+                SongOptionMenuDialog().show(
+                    this.supportFragmentManager,
+                    SongOptionMenuDialog.TAG
+                )
+            }
+        }
+    }
+
+    private fun showInfoSong(song: Song?) {
+        song?.let {
+            Glide.with(binding.root)
+                .load(song.image)
+                .error(R.drawable.ic_song_24)
+                .circleCrop()
+                .into(binding.imgArtSongNowPlaying)
+            binding.tvNameAlbumNowPlaying.text = nowPlayingViewModel.getNamePlaylist()
+            binding.tvNameArtistNowPlaying.text = song.artist
+            binding.tvTitleSongNowPlaying.text = song.title
+        }
+    }//TODO: End widgets are clicked
+
+    private fun addListenerMediaController() {
+        callbackMediaController = object : Player.Listener {
+            //callback Media
+            //we override this callback cause when user next/prev song, we need catch event and
+            //setup a new time total
+            override fun onTimelineChanged(timeline: Timeline, reason: Int) {
+                super.onTimelineChanged(timeline, reason)
+                Log.d("NowPlayingActivity", "TimelineChanged")
+                if (binding.seekbarNowPlaying.max == 0 && (mediaController?.duration ?: 0L) > 0L)
+                //set max duration for seekbar
+                    setMaxDurationForSeekbar()
+            }
+        }
+        mediaController?.addListener(callbackMediaController)
+    }
+
+    private fun setMaxDurationForSeekbar() {
+        val controller = mediaController ?: return
+        val duration = controller.duration
+        if (duration != C.TIME_UNSET) {
+            val totalDuration = FormatTimeUtils.getMinuteAndSecond(duration)
+            binding.seekbarNowPlaying.max = duration.toInt()
+            binding.tvLabelTotalTime.text = totalDuration
+        } else {
+            Log.d("NowPlayingActivity", "MAX 0")
+            binding.tvLabelTotalTime.text = FormatTimeUtils.getMinuteAndSecond(0)
+            binding.seekbarNowPlaying.max = 0
+        }
     }
 }
-

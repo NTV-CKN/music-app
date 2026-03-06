@@ -35,7 +35,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcv_mini_player"
-        android:name="com.infix.musicappv1.ui.playing.MiniPlayerFragment"
+        android:name="com.infix.musicappv1.ui.playing.mini_player.MiniPlayerFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav"

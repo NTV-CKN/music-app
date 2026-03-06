@@ -13,7 +13,7 @@ import com.infix.musicappv1.data.model.now_playing.MediaItemTransitionWrap
 import com.infix.musicappv1.data.model.recent.SongRecent
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PlaybackRepository
-import com.infix.musicappv1.ui.playing.NowPlayingActivity
+import com.infix.musicappv1.ui.playing.now_playing.NowPlayingActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

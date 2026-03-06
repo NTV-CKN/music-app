@@ -1,4 +1,4 @@
-package com.infix.musicappv1.ui.playing
+package com.infix.musicappv1.ui.playing.now_playing
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
