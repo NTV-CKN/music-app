@@ -4,13 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import com.infix.musicappv1.data.model.playlist.Playlist
+import com.infix.musicappv1.data.model.song.Song
+import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentResultSearchSongBinding
+import com.infix.musicappv1.enums.PlaylistEnum
+import com.infix.musicappv1.ui.BasePlayMusicFragment
+import com.infix.musicappv1.ui.adapter.song.SongAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class ResultSearchSongFragment : Fragment() {
+class ResultSearchSongFragment : BasePlayMusicFragment() {
+    @Inject
+    lateinit var permissionRepository: PermissionRepository
     private lateinit var binding: FragmentResultSearchSongBinding
+    private lateinit var adapter: SongAdapter
+    private val resultSearchSongViewModel: ResultSearchSongViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,5 +33,45 @@ class ResultSearchSongFragment : Fragment() {
             false
         )
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initRecyclerView()
+        setupObserve()
+    }
+
+    private fun initRecyclerView() {
+        adapter = SongAdapter(
+            object : SongAdapter.SongClickListener {
+                override fun onSongClick(song: Song, pos: Int) {
+                    val songs = resultSearchSongViewModel.songs.value ?: return
+                    playSong(
+                        pos,
+                        Playlist(namePlaylist = PlaylistEnum.RESULT_SEARCH_SONG.value),
+                        songs
+                    )
+                }
+            },
+            object : SongAdapter.OptionSongClickListener {
+                override fun onOptionClick(song: Song) {
+                    showDialogSongOptionMenu(song)
+                }
+            }, permissionRepository
+        )
+
+        binding.includeSongList.rvSongList.adapter = adapter
+    }
+
+    private fun setupObserve() {
+        resultSearchSongViewModel.key.observe(viewLifecycleOwner) {
+            resultSearchSongViewModel.loadSongsByKey(it ?: "")
+        }
+
+        resultSearchSongViewModel.songs.observe(viewLifecycleOwner) {
+            it?.let { songs ->
+                adapter.updateSongs(songs)
+            }
+        }
     }
 }

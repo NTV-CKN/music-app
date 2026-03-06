@@ -16,6 +16,7 @@ import com.infix.musicappv1.databinding.FragmentSearchSongBinding
 import com.infix.musicappv1.ui.search.history.SearchSongHistoryFragmentDirections
 import com.infix.musicappv1.ui.search.history.key_song.SearchSongKeyViewModel
 import com.infix.musicappv1.ui.search.result.ResultSearchSongFragmentDirections
+import com.infix.musicappv1.ui.search.result.ResultSearchSongViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,6 +27,9 @@ class SearchSongFragment : Fragment() {
     private var navControllerOfParentFragment: NavController? = null
     //use this viewmodel to save key when user click submit in keyboard
     private val searchSongKeyViewModel: SearchSongKeyViewModel by activityViewModels()
+    //use this viewmodel to set new key, when navigate from HistorySearchSong to ResultSearchSong will load
+    //songs with this key (observe)
+    private val resultSearchSongViewModel: ResultSearchSongViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +59,7 @@ class SearchSongFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if(query != null && query.isNotEmpty()) {
                     searchSongKeyViewModel.insert(SearchKeySong(key = query))
+                    resultSearchSongViewModel.setKeySearch(query)
                 }
                 return true
             }
@@ -68,6 +73,7 @@ class SearchSongFragment : Fragment() {
                         ResultSearchSongFragmentDirections.actionNavigateResultSearchSongToNavigateSearchSongHistory()
                     )
                 } else {
+                    resultSearchSongViewModel.setKeySearch(newText)
                     if (navController!!.currentDestination?.id == R.id.navigate_result_search_song) return true
                     navController!!.navigate(
                         SearchSongHistoryFragmentDirections.actionNavigateSearchSongHistoryToNavigateResultSearchSong()

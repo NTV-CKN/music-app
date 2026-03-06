@@ -3,7 +3,6 @@ package com.infix.musicappv1.data.repository.song
 import androidx.paging.PagingSource
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongList
-import com.infix.musicappv1.data.source.Result
 import com.infix.musicappv1.data.source.SongDataSource
 import com.infix.musicappv1.data.source.remote.param.PagingParam
 import kotlinx.coroutines.flow.Flow
@@ -48,6 +47,10 @@ class SongRepositoryImpl @Inject constructor(
 
     override fun getAllSongsPaging(): PagingSource<Int, Song> {
         return local.getAllSongsPaging()
+    }
+
+    override suspend fun getSongsByNameSongOrNameArtist(key: String): List<Song> {
+        return local.getSongsByNameSongOrNameArtist(key)
     }
 
 }

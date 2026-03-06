@@ -19,6 +19,7 @@ class SearchSongKeyViewModel @Inject constructor(
     fun insert(searchKeySong: SearchKeySong) {
         viewModelScope.launch(Dispatchers.IO) {
             searchKeySongRepository.insert(searchKeySong)
+            searchKeySongRepository.trimSearchKeySong()
         }
     }
 }

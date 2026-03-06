@@ -27,11 +27,11 @@ interface SearchKeySongDao {
             LIMIT :keepLimit
         )
     """)
-    fun trimSearchKeySong(keepLimit: Int = 30)
+    suspend fun trimSearchKeySong(keepLimit: Int = 30)
 
     @Query("DELETE FROM search_key_songs")
-    fun clear()
+    suspend  fun clear()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(vararg searchKeySong: SearchKeySong)
+    suspend fun insert(vararg searchKeySong: SearchKeySong)
 }

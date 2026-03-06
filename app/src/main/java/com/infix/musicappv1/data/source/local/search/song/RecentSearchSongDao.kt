@@ -27,11 +27,11 @@ interface RecentSearchSongDao {
             LIMIT :keepLimit
         )
     """)
-    fun trimRecentSearchSong(keepLimit: Int = 30)
+  suspend  fun trimRecentSearchSong(keepLimit: Int = 30)
 
     @Query("DELETE FROM recent_search_songs")
-    fun clear()
+    suspend fun clear()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(vararg recentSearchSong: RecentSearchSong)
+ suspend   fun insert(vararg recentSearchSong: RecentSearchSong)
 }

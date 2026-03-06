@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SearchKeySongRepository {
     fun getSearchKeySong(limit: Int = 15): Flow<List<SearchKeySong>>
-    fun clearAll()
-    fun trimSearchKeySong(keepLimit: Int = 15)
-    fun insert(vararg searchKeySong: SearchKeySong)
+    suspend fun clearAll()
+    suspend fun trimSearchKeySong(keepLimit: Int = 15)
+    suspend fun insert(vararg searchKeySong: SearchKeySong)
 }

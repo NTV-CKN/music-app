@@ -110,4 +110,14 @@ interface SongDao {
     """
     )
     fun getTop40SongMostHeard(): Flow<List<Song>>
+
+    @Query(
+        """
+            SELECT *
+            FROM songs
+            WHERE title LIKE '%' || :key || '%'
+                OR artist LIKE '%' || :key || '%'
+        """
+    )
+    suspend fun getSongsByNameSongOrNameArtist(key: String): List<Song>
 }

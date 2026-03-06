@@ -12,15 +12,15 @@ class RecentSearchSongRepositoryImpl @Inject constructor(
         return local.getRecentSearchSong(limit)
     }
 
-    override fun clearAll() {
+    override suspend fun clearAll() {
         local.clearAll()
     }
 
-    override fun trimRecentSearchSong(keepLimit: Int) {
+    override suspend fun trimRecentSearchSong(keepLimit: Int) {
         local.trimRecentSearchSong(keepLimit)
     }
 
-    override fun insert(vararg recentSearchSong: RecentSearchSong) {
-        TODO("Not yet implemented")
+    override suspend fun insert(vararg recentSearchSong: RecentSearchSong) {
+        local.insert(*recentSearchSong)
     }
 }
