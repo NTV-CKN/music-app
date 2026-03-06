@@ -31,6 +31,10 @@ class SearchSongKeyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         observeData()
+        binding.tvClearAll.setOnClickListener {
+            searchSongKeyViewModel.clearAll()
+            adapter.updateSearchKeySongs(emptyList())
+        }
     }
 
     private fun initRecyclerView() {

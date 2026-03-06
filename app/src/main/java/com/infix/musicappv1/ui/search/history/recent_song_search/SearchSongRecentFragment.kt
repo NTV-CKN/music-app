@@ -39,6 +39,10 @@ class SearchSongRecentFragment : BasePlayMusicFragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         setupObserve()
+        binding.tvClearAll.setOnClickListener {
+            searchSongRecentViewModel.clearAll()
+            adapter.updateSongs(emptyList())
+        }
     }
 
     private fun initRecyclerView() {
