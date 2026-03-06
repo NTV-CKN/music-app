@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
@@ -40,8 +41,14 @@ class SearchSongKeyFragment : Fragment() {
         initRecyclerView()
         observeData()
         binding.tvClearAll.setOnClickListener {
-            searchSongKeyViewModel.clearAll()
-            adapter.updateSearchKeySongs(emptyList())
+            AlertDialog.Builder(requireContext())
+                .setTitle(requireContext().getString(R.string.txt_comfirm_clear_all_data))
+                .setNegativeButton(requireContext().getString(R.string.txt_cancel)) { _, _ -> }
+                .setPositiveButton(requireContext().getString(R.string.txt_agree)) { _, _ ->
+                    searchSongKeyViewModel.clearAll()
+                    adapter.updateSearchKeySongs(emptyList())
+                }
+                .create().show()
         }
     }
 
