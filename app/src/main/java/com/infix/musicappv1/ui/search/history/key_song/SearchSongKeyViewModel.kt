@@ -22,4 +22,10 @@ class SearchSongKeyViewModel @Inject constructor(
             searchKeySongRepository.trimSearchKeySong()
         }
     }
+
+    fun clearAll() {
+        viewModelScope.launch(Dispatchers.IO) {
+            searchKeySongRepository.clearAll()
+        }
+    }
 }
