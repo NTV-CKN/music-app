@@ -32,6 +32,8 @@ import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.ActivityNowPlayingBinding
 import com.infix.musicappv1.media.MediaControllerService
+import com.infix.musicappv1.ui.dialog.song_option_menu.SongOptionMenuDialog
+import com.infix.musicappv1.ui.dialog.song_option_menu.SongOptionMenuViewModel
 import com.infix.musicappv1.utils.FormatTimeUtils
 import com.infix.musicappv1.utils.MusicAppUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,6 +55,8 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
     private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
     private lateinit var animatorBtnPressed: Animator
     private lateinit var animatorRotatingDisk: ObjectAnimator
+    private val songOptionMenuViewModel: SongOptionMenuViewModel by viewModels()
+
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(
@@ -67,7 +71,7 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
                     val binder =
                         service as? MediaControllerService.BinderImpl ?: return@repeatOnLifecycle
                     binder.controllerFlow.collectLatest { controllerTmp ->
-                        if(controllerTmp == null) return@collectLatest
+                        if (controllerTmp == null) return@collectLatest
                         mediaController = controllerTmp
                         addListenerMediaController()
                         //setup repeat mode
@@ -194,7 +198,7 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
                 setMaxDurationForSeekbar()
                 val isPlaying = nowPlayingViewModel.isPlaying.value ?: false
                 animatorRotatingDisk.start()
-                if(!isPlaying) animatorRotatingDisk.pause()
+                if (!isPlaying) animatorRotatingDisk.pause()
             }
         }
         //is playing
@@ -299,7 +303,7 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
     }
 
     private fun setMaxDurationForSeekbar() {
-        val controller = mediaController  ?: return
+        val controller = mediaController ?: return
         val duration = controller.duration
         if (duration != C.TIME_UNSET) {
             val totalDuration = FormatTimeUtils.getMinuteAndSecond(duration)
@@ -333,6 +337,7 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
             R.id.btn_shuffle_now_playing -> shuffleSong()
             R.id.btn_repeat_now_playing -> repeatSongOrPlaylist()
             R.id.btn_add_favorite_now_playing -> addFavorite()
+            R.id.btn_more_option_now_playing -> showDialogSongOptionMenu()
         }
     }
 
@@ -391,6 +396,16 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener, Player.Lis
         }
 
         binding.btnPausePlayNowPlaying.setImageResource(icPauseNext)
+    }
+
+    private fun showDialogSongOptionMenu() {
+        val song =
+            nowPlayingViewModel.playingSongLivedata.value?.song ?: return
+        songOptionMenuViewModel.setSong(song)
+        SongOptionMenuDialog().show(
+            this.supportFragmentManager,
+            SongOptionMenuDialog.TAG
+        )
     }
 }
 

@@ -6,8 +6,11 @@ import androidx.lifecycle.ViewModel
 import com.infix.musicappv1.data.model.option_menu.SongOptionMenuItem
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.utils.SongOptionMenuUtils
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SongOptionMenuViewModel : ViewModel() {
+@HiltViewModel
+class SongOptionMenuViewModel @Inject constructor() : ViewModel() {
     private val _song = MutableLiveData<Song>()
     val song: LiveData<Song> = _song
 
