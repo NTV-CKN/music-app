@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:paddingStart="@dimen/margin_start_8"
     android:paddingEnd="@dimen/margin_end_8"
-    tools:context=".ui.playing.MiniPlayerFragment">
+    tools:context=".ui.playing.mini_player.MiniPlayerFragment">
 
 
     <include
