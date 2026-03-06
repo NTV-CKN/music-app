@@ -11,8 +11,8 @@
         android:id="@+id/fcv_history_search_song"
         android:name="com.infix.musicappv1.ui.search.history.key_song.SearchSongKeyFragment"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_160dp"
-        app:layout_constraintBottom_toBottomOf="@id/guideline"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,7 +26,7 @@
         app:layout_constraintGuide_percent="0.25" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView2"
+        android:id="@+id/fcv_recent_search_song"
         android:name="com.infix.musicappv1.ui.search.history.recent_song_search.SearchSongRecentFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"

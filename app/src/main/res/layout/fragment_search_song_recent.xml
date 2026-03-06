@@ -19,6 +19,16 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextSizeCheck" />
 
+    <TextView
+        android:id="@+id/tv_clear_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_clear_all"
+        android:layout_marginEnd="@dimen/margin_end_16"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_label_recent_search_song"
+        app:layout_constraintEnd_toEndOf="@+id/tv_label_recent_search_song"
+        app:layout_constraintTop_toTopOf="@+id/tv_label_recent_search_song" />
+
     <include
         android:id="@+id/include_song_list"
         layout="@layout/include_song_list"

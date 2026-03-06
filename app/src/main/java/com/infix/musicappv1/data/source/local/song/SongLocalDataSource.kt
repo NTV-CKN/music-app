@@ -52,4 +52,8 @@ class SongLocalDataSource @Inject constructor(
     override suspend fun updateSongFavorite(id: String, isFavorite: Boolean) {
         songDao.updateFavorite(id, isFavorite)
     }
+
+    override suspend fun getSongsByNameSongOrNameArtist(key: String): List<Song> {
+        return songDao.getSongsByNameSongOrNameArtist(key)
+    }
 }

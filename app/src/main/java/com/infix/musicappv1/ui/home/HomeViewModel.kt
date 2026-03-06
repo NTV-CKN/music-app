@@ -21,16 +21,4 @@ class HomeViewModel @Inject constructor(
     //when any fragment has paging song, room update more song and notify for songLocal
     val songLocal: LiveData<List<Song>?> = songRepository.getAllSongsFlow().asLiveData()
     val albumLocal: LiveData<List<Album>?> = albumRepository.loadAllAlbumsFlow().asLiveData()
-
-//    class Factory(
-//        private val songRepository: SongRepository,
-//        private val albumRepository: AlbumRepository,
-//        private val musicDb: MusicDatabase
-//    ) : ViewModelProvider.Factory {
-//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//            if (modelClass.isAssignableFrom(HomeViewModel::class.java))
-//                return HomeViewModel(songRepository, albumRepository, musicDb) as T
-//            throw IllegalArgumentException("Model class is not suit")
-//        }
-//    }
 }

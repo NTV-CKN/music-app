@@ -9,5 +9,7 @@ enum class PlaylistEnum(val value: String, val playlistId: Int) {
     MOST_HEARD("Songs Most Heard", 6),
     CUSTOM("Song Custom", 8),
     DETAIL_ALBUM("Detail Album", 9),
-    MORE_SONG_MOST_HEARD("More Songs Most Heard", 10)
+    MORE_SONG_MOST_HEARD("More Songs Most Heard", 10),
+    RESULT_SEARCH_SONG("Result Search Songs", 11),
+    RECENT_SEARCH_SONG("Recent Search Songs", 12)
 }

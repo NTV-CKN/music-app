@@ -12,11 +12,15 @@ class SearchKeySongLocalDataSource @Inject constructor(
         return searchKeySongDao.getSearchKeySong(limit)
     }
 
-    override fun clearAll() {
+    override suspend fun clearAll() {
         searchKeySongDao.clear()
     }
 
-    override fun trimSearchKeySong(keepLimit: Int) {
+    override suspend fun trimSearchKeySong(keepLimit: Int) {
         searchKeySongDao.trimSearchKeySong(keepLimit)
+    }
+
+    override suspend fun insert(vararg searchKeySong: SearchKeySong) {
+        searchKeySongDao.insert(*searchKeySong)
     }
 }

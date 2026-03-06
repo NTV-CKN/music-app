@@ -10,6 +10,7 @@ interface SongRepository {
     suspend fun loadSongsPaging(pagingParam: PagingParam): SongList?
     fun getAllSongsFlow(): Flow<List<Song>>
     suspend fun insert(vararg song: Song)
+    suspend fun getSongsByNameSongOrNameArtist(key: String): List<Song>
     fun getSongsFavoriteWithLimit(limit: Int = 10): Flow<List<Song>>
     fun getSongsFavoriteFlow(): Flow<List<Song>>
     fun getNSongsPaging(limit: Int = 10): PagingSource<Int, Song>

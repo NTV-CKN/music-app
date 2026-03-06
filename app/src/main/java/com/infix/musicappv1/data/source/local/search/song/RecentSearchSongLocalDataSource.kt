@@ -7,16 +7,20 @@ import javax.inject.Inject
 
 class RecentSearchSongLocalDataSource @Inject constructor(
     private val recentSearchSongDao: RecentSearchSongDao
-): RecentSearchSongDataSource.Local {
+) : RecentSearchSongDataSource.Local {
     override fun getRecentSearchSong(limit: Int): Flow<List<RecentSearchSong>> {
         return recentSearchSongDao.getRecentSearchSong(limit)
     }
 
-    override fun clearAll() {
+    override suspend fun clearAll() {
         recentSearchSongDao.clear()
     }
 
-    override fun trimRecentSearchSong(keepLimit: Int) {
+    override suspend fun trimRecentSearchSong(keepLimit: Int) {
         recentSearchSongDao.trimRecentSearchSong(keepLimit)
+    }
+
+    override suspend fun insert(vararg recentSearchSong: RecentSearchSong) {
+        recentSearchSongDao.insert(*recentSearchSong)
     }
 }

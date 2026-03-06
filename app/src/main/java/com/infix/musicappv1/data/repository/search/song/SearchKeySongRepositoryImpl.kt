@@ -7,16 +7,20 @@ import javax.inject.Inject
 
 class SearchKeySongRepositoryImpl @Inject constructor(
     private val local: SearchKeySongDataSource.Local
-): SearchKeySongRepository {
+) : SearchKeySongRepository {
     override fun getSearchKeySong(limit: Int): Flow<List<SearchKeySong>> {
         return local.getSearchKeySong(limit)
     }
 
-    override fun clearAll() {
+    override suspend fun clearAll() {
         local.clearAll()
     }
 
-    override fun trimSearchKeySong(keepLimit: Int) {
+    override suspend fun trimSearchKeySong(keepLimit: Int) {
         local.trimSearchKeySong(keepLimit)
+    }
+
+    override suspend fun insert(vararg searchKeySong: SearchKeySong) {
+        local.insert(*searchKeySong)
     }
 }

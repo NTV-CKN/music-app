@@ -39,7 +39,11 @@
             app:popExitAnim="@anim/slide_right"/>
         <action
             android:id="@+id/action_navigation_home_to_navigate_search_song"
-            app:destination="@id/navigate_search_song" />
+            app:destination="@id/navigate_search_song"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_discovery"
@@ -68,7 +72,11 @@
             app:popExitAnim="@anim/slide_right"/>
         <action
             android:id="@+id/action_navigation_discovery_to_navigate_search_song"
-            app:destination="@id/navigate_search_song" />
+            app:destination="@id/navigate_search_song"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_library"
@@ -90,7 +98,11 @@
             app:popExitAnim="@anim/slide_right"/>
         <action
             android:id="@+id/action_navigation_library_to_navigate_search_song"
-            app:destination="@id/navigate_search_song" />
+            app:destination="@id/navigate_search_song"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right"/>
     </fragment>
 
     <fragment
