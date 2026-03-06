@@ -7,4 +7,5 @@ interface RecentSearchSongRepository {
     fun getRecentSearchSong(limit: Int = 30): Flow<List<RecentSearchSong>>
     fun clearAll()
     fun trimRecentSearchSong(keepLimit: Int = 30)
+    fun insert(vararg recentSearchSong: RecentSearchSong)
 }

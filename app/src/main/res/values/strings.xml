@@ -71,4 +71,5 @@
     <string name="txt_history_search_keys">History search keys</string>
     <string name="txt_recent_searched_songs">Recent searched songs</string>
     <string name="txt_result_search_song">Result search songs</string>
+    <string name="txt_clear_all">Clear All</string>
 </resources>

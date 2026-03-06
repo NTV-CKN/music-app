@@ -7,4 +7,5 @@ interface SearchKeySongRepository {
     fun getSearchKeySong(limit: Int = 15): Flow<List<SearchKeySong>>
     fun clearAll()
     fun trimSearchKeySong(keepLimit: Int = 15)
+    fun insert(vararg searchKeySong: SearchKeySong)
 }

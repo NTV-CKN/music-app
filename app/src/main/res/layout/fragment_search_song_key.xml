@@ -28,9 +28,18 @@
         android:layout_marginEnd="@dimen/margin_end_16"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_max="@dimen/height_160dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_label_key_search_song"
         app:spanCount="4"
         tools:listitem="@layout/item_key_search_song" />
+
+    <TextView
+        android:id="@+id/tv_clear_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_clear_all"
+        android:layout_marginEnd="@dimen/margin_end_16"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_label_key_search_song"
+        app:layout_constraintEnd_toEndOf="@+id/tv_label_key_search_song"
+        app:layout_constraintTop_toTopOf="@+id/tv_label_key_search_song" />
 </androidx.constraintlayout.widget.ConstraintLayout>

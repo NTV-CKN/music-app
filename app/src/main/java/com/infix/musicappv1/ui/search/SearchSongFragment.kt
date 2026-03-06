@@ -6,12 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
+import com.infix.musicappv1.data.model.search.SearchKeySong
 import com.infix.musicappv1.databinding.FragmentSearchSongBinding
 import com.infix.musicappv1.ui.search.history.SearchSongHistoryFragmentDirections
+import com.infix.musicappv1.ui.search.history.key_song.SearchSongKeyViewModel
 import com.infix.musicappv1.ui.search.result.ResultSearchSongFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,6 +24,8 @@ class SearchSongFragment : Fragment() {
     private lateinit var searchView: SearchView
     private var navController: NavController? = null
     private var navControllerOfParentFragment: NavController? = null
+    //use this viewmodel to save key when user click submit in keyboard
+    private val searchSongKeyViewModel: SearchSongKeyViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +53,9 @@ class SearchSongFragment : Fragment() {
         searchView = binding.toolbarSearchSong.findViewById(R.id.search_view_search_song)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-
+                if(query != null && query.isNotEmpty()) {
+                    searchSongKeyViewModel.insert(SearchKeySong(key = query))
+                }
                 return true
             }
 

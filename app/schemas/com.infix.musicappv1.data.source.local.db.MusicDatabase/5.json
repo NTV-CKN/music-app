@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "0aa9c95eb29d0a0c8d9663527a6ea2ee",
+    "identityHash": "6014bce77048c8d1410819ae57faac93",
     "entities": [
       {
         "tableName": "albums",
@@ -467,7 +467,7 @@
       },
       {
         "tableName": "search_key_songs",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `key` TEXT NOT NULL, `search_at` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `key` TEXT NOT NULL, `search_at` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -489,12 +489,22 @@
           }
         ],
         "primaryKey": {
-          "autoGenerate": false,
+          "autoGenerate": true,
           "columnNames": [
             "id"
           ]
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_search_key_songs_key",
+            "unique": true,
+            "columnNames": [
+              "key"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_search_key_songs_key` ON `${TABLE_NAME}` (`key`)"
+          }
+        ],
         "foreignKeys": []
       },
       {
@@ -581,7 +591,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0aa9c95eb29d0a0c8d9663527a6ea2ee')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6014bce77048c8d1410819ae57faac93')"
     ]
   }
 }

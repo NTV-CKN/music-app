@@ -1,6 +1,8 @@
 package com.infix.musicappv1.data.source.local.search.song
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.infix.musicappv1.data.model.search.RecentSearchSong
 import kotlinx.coroutines.flow.Flow
@@ -29,4 +31,7 @@ interface RecentSearchSongDao {
 
     @Query("DELETE FROM recent_search_songs")
     fun clear()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(vararg recentSearchSong: RecentSearchSong)
 }

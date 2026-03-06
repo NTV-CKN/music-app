@@ -19,4 +19,8 @@ class SearchKeySongRepositoryImpl @Inject constructor(
     override fun trimSearchKeySong(keepLimit: Int) {
         local.trimSearchKeySong(keepLimit)
     }
+
+    override fun insert(vararg searchKeySong: SearchKeySong) {
+        local.insert(*searchKeySong)
+    }
 }

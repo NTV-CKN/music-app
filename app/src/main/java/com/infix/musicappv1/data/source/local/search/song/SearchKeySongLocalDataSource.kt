@@ -19,4 +19,8 @@ class SearchKeySongLocalDataSource @Inject constructor(
     override fun trimSearchKeySong(keepLimit: Int) {
         searchKeySongDao.trimSearchKeySong(keepLimit)
     }
+
+    override fun insert(vararg searchKeySong: SearchKeySong) {
+        searchKeySongDao.insert(*searchKeySong)
+    }
 }

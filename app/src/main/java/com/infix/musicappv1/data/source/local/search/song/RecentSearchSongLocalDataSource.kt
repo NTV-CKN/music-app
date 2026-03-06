@@ -19,4 +19,8 @@ class RecentSearchSongLocalDataSource @Inject constructor(
     override fun trimRecentSearchSong(keepLimit: Int) {
         recentSearchSongDao.trimRecentSearchSong(keepLimit)
     }
+
+    override fun insert(vararg recentSearchSong: RecentSearchSong) {
+        recentSearchSongDao.insert(*recentSearchSong)
+    }
 }

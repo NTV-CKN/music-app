@@ -2,11 +2,12 @@ package com.infix.musicappv1.data.model.search
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "search_key_songs")
+@Entity(tableName = "search_key_songs", indices = [Index(value = ["key"], unique = true)])
 data class SearchKeySong(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo("id")
     val id: Int = 0,
     @ColumnInfo("key")
