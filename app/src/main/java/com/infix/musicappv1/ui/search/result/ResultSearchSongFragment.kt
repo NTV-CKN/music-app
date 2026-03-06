@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.infix.musicappv1.data.model.playlist.Playlist
+import com.infix.musicappv1.data.model.search.RecentSearchSong
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentResultSearchSongBinding
@@ -51,6 +52,9 @@ class ResultSearchSongFragment : BasePlayMusicFragment() {
                         Playlist(namePlaylist = PlaylistEnum.RESULT_SEARCH_SONG.value),
                         songs
                     )
+                    //insert RecentSearchSong
+                    val recentSearchSong: RecentSearchSong = createRecentSearchSong(song)
+                    resultSearchSongViewModel.saveSongWhenUserClick(recentSearchSong)
                 }
             },
             object : SongAdapter.OptionSongClickListener {
@@ -72,6 +76,21 @@ class ResultSearchSongFragment : BasePlayMusicFragment() {
             it?.let { songs ->
                 adapter.updateSongs(songs)
             }
+        }
+    }
+
+    private fun createRecentSearchSong(song: Song): RecentSearchSong {
+        return RecentSearchSong().apply {
+            id = song.id
+            title = song.title
+            album = song.album
+            artist = song.artist
+            source = song.source
+            image = song.image
+            duration = song.duration
+            favorite = song.favorite
+            counter = song.counter
+            replay = song.replay
         }
     }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.infix.musicappv1.data.model.search.RecentSearchSong
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.search.song.RecentSearchSongRepository
 import com.infix.musicappv1.data.repository.song.SongRepository
@@ -32,6 +33,13 @@ class ResultSearchSongViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val result = songRepository.getSongsByNameSongOrNameArtist(key)
             _songs.postValue(result)
+        }
+    }
+
+    fun saveSongWhenUserClick(recentSearchSong: RecentSearchSong) {
+        viewModelScope.launch(Dispatchers.IO) {
+            resultSearchSongRepository.insert(recentSearchSong)
+            resultSearchSongRepository.trimRecentSearchSong()
         }
     }
 }
