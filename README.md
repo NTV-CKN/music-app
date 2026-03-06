@@ -10,4 +10,4 @@
   + Thư viện Glide để load ảnh
   + Thư viện DataStore để xử lí thao tác lưu session trước đấy chơi nhạc khi quay lại ứng dụng
   + Thư viện Navigation hỗ trợ di chuyển và quản lí qua lại giữa các fragment và truyền nhận dữ liệu an toàn (Safe Args)
-- Kiến trúc sử dụng: MVVM kết hợp Clean Architecture
+- Kiến trúc sử dụng: MVVM kết hợp Clean Architecture, viewBinding
