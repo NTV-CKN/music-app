@@ -26,7 +26,7 @@
         app:layout_constraintGuide_percent="0.25" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView2"
+        android:id="@+id/fcv_recent_search_song"
         android:name="com.infix.musicappv1.ui.search.history.recent_song_search.SearchSongRecentFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
