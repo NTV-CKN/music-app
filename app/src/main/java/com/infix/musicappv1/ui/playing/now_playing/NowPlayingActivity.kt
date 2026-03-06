@@ -48,7 +48,11 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class NowPlayingActivity : AppCompatActivity(), View.OnClickListener {
     @Inject
+    lateinit var processEventNowPlaying: ProcessEventNowPlaying
+
+    @Inject
     lateinit var permissionRepository: PermissionRepository
+
     private var seekbarJob: Job? = null
     private lateinit var binding: ActivityNowPlayingBinding
     private var mediaController: MediaController? = null
@@ -58,8 +62,6 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener {
     private val songOptionMenuViewModel: SongOptionMenuViewModel by viewModels()
     private lateinit var callbackMediaController: Player.Listener
 
-    //temp
-    private val processEventNowPlaying = ProcessEventNowPlayingImpl()
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(
             name: ComponentName?,
