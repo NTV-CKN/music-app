@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
+import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
@@ -40,8 +42,14 @@ class SearchSongRecentFragment : BasePlayMusicFragment() {
         initRecyclerView()
         setupObserve()
         binding.tvClearAll.setOnClickListener {
-            searchSongRecentViewModel.clearAll()
-            adapter.updateSongs(emptyList())
+            AlertDialog.Builder(requireContext())
+                .setTitle(requireContext().getString(R.string.txt_comfirm_clear_all_data))
+                .setNegativeButton(requireContext().getString(R.string.txt_cancel)) { _, _ -> }
+                .setPositiveButton(requireContext().getString(R.string.txt_agree)) { _, _ ->
+                    searchSongRecentViewModel.clearAll()
+                    adapter.updateSongs(emptyList())
+                }
+                .create().show()
         }
     }
 
