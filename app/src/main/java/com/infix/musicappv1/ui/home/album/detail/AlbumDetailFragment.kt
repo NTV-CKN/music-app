@@ -14,8 +14,8 @@ import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentAlbumDetailBinding
-import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.adapter.song.SongAdapter
+import com.infix.musicappv1.ui.base.BasePlayMusicFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

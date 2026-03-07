@@ -16,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -28,6 +27,7 @@ import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentMiniPlayerBinding
 import com.infix.musicappv1.media.MediaControllerService
+import com.infix.musicappv1.ui.base.BaseFragment
 import com.infix.musicappv1.ui.playing.now_playing.NowPlayingActivity
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.MusicAppUtils
@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MiniPlayerFragment : Fragment(), View.OnClickListener {
+class MiniPlayerFragment : BaseFragment(), View.OnClickListener {
     @Inject
     lateinit var permissionRepository: PermissionRepository
     private var fractionDisk: Float = 0.0f
@@ -164,6 +164,15 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setObserve() {
+        //network
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                networkRepository.hasNetwork.collectLatest { isNetwork->
+                    if(isNetwork != null && !isNetwork)
+                        controller?.pause()
+                }
+            }
+        }
         //playing song
         playingSongSharedViewModel.playingSongLivedata.observe(viewLifecycleOwner) { playingSong ->
             val song = playingSong?.song
@@ -241,14 +250,18 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
         }
     }
 
-//    private fun MiniPlayerFragment.contractEventPlayer(controller: MediaController) {
-//        controller.addListener(object : Player.Listener {
-//            override fun onIsPlayingChanged(isPlaying: Boolean) {
-//                super.onIsPlayingChanged(isPlaying)
-//                miniPlayerViewModel.setPlaying(isPlaying)
-//            }
-//        })
-//    }
+    override fun onClick(v: View?) {
+        if(!checkNetwork()) return
+
+        animatorBtnPressed.setTarget(v)
+        animatorBtnPressed.start()
+        when (v?.id) {
+            R.id.btn_pause_play_mini_player -> pausePlayMusic()
+            R.id.btn_favorite_mini_player -> updateSongFavorite()
+            R.id.btn_skip_next_mini_player -> skipNextMusic()
+            else -> {}
+        }
+    }
 
     private fun pausePlayMusic() {
         miniPlayerViewModel.isPlaying.value?.let { isPlaying ->
@@ -283,18 +296,6 @@ class MiniPlayerFragment : Fragment(), View.OnClickListener {
 
     private fun showMiniPlayer(bool: Boolean) {
         binding.root.visibility = if (bool) View.VISIBLE else View.GONE
-    }
-
-    override fun onClick(v: View?) {
-        if (v == null) return
-        animatorBtnPressed.setTarget(v)
-        animatorBtnPressed.start()
-        when (v.id) {
-            R.id.btn_pause_play_mini_player -> pausePlayMusic()
-            R.id.btn_favorite_mini_player -> updateSongFavorite()
-            R.id.btn_skip_next_mini_player -> skipNextMusic()
-            else -> {}
-        }
     }
 
     companion object {

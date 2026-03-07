@@ -42,7 +42,7 @@ class SearchSongKeyFragment : Fragment() {
         observeData()
         binding.tvClearAll.setOnClickListener {
             AlertDialog.Builder(requireContext())
-                .setTitle(requireContext().getString(R.string.txt_comfirm_clear_all_data))
+                .setTitle(requireContext().getString(R.string.txt_confirm_clear_all_data))
                 .setNegativeButton(requireContext().getString(R.string.txt_cancel)) { _, _ -> }
                 .setPositiveButton(requireContext().getString(R.string.txt_agree)) { _, _ ->
                     searchSongKeyViewModel.clearAll()

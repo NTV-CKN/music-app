@@ -70,5 +70,6 @@
     <string name="txt_recent_searched_songs">Nhạc chọn phát gần đây</string>
     <string name="txt_result_search_song">Kết quả tìm kiếm</string>
     <string name="txt_clear_all">Xóa tất cả</string>
-    <string name="txt_comfirm_clear_all_data">Bạn chắc muốn xóa dữ liệu này chứ?</string>
+    <string name="txt_confirm_clear_all_data">Bạn chắc muốn xóa dữ liệu này chứ?</string>
+    <string name="txt_notify_when_lost_internet">Bạn phải cung cấp Internet để sử dụng ứng dụng</string>
 </resources>

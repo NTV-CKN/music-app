@@ -13,9 +13,9 @@ import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentMoreRecommendSongBinding
 import com.infix.musicappv1.enums.PlaylistEnum
-import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.adapter.song.SongAdapter
 import com.infix.musicappv1.ui.adapter.song.SongPagingDataAdapter
+import com.infix.musicappv1.ui.base.BasePlayMusicFragment
 import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.utils.MusicAppUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,7 +60,7 @@ class MoreRecommendSongFragment : BasePlayMusicFragment() {
             object : SongAdapter.SongClickListener {
                 override fun onSongClick(song: Song, pos: Int) {
                     val songs =
-                        homeViewModel.songLocal.value?: return
+                        homeViewModel.songLocal.value ?: return
                     val indexToPlay = MusicAppUtils.getIndexOfSong(song, songs)
                     playSong(
                         indexToPlay,
@@ -76,7 +76,8 @@ class MoreRecommendSongFragment : BasePlayMusicFragment() {
             }, permissionRepository
         )
 
-        binding.includeSongList.rvSongList.layoutManager = SongPagingDataAdapter.WrapContentLinearLayoutManager(requireContext())
+        binding.includeSongList.rvSongList.layoutManager =
+            SongPagingDataAdapter.WrapContentLinearLayoutManager(requireContext())
 
         binding.includeSongList.rvSongList.adapter = adapter
     }
@@ -84,14 +85,14 @@ class MoreRecommendSongFragment : BasePlayMusicFragment() {
     //Cause MoreRecommendSongFragment not in home, we must observe songLocal
     //to update songs of room when paging. Avoid value of songLocal not integrity
     private fun observeSongLocal() {
-        homeViewModel.songLocal.observe(viewLifecycleOwner){}
+        homeViewModel.songLocal.observe(viewLifecycleOwner) {}
     }
 
     private fun observePagingData() {
-      viewLifecycleOwner.lifecycleScope.launch {
-          repeatOnLifecycle(Lifecycle.State.STARTED) {
-              moreRcmSongViewModel.songs.collectLatest { adapter.submitData(it) }
-          }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                moreRcmSongViewModel.songs.collectLatest { adapter.submitData(it) }
+            }
         }
     }
 }

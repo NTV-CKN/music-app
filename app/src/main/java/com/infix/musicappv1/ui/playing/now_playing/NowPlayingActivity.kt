@@ -14,6 +14,7 @@ import android.os.IBinder
 import android.util.Log
 import android.view.View
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +30,7 @@ import androidx.media3.session.MediaController
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.song.Song
+import com.infix.musicappv1.data.repository.NetworkRepository
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.ActivityNowPlayingBinding
 import com.infix.musicappv1.media.MediaControllerService
@@ -52,6 +54,9 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener {
 
     @Inject
     lateinit var permissionRepository: PermissionRepository
+
+    @Inject
+    lateinit var networkRepository: NetworkRepository
 
     private var seekbarJob: Job? = null
     private lateinit var binding: ActivityNowPlayingBinding
@@ -192,6 +197,20 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setupObserver() {
+        //network
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                networkRepository.hasNetwork.collectLatest {
+                    val isNetwork = networkRepository.hasNetwork.value ?: false
+                    if (!isNetwork)
+                        Toast.makeText(
+                            this@NowPlayingActivity,
+                            resources.getString(R.string.txt_notify_when_lost_internet),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                }
+            }
+        }
         //playing song
         nowPlayingViewModel.playingSongLivedata.observe(this) {
             it?.let {
@@ -291,6 +310,8 @@ class NowPlayingActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         animatorBtnPressed.setTarget(v)
         animatorBtnPressed.start()
+        val isNetwork = networkRepository.hasNetwork.value ?: false
+        if (!isNetwork) return
         when (v?.id) {
             R.id.btn_pause_play_now_playing -> playPauseSong()
             R.id.btn_skip_next_now_playing -> skipNext()

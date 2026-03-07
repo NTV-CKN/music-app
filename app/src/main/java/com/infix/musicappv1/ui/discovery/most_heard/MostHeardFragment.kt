@@ -11,7 +11,7 @@ import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentMostHeardBinding
 import com.infix.musicappv1.enums.PlaylistEnum
-import com.infix.musicappv1.ui.BasePlayMusicFragment
+import com.infix.musicappv1.ui.base.BasePlayMusicFragment
 import com.infix.musicappv1.ui.adapter.song.SongAdapter
 import com.infix.musicappv1.ui.discovery.DiscoveryFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint

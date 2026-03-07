@@ -10,7 +10,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.databinding.FragmentArtistBinding
 import com.infix.musicappv1.ui.adapter.artist.ArtistPagingDataAdapter
@@ -27,7 +26,7 @@ class ArtistFragment : Fragment() {
         object : ArtistPagingDataAdapter.OnArtistClick {
             override fun onClick(artist: Artist) {
                 artistDetailViewModel.setArtistWithSongsByArtistName(artist.id, artist.name)
-                findNavController().navigate(R.id.action_navigation_discovery_to_navigate_detail_artist)
+                findNavController().navigate(DiscoveryFragmentDirections.actionNavigationDiscoveryToNavigateDetailArtist())
             }
         },
         object : ArtistPagingDataAdapter.OnInterestClick {

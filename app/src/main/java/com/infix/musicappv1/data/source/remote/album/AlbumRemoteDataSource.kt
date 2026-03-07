@@ -11,15 +11,20 @@ import javax.inject.Inject
 
 class AlbumRemoteDataSource @Inject constructor() : AlbumDataSource.Remote {
     override suspend fun loadAlbumsPaging(pagingParam: PagingParam): Result<List<Album>> {
-        val response =
-            RetrofitHelper.musicService.loadAlbumsPaging(pagingParam)
-        return if (response.isSuccessful) {
-            if (response.body() != null)
-                Result.Success(response.body()!!.albums)
-            else
-                Result.Error(Exception("Body is null"))
-        } else
-            Result.Error(Exception("Unknown error"))
+
+        return try {
+            val response =
+                RetrofitHelper.musicService.loadAlbumsPaging(pagingParam)
+            if (response.isSuccessful) {
+                if (response.body() != null)
+                    Result.Success(response.body()!!.albums)
+                else
+                    Result.Error(Exception("Body is null"))
+            } else
+                Result.Error(Exception("Unknown error"))
+        } catch (ex: Exception) {
+            Result.Error(Exception(ex.message ?: "Unknown error"))
+        }
     }
 
     override suspend fun loadSongsByAlbumId(searchParam: SearchParam): Result<List<Song>> {
