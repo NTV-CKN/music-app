@@ -70,5 +70,6 @@
     <string name="txt_recent_searched_songs">Recent searched songs</string>
     <string name="txt_result_search_song">Result search songs</string>
     <string name="txt_clear_all">Clear All</string>
-    <string name="txt_comfirm_clear_all_data">Are you sure delete this data?</string>
+    <string name="txt_confirm_clear_all_data">Are you sure delete this data?</string>
+    <string name="txt_notify_when_lost_internet">You must provide Internet to use app</string>
 </resources>

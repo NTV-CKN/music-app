@@ -15,9 +15,9 @@ import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentRecommendSongBinding
 import com.infix.musicappv1.enums.PlaylistEnum
-import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.adapter.song.SongAdapter
 import com.infix.musicappv1.ui.adapter.song.SongPagingDataAdapter
+import com.infix.musicappv1.ui.base.BasePlayMusicFragment
 import com.infix.musicappv1.ui.home.HomeFragmentDirections
 import com.infix.musicappv1.ui.home.HomeViewModel
 import com.infix.musicappv1.utils.MusicAppUtils
@@ -65,10 +65,14 @@ class RecommendSongFragment : BasePlayMusicFragment() {
     }
 
     private fun collectData() {
-       viewLifecycleOwner.lifecycleScope.launch {
-           repeatOnLifecycle(Lifecycle.State.STARTED) {
-               rcmSongViewModel.songs.collectLatest { adapter.submitData(it) }
-           }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                try {
+                    rcmSongViewModel.songs.collectLatest { adapter.submitData(it) }
+                }catch (ex: Exception) {
+                    Log.d("RecommendSongFragment", ex.message?:"Unknown")
+                }
+            }
         }
     }
 
@@ -76,7 +80,7 @@ class RecommendSongFragment : BasePlayMusicFragment() {
         adapter = SongPagingDataAdapter(
             object : SongAdapter.SongClickListener {
                 override fun onSongClick(song: Song, pos: Int) {
-                    Log.d("SSSS", ""+ homeViewModel.songLocal.value)
+                    Log.d("SSSS", "" + homeViewModel.songLocal.value)
                     val songs =
                         homeViewModel.songLocal.value?.subList(0, RecommendSongViewModel.SIZE_SONG)
                             ?: return
@@ -92,7 +96,7 @@ class RecommendSongFragment : BasePlayMusicFragment() {
                 override fun onOptionClick(song: Song) {
                     showDialogSongOptionMenu(song)
                 }
-            },permissionRepository
+            }, permissionRepository
         )
 
         binding.includeRcmSong.rvSongList.adapter = adapter

@@ -6,6 +6,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import com.infix.musicappv1.data.repository.NetworkRepository
 import com.infix.musicappv1.data.repository.paging.SongRemoteMediator
 import com.infix.musicappv1.data.repository.song.SongRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
@@ -15,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RecommendSongViewModel @Inject constructor(
     private val songRepository: SongRepository,
-    private val musicDb: MusicDatabase
+    private val musicDb: MusicDatabase,
+    private val networkRepository: NetworkRepository
 ) : ViewModel() {
     @OptIn(ExperimentalPagingApi::class)
     val songs = Pager(
@@ -25,7 +27,7 @@ class RecommendSongViewModel @Inject constructor(
             prefetchDistance = 3,
             enablePlaceholders = false
         ),
-        remoteMediator = SongRemoteMediator(songRepository, musicDb),
+        remoteMediator = SongRemoteMediator(songRepository, musicDb, networkRepository),
     ) {
         songRepository.getNSongsPaging(SIZE_SONG)
     }.flow.cachedIn(viewModelScope)//cached to avoid refresh when user return app

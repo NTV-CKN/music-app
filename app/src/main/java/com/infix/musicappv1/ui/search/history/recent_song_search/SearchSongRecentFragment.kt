@@ -12,8 +12,8 @@ import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentSearchSongRecentBinding
 import com.infix.musicappv1.enums.PlaylistEnum
-import com.infix.musicappv1.ui.BasePlayMusicFragment
 import com.infix.musicappv1.ui.adapter.song.SongAdapter
+import com.infix.musicappv1.ui.base.BasePlayMusicFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -43,7 +43,7 @@ class SearchSongRecentFragment : BasePlayMusicFragment() {
         setupObserve()
         binding.tvClearAll.setOnClickListener {
             AlertDialog.Builder(requireContext())
-                .setTitle(requireContext().getString(R.string.txt_comfirm_clear_all_data))
+                .setTitle(requireContext().getString(R.string.txt_confirm_clear_all_data))
                 .setNegativeButton(requireContext().getString(R.string.txt_cancel)) { _, _ -> }
                 .setPositiveButton(requireContext().getString(R.string.txt_agree)) { _, _ ->
                     searchSongRecentViewModel.clearAll()

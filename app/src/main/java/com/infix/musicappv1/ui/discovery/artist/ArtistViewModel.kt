@@ -7,6 +7,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.infix.musicappv1.data.model.artist.Artist
+import com.infix.musicappv1.data.repository.NetworkRepository
 import com.infix.musicappv1.data.repository.artist.ArtistRepository
 import com.infix.musicappv1.data.repository.paging.ArtistRemoteMediator
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
@@ -18,12 +19,18 @@ import javax.inject.Inject
 @HiltViewModel
 class ArtistViewModel @Inject constructor(
     private val artistRepository: ArtistRepository,
-    private val musicDb: MusicDatabase
+    private val musicDb: MusicDatabase,
+    private val networkRepository: NetworkRepository
 ) : ViewModel() {
     @OptIn(ExperimentalPagingApi::class)
     val artists = Pager(
-        PagingConfig(pageSize = 20, initialLoadSize = 20, prefetchDistance = 5, enablePlaceholders = false),
-        remoteMediator = ArtistRemoteMediator(artistRepository, musicDb)
+        PagingConfig(
+            pageSize = 20,
+            initialLoadSize = 20,
+            prefetchDistance = 5,
+            enablePlaceholders = false
+        ),
+        remoteMediator = ArtistRemoteMediator(artistRepository, musicDb, networkRepository)
     ) {
         artistRepository.getNArtistsPaging(ARTIST_SIZE)
     }.flow.cachedIn(viewModelScope)

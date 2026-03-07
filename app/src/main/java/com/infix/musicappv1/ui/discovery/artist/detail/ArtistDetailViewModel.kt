@@ -28,7 +28,7 @@ class ArtistDetailViewModel @Inject constructor(
     //So we get songs of name artist with API to avoid song not full but artist detail click
     fun setArtistWithSongsByArtistName(artistId: Int, name: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            this@ArtistDetailViewModel.artist = artistRepository.getArtistById(artistId)
+            this@ArtistDetailViewModel.artist = artistRepository.getArtistById(artistId)//local
             val result = artistRepository.loadSongsByNameArtist(
                 SearchParam(
                     queryType = SearchParam.QUERY_TYPE_SEARCH,

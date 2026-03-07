@@ -14,7 +14,7 @@ import com.infix.musicappv1.data.model.recent.SongRecent
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentRecentSongsBinding
 import com.infix.musicappv1.enums.PlaylistEnum
-import com.infix.musicappv1.ui.BasePlayMusicFragment
+import com.infix.musicappv1.ui.base.BasePlayMusicFragment
 import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
 import com.infix.musicappv1.ui.library.LibraryFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint

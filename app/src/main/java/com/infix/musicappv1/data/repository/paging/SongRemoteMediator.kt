@@ -9,6 +9,7 @@ import androidx.room.withTransaction
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongRemoteKeys
 import com.infix.musicappv1.data.model.tracking.TrackingUpdate
+import com.infix.musicappv1.data.repository.NetworkRepository
 import com.infix.musicappv1.data.repository.song.SongRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.data.source.remote.param.PagingParam
@@ -19,8 +20,10 @@ import java.util.concurrent.TimeUnit
 @OptIn(ExperimentalPagingApi::class)
 class SongRemoteMediator(
     private val songRepository: SongRepository,
-    private val musicDb: MusicDatabase
+    private val musicDb: MusicDatabase,
+    private val networkRepository: NetworkRepository
 ) : RemoteMediator<Int, Song>() {
+
     private var trackOffset: Int? = null
 
     override suspend fun initialize(): InitializeAction {
@@ -36,6 +39,8 @@ class SongRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, Song>
     ): MediatorResult {
+        val isNetwork = networkRepository.hasNetwork.value ?: false
+        if (!isNetwork) return MediatorResult.Error(Exception("Not Internet"))
         Log.d(
             "SongRemoteMediator",
             "Load type: " + loadType.name + ", coroutine: ${Thread.currentThread().name}"

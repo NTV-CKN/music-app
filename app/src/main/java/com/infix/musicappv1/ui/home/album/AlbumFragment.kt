@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +13,7 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.databinding.FragmentAlbumBinding
 import com.infix.musicappv1.ui.adapter.album.AlbumPagingDataAdapter
+import com.infix.musicappv1.ui.base.BaseFragment
 import com.infix.musicappv1.ui.home.HomeFragmentDirections
 import com.infix.musicappv1.ui.home.album.detail.AlbumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumFragment : Fragment() {
+class AlbumFragment : BaseFragment() {
     private val albumViewModel: AlbumViewModel by activityViewModels()
 
     private val albumDetailViewModel: AlbumDetailViewModel by activityViewModels()
