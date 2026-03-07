@@ -67,7 +67,11 @@ class RecommendSongFragment : BasePlayMusicFragment() {
     private fun collectData() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                rcmSongViewModel.songs.collectLatest { adapter.submitData(it) }
+                try {
+                    rcmSongViewModel.songs.collectLatest { adapter.submitData(it) }
+                }catch (ex: Exception) {
+                    Log.d("RecommendSongFragment", ex.message?:"Unknown")
+                }
             }
         }
     }
