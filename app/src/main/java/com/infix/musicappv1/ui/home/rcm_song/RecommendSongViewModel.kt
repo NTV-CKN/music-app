@@ -24,23 +24,12 @@ class RecommendSongViewModel @Inject constructor(
         config = PagingConfig(
             pageSize = 20,
             initialLoadSize = 20,
-            prefetchDistance = 3,
             enablePlaceholders = false
         ),
         remoteMediator = SongRemoteMediator(songRepository, musicDb, networkRepository),
     ) {
         songRepository.getNSongsPaging(SIZE_SONG)
     }.flow.cachedIn(viewModelScope)//cached to avoid refresh when user return app
-
-
-//    class Factory(private val songRepository: SongRepository, private val musicDb: MusicDatabase) :
-//        ViewModelProvider.Factory {
-//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//            if (modelClass.isAssignableFrom(RecommendSongViewModel::class.java))
-//                return RecommendSongViewModel(songRepository, musicDb) as T
-//            throw IllegalArgumentException("Model class is not suit")
-//        }
-//    }
 
     companion object {
         const val SIZE_SONG = 10

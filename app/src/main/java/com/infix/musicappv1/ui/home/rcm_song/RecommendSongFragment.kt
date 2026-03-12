@@ -98,7 +98,6 @@ class RecommendSongFragment : BasePlayMusicFragment() {
                 }
             }, permissionRepository
         )
-
         binding.includeRcmSong.rvSongList.adapter = adapter
     }
 

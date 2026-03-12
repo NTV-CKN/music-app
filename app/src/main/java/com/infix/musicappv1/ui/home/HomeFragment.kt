@@ -46,7 +46,7 @@ class HomeFragment : Fragment() {
                     val binder =
                         service as? MediaControllerService.BinderImpl ?: return@repeatOnLifecycle
                     binder.controllerFlow.collectLatest { controller ->
-                        if(controller == null) return@collectLatest
+                        if (controller == null) return@collectLatest
                         mediaController = controller
                         isMediaControllerReady = true
                         playingSongSharedViewModel.setIsDataReady(isAlbumReady && isSongsReady && isMediaControllerReady)
@@ -89,11 +89,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupEvent() {
-        binding.btnSearchHome.setOnClickListener {
-            findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToNavigateSearchSong())
-        }
-    }
 
     override fun onStart() {
         super.onStart()
@@ -115,6 +110,12 @@ class HomeFragment : Fragment() {
         if (::binding.isInitialized) {
             val scrollY = binding.root.scrollY
             outState.putInt(SCROLL_POS_Y, scrollY)
+        }
+    }
+
+    private fun setupEvent() {
+        binding.btnSearchHome.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToNavigateSearchSong())
         }
     }
 

@@ -8,7 +8,7 @@ import com.infix.musicappv1.data.model.song.SongRemoteKeys
 
 @Dao
 interface SongRemoteKeysDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg songRemoteKeys: SongRemoteKeys)
 
     @Query("""
@@ -17,6 +17,14 @@ interface SongRemoteKeysDao {
         WHERE song_id = :songId
     """)
     suspend fun getSongRemoteKeysById(songId: String): SongRemoteKeys?
+
+    @Query("""
+        SELECT *
+        FROM song_remote_keys
+        ORDER BY create_at DESC
+        LIMIT 1
+    """)
+    suspend fun getSongRemoteKeyLastest(): SongRemoteKeys?
 
     @Query(
         """
