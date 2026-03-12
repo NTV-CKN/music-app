@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -29,27 +28,16 @@
         app:layout_constraintTop_toTopOf="@+id/tv_title_rcm_song"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
-    <include
-        android:id="@+id/include_rcm_song"
-        layout="@layout/include_song_list"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top_8"
-        android:maxHeight="@dimen/height_300dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title_rcm_song" />
-
-<!--    <ProgressBar-->
-<!--        android:id="@+id/progress_rcm_song"-->
-<!--        style="?android:attr/progressBarStyle"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginEnd="@dimen/margin_end_16"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/tv_title_rcm_song"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="1.0"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/btn_more_rcm_song"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/tv_title_rcm_song"-->
-<!--        app:layout_constraintVertical_bias="0.444" />-->
+    <!--    <ProgressBar-->
+    <!--        android:id="@+id/progress_rcm_song"-->
+    <!--        style="?android:attr/progressBarStyle"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginEnd="@dimen/margin_end_16"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/tv_title_rcm_song"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="1.0"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/btn_more_rcm_song"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/tv_title_rcm_song"-->
+    <!--        app:layout_constraintVertical_bias="0.444" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

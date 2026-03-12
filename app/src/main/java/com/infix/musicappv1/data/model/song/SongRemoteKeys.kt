@@ -9,8 +9,6 @@ data class SongRemoteKeys(
     @PrimaryKey
     @ColumnInfo("song_id")
     val songId: String,
-    @ColumnInfo("prev_key")
-    val prevKey: Int?,
-    @ColumnInfo("next_key")
-    val nextKey: Int?
+    @ColumnInfo("create_at")
+    val createAt: Long = System.currentTimeMillis()
 )
