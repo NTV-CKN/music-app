@@ -20,10 +20,14 @@ import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalPagingApi::class)
 class SongRemoteMediator(
+    //when app haven't data, we load N song but use query limit with PagingSource
+    //can lead to infinite loop. So we use isLimit to block load next
+    private var isLimit: Boolean,
     private val songRepository: SongRepository,
     private val musicDb: MusicDatabase,
     private val networkRepository: NetworkRepository
 ) : RemoteMediator<Int, Song>() {
+    private var trackLimit = false
 
     override suspend fun initialize(): InitializeAction {
         val lastSongUpdate = musicDb.trackingUpdateDao().getLastUpdateSongs() ?: 0
@@ -38,6 +42,11 @@ class SongRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, Song>
     ): MediatorResult {
+        Log.d("SongRemoteMediator", "is limit $isLimit, trackLimit == isLimit && isLimit ${trackLimit == isLimit && isLimit}")
+        if (trackLimit == isLimit && isLimit)
+            return MediatorResult.Success(true)
+
+        trackLimit = true
         if (loadType == LoadType.PREPEND) return MediatorResult.Success(true)
         val isNetwork = networkRepository.hasNetwork.value ?: false
         if (!isNetwork) return MediatorResult.Error(Exception("Not Internet"))
@@ -93,7 +102,6 @@ class SongRemoteMediator(
                     songRepository.insert(*result.toTypedArray())
                 }
             }
-
             MediatorResult.Success(endOfPaginationReached = isEnd)
         } catch (e: Exception) {
             Log.d("SongRemoteMediator", e.message ?: "Unknow")

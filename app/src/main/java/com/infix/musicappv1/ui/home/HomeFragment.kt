@@ -6,26 +6,48 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.session.MediaController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.infix.musicappv1.data.model.playlist.Playlist
+import com.infix.musicappv1.data.model.song.Song
+import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentHomeBinding
+import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.media.MediaControllerService
+import com.infix.musicappv1.ui.adapter.home.SectionAlbumListAdapter
+import com.infix.musicappv1.ui.adapter.home.SectionHeaderHomeAdapter
+import com.infix.musicappv1.ui.adapter.home.SectionSongListAdapter
+import com.infix.musicappv1.ui.adapter.song.SongAdapter
+import com.infix.musicappv1.ui.adapter.song.SongPagingDataAdapter
+import com.infix.musicappv1.ui.base.BasePlayMusicFragment
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
+import com.infix.musicappv1.utils.MusicAppUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : BasePlayMusicFragment() {
+    @Inject
+    lateinit var permissionRepository: PermissionRepository
+
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var sectionHeaderHomeAdapter: SectionHeaderHomeAdapter
+    private lateinit var sectionAlbumListAdapter: SectionAlbumListAdapter
+    private lateinit var sectionSongListAdapter: SectionSongListAdapter
+    private lateinit var sectionSongPagingAdapter: SongPagingDataAdapter
+
     private var isSongsReady = false
     private var isAlbumReady = false
     private var isMediaControllerReady = false
@@ -60,7 +82,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private var isObserve = false
+//    private var isObserve = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,19 +98,9 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupEvent()
-        if (!isObserve) {
-            setupInitDataTmp()
-            isObserve = true
-        }
-        if (savedInstanceState != null) {
-            val scrollY = savedInstanceState.getInt(SCROLL_POS_Y, 0)
-            binding.homeScrollView.post {
-                binding.homeScrollView.scrollTo(0, scrollY)
-            }
-        }
+        setupInitDataTmp()
+        initRecyclerView()
     }
-
 
     override fun onStart() {
         super.onStart()
@@ -104,20 +116,6 @@ class HomeFragment : Fragment() {
         requireActivity().unbindService(serviceConnection)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        //cause when app config change but not in home, when app change again => Error uninitialize
-        if (::binding.isInitialized) {
-            val scrollY = binding.root.scrollY
-            outState.putInt(SCROLL_POS_Y, scrollY)
-        }
-    }
-
-    private fun setupEvent() {
-        binding.btnSearchHome.setOnClickListener {
-            findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToNavigateSearchSong())
-        }
-    }
 
     private fun setupInitDataTmp() {
         //song data
@@ -134,7 +132,61 @@ class HomeFragment : Fragment() {
         }
     }
 
-    companion object {
-        const val SCROLL_POS_Y = "com.infix.musicappv1.ui.home.HomeFragment.SCROLL_POS_Y"
+    private fun initRecyclerView() {
+        sectionHeaderHomeAdapter = SectionHeaderHomeAdapter {
+            findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToNavigateSearchSong())
+        }
+        sectionSongListAdapter = SectionSongListAdapter {
+            findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToNavigateMoreSongRecommend())
+        }
+        sectionAlbumListAdapter = SectionAlbumListAdapter()
+
+        sectionSongPagingAdapter = SongPagingDataAdapter(
+            object : SongAdapter.SongClickListener {
+                override fun onSongClick(song: Song, pos: Int) {
+                    Log.d("SSSS", "" + homeViewModel.songLocal.value)
+                    val songs =
+                        homeViewModel.songLocal.value?.subList(0, HomeViewModel.SIZE_SONG)
+                            ?: return
+                    val indexToPlay = MusicAppUtils.getIndexOfSong(song, songs)
+                    playSong(
+                        indexToPlay,
+                        Playlist(namePlaylist = PlaylistEnum.RECOMMENDED.value),
+                        songs
+                    )
+                }
+            },
+            object : SongAdapter.OptionSongClickListener {
+                override fun onOptionClick(song: Song) {
+                    showDialogSongOptionMenu(song)
+                }
+            }, permissionRepository
+        )
+        sectionSongPagingAdapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+
+        val concatAdapter =
+            ConcatAdapter(
+                sectionHeaderHomeAdapter,
+                sectionAlbumListAdapter,
+                sectionSongListAdapter,
+                sectionSongPagingAdapter
+            )
+
+        collectData()
+
+        binding.recyclerViewHome.adapter = concatAdapter
+    }
+
+    private fun collectData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                try {
+                    homeViewModel.songs.collectLatest { sectionSongPagingAdapter.submitData(it) }
+                }catch (ex: Exception) {
+                    Log.d("RecommendSongFragment", ex.message?:"Unknown")
+                }
+            }
+        }
     }
 }
