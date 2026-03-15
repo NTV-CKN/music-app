@@ -43,7 +43,7 @@ import com.infix.musicappv1.data.source.local.tracking.TrackingUpdateDao
         SearchKeySong::class,
         RecentSearchSong::class
     ],
-    version = 6,
+    version = 7,
     // autoMigrations = [AutoMigration(from = 3, to = 4)]
 )
 @TypeConverters(value = [DateConverter::class])

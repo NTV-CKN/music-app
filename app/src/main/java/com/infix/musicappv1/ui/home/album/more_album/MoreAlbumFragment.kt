@@ -12,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.infix.musicappv1.data.model.album.Album
+import com.infix.musicappv1.data.repository.album.AlbumRepository
 import com.infix.musicappv1.databinding.FragmentMoreAlbumBinding
 import com.infix.musicappv1.ui.adapter.album.MoreAlbumPagingDataAdapter
 import com.infix.musicappv1.ui.base.BaseFragment
@@ -19,9 +20,13 @@ import com.infix.musicappv1.ui.home.album.detail.AlbumDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MoreAlbumFragment : BaseFragment() {
+    @Inject
+    lateinit var albumRepository: AlbumRepository
+
     private lateinit var binding: FragmentMoreAlbumBinding
     private lateinit var adapter: MoreAlbumPagingDataAdapter
 

@@ -14,6 +14,7 @@ interface AlbumDataSource {
     }
 
     interface Local {
+        suspend fun loadAllAlbums(): List<Album>
         fun loadAlbumsPaging(): PagingSource<Int, Album>
         fun loadAllAlbumsFlow(): Flow<List<Album>>
         fun loadNAlbumPaging(limit: Int = 9): PagingSource<Int, Album>
