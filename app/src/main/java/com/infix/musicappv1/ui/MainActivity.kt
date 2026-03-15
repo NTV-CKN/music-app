@@ -54,13 +54,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by viewModels()
 
-    //    private val homeViewModel: HomeViewModel by viewModels {
-//        HomeViewModel.Factory(
-//            InjectUtils.getSongRepository(this.applicationContext),
-//            InjectUtils.getPlaylistRepository(this.applicationContext),
-//            MusicDatabase.getInstance(this.applicationContext)
-//        )
-//    }
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -85,12 +78,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-//        if (savedInstanceState != null) {
-//            if (!savedInstanceState.getBoolean(KEY_IS_LOADED, false))
-//                homeViewModel.setupDataTmp()
-//            else
-//                homeViewModel.loadLocalData()
-//        }
+
         initializeNavHostFragment()
         setupObserver()
         calculateDensityOfApp()

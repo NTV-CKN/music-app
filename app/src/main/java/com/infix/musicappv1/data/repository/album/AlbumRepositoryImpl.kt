@@ -19,6 +19,10 @@ class AlbumRepositoryImpl @Inject constructor(
         return if (result is Result.Success) result.data else null
     }
 
+    override suspend fun loadAllAlbums(): List<Album> {
+        return local.loadAllAlbums()
+    }
+
     override fun loadAllAlbumsFlow(): Flow<List<Album>> {
         return local.loadAllAlbumsFlow()
     }

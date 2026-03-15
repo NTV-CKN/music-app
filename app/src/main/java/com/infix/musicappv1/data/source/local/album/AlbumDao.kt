@@ -14,6 +14,12 @@ interface AlbumDao {
     suspend fun insert(vararg album: Album)
 
     @Query("""
+        SELECT *
+        FROM albums
+    """)
+    suspend fun loadAllAlbums(): List<Album>
+
+    @Query("""
         DELETE FROM albums
     """)
     suspend fun clear()

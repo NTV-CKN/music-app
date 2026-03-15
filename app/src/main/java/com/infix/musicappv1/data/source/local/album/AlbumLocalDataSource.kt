@@ -9,6 +9,10 @@ import javax.inject.Inject
 class AlbumLocalDataSource @Inject constructor(
     private val albumDao: AlbumDao
 ): AlbumDataSource.Local {
+    override suspend fun loadAllAlbums(): List<Album> {
+        return albumDao.loadAllAlbums()
+    }
+
     override fun loadAlbumsPaging(): PagingSource<Int, Album> {
         return albumDao.loadAlbumsPaging()
     }
