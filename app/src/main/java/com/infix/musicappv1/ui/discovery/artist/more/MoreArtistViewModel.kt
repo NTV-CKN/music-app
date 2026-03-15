@@ -24,15 +24,4 @@ class MoreArtistViewModel @Inject constructor(
     ) {
         artistRepository.getArtistsPaging()
     }.flow
-
-//    class Factory(
-//        private val artistRepository: ArtistRepository,
-//        private val musicDb: MusicDatabase
-//    ) : ViewModelProvider.Factory {
-//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//            if (modelClass.isAssignableFrom(MoreArtistViewModel::class.java))
-//                return MoreArtistViewModel(artistRepository, musicDb) as T
-//            throw IllegalArgumentException("Model class is not suit")
-//        }
-//    }
 }

@@ -18,6 +18,7 @@ interface ArtistDataSource {
         suspend fun delete(vararg artist: Artist)
         suspend fun update(vararg artist: Artist)
         suspend fun insert(vararg artist: Artist)
+        suspend fun loadAllArtistLocal(): List<Artist>
     }
 
     interface Remote {

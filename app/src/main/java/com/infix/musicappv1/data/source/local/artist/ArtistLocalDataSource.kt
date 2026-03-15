@@ -46,4 +46,8 @@ class ArtistLocalDataSource @Inject constructor(
     override suspend fun insert(vararg artist: Artist) {
         artistDao.insert(*artist)
     }
+
+    override suspend fun loadAllArtistLocal(): List<Artist> {
+        return artistDao.getAllArtist()
+    }
 }
