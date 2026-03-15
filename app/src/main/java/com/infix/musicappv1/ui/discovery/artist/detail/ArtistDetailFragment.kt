@@ -60,7 +60,7 @@ class ArtistDetailFragment : BasePlayMusicFragment() {
                         binding.tvNameArtistDetail.text =
                             getString(R.string.txt_name_artist, artist.name)
                         binding.tvAmountInterestedArtistDetail.text =
-                            getString(R.string.txt_amount_of_interested, artist.interested)
+                            getString(R.string.txt_amount_of_interested, artist.amountInterested)
                         binding.tvIsInterestedArtistDetail.text =
                             getString(R.string.txt_your_interested_artist, "" + artist.isInterested)
 

@@ -5,23 +5,26 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObjects
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.model.artist.ArtistRemoteKeys
 import com.infix.musicappv1.data.model.tracking.TrackingUpdate
 import com.infix.musicappv1.data.repository.NetworkRepository
 import com.infix.musicappv1.data.repository.artist.ArtistRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
-import com.infix.musicappv1.data.source.remote.param.PagingParam
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalPagingApi::class)
 class ArtistRemoteMediator(
+    private val isLimit: Boolean,
     private val artistRepository: ArtistRepository,
     private val musicDb: MusicDatabase,
     private val networkRepository: NetworkRepository
 ) : RemoteMediator<Int, Artist>() {
+    private var trackLimit = false
 
     override suspend fun initialize(): InitializeAction {
         val lastArtistUpdate = musicDb.trackingUpdateDao().getLastUpdateArtist() ?: 0
@@ -39,67 +42,54 @@ class ArtistRemoteMediator(
         val isNetwork = networkRepository.hasNetwork.value ?: false
         if (!isNetwork) return MediatorResult.Error(Exception("Not Internet"))
 
-        val numPage: Int = when (loadType) {
-            LoadType.REFRESH -> {
-                getRemoteKeysCurrent(state)?.nextKey?.minus(1) ?: 0
+        if (LoadType.PREPEND == loadType)
+            return MediatorResult.Success(true)
+
+        if (isLimit && trackLimit)
+            return MediatorResult.Success(true)
+
+        return try {
+            if (loadType == LoadType.REFRESH) {
+                musicDb.artistRemoteKeysDao().clear()
+                musicDb.artistDao().clear()
+            }
+            val artistsCollection = Firebase.firestore.collection("artists")
+            val lastDocument =
+                musicDb.artistRemoteKeysDao().getArtistRemoteKeyLastest()?.let { key ->
+                    artistsCollection.document(key.artistId.toString()).get().await()
+                }
+
+            val query = if (lastDocument != null) {
+                artistsCollection
+                    .startAfter(lastDocument)
+                    .limit(state.config.pageSize.toLong())
+            } else {
+                artistsCollection
+                    .limit(state.config.pageSize.toLong())
             }
 
-            LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
-            LoadType.APPEND -> {
-                val remoteKeys = getRemoteKeysForLast(state)
-                remoteKeys?.nextKey ?: return MediatorResult.Success(endOfPaginationReached = true)
-            }
-        }
+            val result = query.get().await().toObjects<Artist>()
+            val endReached = result.isEmpty() || result.size < state.config.pageSize
 
-        return withContext(Dispatchers.IO) {
-            try {
-                val artists = artistRepository.loadArtistsPaging(
-                    PagingParam(offset = numPage * state.config.pageSize, limit = state.config.pageSize)
-                ) ?: emptyList()
-
-                val endOfReach = artists.isEmpty() || artists.size < state.config.pageSize
-                val prevKey = if (numPage == 0) null else numPage - 1
-                val nextKey = if (endOfReach) null else numPage + 1
-                musicDb.withTransaction {
-                    if(loadType == LoadType.REFRESH) {
-                        musicDb.artistDao().clear()
-                        musicDb.artistRemoteKeysDao().clear()
-                    }
-
-                    val remoteKeys = artists.map {
-                        ArtistRemoteKeys(
-                            it.id,
-                            prevKey,
-                            nextKey
-                        )
-                    }
-
-                    musicDb.artistDao().insert(*artists.toTypedArray())
-                    musicDb.artistRemoteKeysDao().insert(*remoteKeys.toTypedArray())
+            musicDb.withTransaction {
+                result.lastOrNull()?.let { artist ->
+                    musicDb.artistRemoteKeysDao().insert(
+                        ArtistRemoteKeys(artist.id)
+                    )
                     musicDb.trackingUpdateDao().insert(
                         TrackingUpdate(
-                            songUpdateAt = 0,
                             artistUpdateAt = System.currentTimeMillis()
                         )
                     )
                 }
-                MediatorResult.Success(endOfReach)
-            } catch (ex: Exception) {
-                MediatorResult.Error(ex)
+
+                musicDb.artistDao().insert(*result.toTypedArray())
             }
-        }
-    }
 
-    suspend fun getRemoteKeysForLast(state: PagingState<Int, Artist>): ArtistRemoteKeys? {
-        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { artist ->
-            musicDb.artistRemoteKeysDao().getArtistRemoteKeysByArtistId(artist.id)
-        }
-    }
-
-    suspend fun getRemoteKeysCurrent(state: PagingState<Int, Artist>): ArtistRemoteKeys? {
-        return state.anchorPosition?.let { pos ->
-            val artist = state.closestItemToPosition(pos)
-            artist?.let { musicDb.artistRemoteKeysDao().getArtistRemoteKeysByArtistId(it.id) }
+            trackLimit = true
+            MediatorResult.Success(endReached)
+        } catch (ex: Exception) {
+            MediatorResult.Error(ex)
         }
     }
 }

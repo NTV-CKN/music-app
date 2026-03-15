@@ -3,19 +3,22 @@ package com.infix.musicappv1.data.model.artist
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.firebase.firestore.PropertyName
 
 @Entity(tableName = "artists")
 data class Artist(
     @PrimaryKey
     @ColumnInfo("artist_id")
-    val id: Int,
+    val id: Int = 0,
     @ColumnInfo("artist_name")
-    val name: String,
+    val name: String = "",
     @ColumnInfo("artist_avatar")
-    val avatar: String,
+    val avatar: String = "",
     @ColumnInfo("artist_interested")
-    val interested: Int,
+    val amountInterested: Int = 0,
     @ColumnInfo("artist_is_interested")
+    @get:PropertyName("artist_is_interested")
+    @set:PropertyName("artist_is_interested")
     var isInterested: Boolean = false
 ){
     override fun equals(other: Any?): Boolean {

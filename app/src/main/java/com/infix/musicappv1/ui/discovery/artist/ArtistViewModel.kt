@@ -30,7 +30,7 @@ class ArtistViewModel @Inject constructor(
             prefetchDistance = 5,
             enablePlaceholders = false
         ),
-        remoteMediator = ArtistRemoteMediator(artistRepository, musicDb, networkRepository)
+        remoteMediator = ArtistRemoteMediator(true, artistRepository, musicDb, networkRepository)
     ) {
         artistRepository.getNArtistsPaging(ARTIST_SIZE)
     }.flow.cachedIn(viewModelScope)

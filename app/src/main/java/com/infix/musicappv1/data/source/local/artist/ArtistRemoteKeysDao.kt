@@ -27,4 +27,12 @@ interface ArtistRemoteKeysDao {
     """
     )
     suspend fun clear()
+
+    @Query("""
+        SELECT *
+        FROM artist_remote_keys
+        ORDER BY create_at DESC
+        LIMIT 1
+    """)
+    suspend fun getArtistRemoteKeyLastest(): ArtistRemoteKeys?
 }

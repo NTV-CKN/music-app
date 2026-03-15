@@ -20,7 +20,7 @@ class MoreArtistViewModel @Inject constructor(
     @OptIn(ExperimentalPagingApi::class)
     val artists = Pager(
         PagingConfig(pageSize = 20, initialLoadSize = 20, prefetchDistance = 5),
-        remoteMediator = ArtistRemoteMediator(artistRepository, musicDb, networkRepository)
+        remoteMediator = ArtistRemoteMediator(false, artistRepository, musicDb, networkRepository)
     ) {
         artistRepository.getArtistsPaging()
     }.flow
