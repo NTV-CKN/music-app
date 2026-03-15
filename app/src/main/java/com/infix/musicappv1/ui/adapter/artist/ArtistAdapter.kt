@@ -20,7 +20,7 @@ class ArtistAdapter(
         fun bind(artist: Artist) {
             binding.tvNameArtist.text = artist.name
             binding.tvNumberInterested.text =
-                binding.root.context.getString(R.string.txt_amount_of_interested, artist.interested)
+                binding.root.context.getString(R.string.txt_amount_of_interested, artist.amountInterested)
             Glide.with(binding.root)
                 .load(artist.avatar)
                 .error(R.drawable.ic_artist_24px)
