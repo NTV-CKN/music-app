@@ -22,7 +22,7 @@ class AlbumViewModel @Inject constructor(
     @OptIn(ExperimentalPagingApi::class)
     val albums = Pager(
         PagingConfig(initialLoadSize = 20, pageSize = 20, prefetchDistance = 5),
-        remoteMediator = AlbumRemoteMediator(albumRepository, musicDb, networkRepository)
+        remoteMediator = AlbumRemoteMediator(true, albumRepository, musicDb, networkRepository)
     ) {
         albumRepository.loadNAlbumPaging(10)
     }.flow.cachedIn(viewModelScope)

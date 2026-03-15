@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.album.AlbumRemoteKeys
 
 @Dao
@@ -23,4 +22,12 @@ interface AlbumRemoteKeysDao {
         WHERE album_id = :albumId
     """)
     suspend fun getAlbumRemoteKeysByAlbumId(albumId: String): AlbumRemoteKeys?
+
+    @Query("""
+        SELECT *
+        FROM album_remote_keys
+        ORDER BY create_at DESC
+        LIMIT 1
+    """)
+    suspend fun getAlbumRemoteKeyLatest(): AlbumRemoteKeys?
 }

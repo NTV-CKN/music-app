@@ -9,8 +9,6 @@ data class AlbumRemoteKeys(
     @PrimaryKey
     @ColumnInfo("album_id")
     val albumId: String,
-    @ColumnInfo("prev_key")
-    val prevKey: Int?,
-    @ColumnInfo("next_key")
-    val nextKey: Int?
+    @ColumnInfo("create_at")
+   val  createAt: Long = System.currentTimeMillis()
 )
