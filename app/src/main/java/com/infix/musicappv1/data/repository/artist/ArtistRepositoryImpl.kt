@@ -38,6 +38,10 @@ class ArtistRepositoryImpl @Inject constructor(
         return local.getLimitInterestArtist(limit)
     }
 
+    override suspend fun loadAllArtistLocal(): List<Artist> {
+        return local.loadAllArtistLocal()
+    }
+
     override suspend fun delete(vararg artist: Artist) {
         local.delete(*artist)
     }

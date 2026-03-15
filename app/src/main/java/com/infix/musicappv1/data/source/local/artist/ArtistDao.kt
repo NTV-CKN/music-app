@@ -22,6 +22,12 @@ interface ArtistDao {
     suspend fun update(vararg artist: Artist)
 
     @Query("""
+        SELECT *
+        FROM artists
+    """)
+    suspend fun getAllArtist(): List<Artist>
+
+    @Query("""
         SELECT * 
         FROM artists
         WHERE artist_id = :artistId
