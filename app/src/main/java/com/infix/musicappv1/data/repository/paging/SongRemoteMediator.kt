@@ -6,8 +6,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObjects
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongRemoteKeys
@@ -27,6 +26,7 @@ class SongRemoteMediator @AssistedInject constructor(
     //can lead to infinite loop. So we use isLimit to block load next
     @Assisted
     private var isLimit: Boolean,
+    private val firestore: FirebaseFirestore,
     private val songRepository: SongRepository,
     private val musicDb: MusicDatabase,
     private val networkRepository: NetworkRepository
@@ -52,7 +52,10 @@ class SongRemoteMediator @AssistedInject constructor(
         loadType: LoadType,
         state: PagingState<Int, Song>
     ): MediatorResult {
-        Log.d("SongRemoteMediator", "is limit $isLimit, trackLimit == isLimit && isLimit ${trackLimit == isLimit && isLimit}")
+        Log.d(
+            "SongRemoteMediator",
+            "is limit $isLimit, trackLimit == isLimit && isLimit ${trackLimit == isLimit && isLimit}"
+        )
         if (trackLimit == isLimit && isLimit)
             return MediatorResult.Success(true)
 
@@ -75,20 +78,20 @@ class SongRemoteMediator @AssistedInject constructor(
                 musicDb.songRemoteKeysDao().getSongRemoteKeyLastest()
             else null
             val lastSnapshot = songRemoteKeyLatest?.let {
-                Firebase.firestore
+                firestore
                     .collection("songs")
                     .document(it.songId)
                     .get().await()
             }
             val query =
                 if (lastSnapshot != null) {//if not load refresh or song remote key not null
-                    Firebase.firestore
+                    firestore
                         .collection("songs")
                         .orderBy("id")
                         .startAfter(lastSnapshot)
                         .limit(state.config.pageSize.toLong())
                 } else {//else load init
-                    Firebase.firestore
+                    firestore
                         .collection("songs")
                         .orderBy("id")
                         .limit(state.config.pageSize.toLong())
