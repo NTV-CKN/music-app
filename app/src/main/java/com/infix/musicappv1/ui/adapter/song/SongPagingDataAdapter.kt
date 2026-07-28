@@ -2,6 +2,7 @@ package com.infix.musicappv1.ui.adapter.song
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.R
@@ -39,10 +41,6 @@ class SongPagingDataAdapter(
         position: Int
     ) {
         Log.d("SongPagingDataAdapter", "pos $position")
-        val song = getItem(position)
-//        song?.let {
-//            holder.bind(it, position)
-//        }
         holder.bind()
     }
 
@@ -53,7 +51,6 @@ class SongPagingDataAdapter(
             oldItem: Song,
             newItem: Song
         ): Boolean {
-            //Log.d("SSSS", "" + oldItem.id + " " + newItem.id)
             //if load too fast and data wrong create behavior, maybe has duplicate song id
             //so this callback will return true => RecyclerView move item this song at oldpos to new pos => crash
             //We add compare with title to guarantee two songs is same and return right true or false
@@ -74,35 +71,35 @@ class SongPagingDataAdapter(
 
     //this layout manager will set for recycler view has use this adapter. Cause during user scroll,
     //recycler view may predict next item but data of adapter still not next item, so app will crash
-//    class WrapContentLinearLayoutManager(context: Context) : LinearLayoutManager(context) {
-//        init {
-//            isItemPrefetchEnabled = false
-//        }
-//
-//        override fun onLayoutChildren(
-//            recycler: RecyclerView.Recycler?,
-//            state: RecyclerView.State?
-//        ) {
-//            try {
-//                super.onLayoutChildren(recycler, state)
-//            } catch (e: IndexOutOfBoundsException) {
-//            }
-//        }
-//
-//        override fun scrollVerticallyBy(
-//            dy: Int,
-//            recycler: RecyclerView.Recycler?,
-//            state: RecyclerView.State?
-//        ): Int {
-//            return try {
-//                super.scrollVerticallyBy(dy, recycler, state)
-//            } catch (e: IndexOutOfBoundsException) {
-//                dy
-//            }
-//        }
-//
-//        override fun supportsPredictiveItemAnimations(): Boolean = false
-//    }
+    class WrapContentLinearLayoutManager(context: Context) : LinearLayoutManager(context) {
+        init {
+            isItemPrefetchEnabled = false
+        }
+
+        override fun onLayoutChildren(
+            recycler: RecyclerView.Recycler?,
+            state: RecyclerView.State?
+        ) {
+            try {
+                super.onLayoutChildren(recycler, state)
+            } catch (e: IndexOutOfBoundsException) {
+            }
+        }
+
+        override fun scrollVerticallyBy(
+            dy: Int,
+            recycler: RecyclerView.Recycler?,
+            state: RecyclerView.State?
+        ): Int {
+            return try {
+                super.scrollVerticallyBy(dy, recycler, state)
+            } catch (e: IndexOutOfBoundsException) {
+                dy
+            }
+        }
+
+        override fun supportsPredictiveItemAnimations(): Boolean = false
+    }
 
     inner class ViewHolder(private val binding: ItemSongBinding) :
         RecyclerView.ViewHolder(binding.root) {
