@@ -6,23 +6,20 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
-import com.infix.musicappv1.data.repository.NetworkRepository
 import com.infix.musicappv1.data.repository.album.AlbumRepository
 import com.infix.musicappv1.data.repository.paging.AlbumRemoteMediator
-import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class MoreAlbumViewModel @Inject constructor(
     private val albumRepository: AlbumRepository,
-    private val musicDb: MusicDatabase,
-    private val networkRepository: NetworkRepository
+    private val factory: AlbumRemoteMediator.FactoryAssisted
 ) : ViewModel() {
     @OptIn(ExperimentalPagingApi::class)
     val albums = Pager(
         PagingConfig(initialLoadSize = 20, pageSize = 20),
-        remoteMediator = AlbumRemoteMediator(false,albumRepository, musicDb, networkRepository)
+        remoteMediator = factory.create(false)
     ) {
         albumRepository.loadAlbumsPaging()
     }.flow.cachedIn(viewModelScope)

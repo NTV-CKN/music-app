@@ -90,7 +90,7 @@ class MoreRecommendSongFragment : BasePlayMusicFragment() {
 
     private fun observePagingData() {
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 moreRcmSongViewModel.songs.collectLatest { adapter.submitData(it) }
             }
         }

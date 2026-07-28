@@ -41,10 +41,7 @@ class SongPagingDataAdapter(
         position: Int
     ) {
         Log.d("SongPagingDataAdapter", "pos $position")
-        val song = getItem(position)
-        song?.let {
-            holder.bind(it, position)
-        }
+        holder.bind()
     }
 
     class DiffUtils : DiffUtil.ItemCallback<Song>() {
@@ -54,7 +51,6 @@ class SongPagingDataAdapter(
             oldItem: Song,
             newItem: Song
         ): Boolean {
-            //Log.d("SSSS", "" + oldItem.id + " " + newItem.id)
             //if load too fast and data wrong create behavior, maybe has duplicate song id
             //so this callback will return true => RecyclerView move item this song at oldpos to new pos => crash
             //We add compare with title to guarantee two songs is same and return right true or false
@@ -107,8 +103,35 @@ class SongPagingDataAdapter(
 
     inner class ViewHolder(private val binding: ItemSongBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+            init {
+                binding.root.setOnClickListener {
+                    val song = getItem(bindingAdapterPosition)?:return@setOnClickListener
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        val notificationGranted =
+                            ContextCompat.checkSelfPermission(
+                                binding.root.context,
+                                Manifest.permission.POST_NOTIFICATIONS
+                            ) == PackageManager.PERMISSION_GRANTED
+
+                        permissionRepository.setGrantedNotification(notificationGranted)
+                        if (notificationGranted)
+                            onSongClick.onSongClick(song, bindingAdapterPosition)
+
+                        permissionRepository.setAskPermissionNotification(!notificationGranted)
+                    } else
+                        onSongClick.onSongClick(song, position)
+                }
+                //option
+                binding.btnItemSongOption.setOnClickListener {
+                    val song = getItem(bindingAdapterPosition)?:return@setOnClickListener
+                    onOptionClick.onOptionClick(song)
+                }
+            }
+
         @SuppressLint("SuspiciousIndentation")
-        fun bind(song: Song, position: Int) {
+        fun bind() {
+            val song = getItem(bindingAdapterPosition) ?: return
             binding.tvItemSongTitle.text = song.title
             binding.tvItemSongArtist.text = song.artist
             Glide.with(binding.root)
@@ -116,26 +139,6 @@ class SongPagingDataAdapter(
                 .error(R.drawable.ic_song_24)
                 .into(binding.imgItemSong)
             //song click listener
-            binding.root.setOnClickListener {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    val notificationGranted =
-                        ContextCompat.checkSelfPermission(
-                            binding.root.context,
-                            Manifest.permission.POST_NOTIFICATIONS
-                        ) == PackageManager.PERMISSION_GRANTED
-
-                    permissionRepository.setGrantedNotification(notificationGranted)
-                    if (notificationGranted)
-                        onSongClick.onSongClick(song, position)
-
-                    permissionRepository.setAskPermissionNotification(!notificationGranted)
-                } else
-                    onSongClick.onSongClick(song, position)
-            }
-            //option
-            binding.btnItemSongOption.setOnClickListener {
-                onOptionClick.onOptionClick(song)
-            }
         }
     }
 }
