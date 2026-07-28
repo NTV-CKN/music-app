@@ -34,6 +34,7 @@ interface SongDao {
         """
         SELECT *
         FROM songs
+        ORDER BY song_id
     """
     )
     fun getAllSongsPaging(): PagingSource<Int, Song>
