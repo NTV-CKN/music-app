@@ -14,16 +14,26 @@ import com.infix.musicappv1.data.model.tracking.TrackingUpdate
 import com.infix.musicappv1.data.repository.NetworkRepository
 import com.infix.musicappv1.data.repository.artist.ArtistRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalPagingApi::class)
-class ArtistRemoteMediator(
+class ArtistRemoteMediator @AssistedInject constructor(
+    @Assisted
     private val isLimit: Boolean,
     private val artistRepository: ArtistRepository,
     private val musicDb: MusicDatabase,
     private val networkRepository: NetworkRepository
 ) : RemoteMediator<Int, Artist>() {
+
+    @AssistedFactory
+    interface FactoryAssisted {
+        fun create(isLimit: Boolean): ArtistRemoteMediator
+    }
+
     private var trackLimit = false
 
     override suspend fun initialize(): InitializeAction {
