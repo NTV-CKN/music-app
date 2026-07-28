@@ -10,11 +10,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.song.Song
-import com.infix.musicappv1.data.repository.NetworkRepository
 import com.infix.musicappv1.data.repository.album.AlbumRepository
 import com.infix.musicappv1.data.repository.paging.SongRemoteMediator
 import com.infix.musicappv1.data.repository.song.SongRepository
-import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -23,8 +21,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val songRepository: SongRepository,
     private val albumRepository: AlbumRepository,
-    private val musicDb: MusicDatabase,
-    private val networkRepository: NetworkRepository
+    factory: SongRemoteMediator.FactoryAssisted
 ) : ViewModel() {
     //when any fragment has paging song, room update more song and notify for songLocal
     val songLocal: LiveData<List<Song>?> = songRepository.getAllSongsFlow().asLiveData()
@@ -38,7 +35,7 @@ class HomeViewModel @Inject constructor(
             prefetchDistance = 1,
             enablePlaceholders = false
         ),
-        remoteMediator = SongRemoteMediator(true, songRepository, musicDb, networkRepository),
+        remoteMediator = factory.create(true),
     ) {
         songRepository.getNSongsPaging(SIZE_SONG)
     }.flow.cachedIn(viewModelScope)//cached to avoid refresh when user return app

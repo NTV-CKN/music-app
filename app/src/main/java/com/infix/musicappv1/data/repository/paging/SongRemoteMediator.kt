@@ -6,8 +6,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObjects
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongRemoteKeys
@@ -15,18 +14,29 @@ import com.infix.musicappv1.data.model.tracking.TrackingUpdate
 import com.infix.musicappv1.data.repository.NetworkRepository
 import com.infix.musicappv1.data.repository.song.SongRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalPagingApi::class)
-class SongRemoteMediator(
+class SongRemoteMediator @AssistedInject constructor(
     //when app haven't data, we load N song but use query limit with PagingSource
     //can lead to infinite loop. So we use isLimit to block load next
+    @Assisted
     private var isLimit: Boolean,
+    private val firestore: FirebaseFirestore,
     private val songRepository: SongRepository,
     private val musicDb: MusicDatabase,
     private val networkRepository: NetworkRepository
 ) : RemoteMediator<Int, Song>() {
+
+    @AssistedFactory
+    interface FactoryAssisted {
+        fun create(isLimit: Boolean): SongRemoteMediator
+    }
+
     private var trackLimit = false
 
     override suspend fun initialize(): InitializeAction {
@@ -42,7 +52,10 @@ class SongRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, Song>
     ): MediatorResult {
-        Log.d("SongRemoteMediator", "is limit $isLimit, trackLimit == isLimit && isLimit ${trackLimit == isLimit && isLimit}")
+        Log.d(
+            "SongRemoteMediator",
+            "is limit $isLimit, trackLimit == isLimit && isLimit ${trackLimit == isLimit && isLimit}"
+        )
         if (trackLimit == isLimit && isLimit)
             return MediatorResult.Success(true)
 
@@ -65,20 +78,20 @@ class SongRemoteMediator(
                 musicDb.songRemoteKeysDao().getSongRemoteKeyLastest()
             else null
             val lastSnapshot = songRemoteKeyLatest?.let {
-                Firebase.firestore
+                firestore
                     .collection("songs")
                     .document(it.songId)
                     .get().await()
             }
             val query =
                 if (lastSnapshot != null) {//if not load refresh or song remote key not null
-                    Firebase.firestore
+                    firestore
                         .collection("songs")
                         .orderBy("id")
                         .startAfter(lastSnapshot)
                         .limit(state.config.pageSize.toLong())
                 } else {//else load init
-                    Firebase.firestore
+                    firestore
                         .collection("songs")
                         .orderBy("id")
                         .limit(state.config.pageSize.toLong())
