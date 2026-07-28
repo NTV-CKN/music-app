@@ -48,6 +48,8 @@ android {
 
 dependencies {
     implementation(libs.hilt.android)
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.datastore.preferences)

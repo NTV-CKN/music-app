@@ -76,8 +76,8 @@ class MoreRecommendSongFragment : BasePlayMusicFragment() {
             }, permissionRepository
         )
 
-        binding.includeSongList.rvSongList.layoutManager =
-            SongPagingDataAdapter.WrapContentLinearLayoutManager(requireContext())
+//        binding.includeSongList.rvSongList.layoutManager =
+//            SongPagingDataAdapter.WrapContentLinearLayoutManager(requireContext())
 
         binding.includeSongList.rvSongList.adapter = adapter
     }
