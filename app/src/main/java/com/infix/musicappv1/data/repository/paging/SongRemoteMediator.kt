@@ -15,18 +15,28 @@ import com.infix.musicappv1.data.model.tracking.TrackingUpdate
 import com.infix.musicappv1.data.repository.NetworkRepository
 import com.infix.musicappv1.data.repository.song.SongRepository
 import com.infix.musicappv1.data.source.local.db.MusicDatabase
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalPagingApi::class)
-class SongRemoteMediator(
+class SongRemoteMediator @AssistedInject constructor(
     //when app haven't data, we load N song but use query limit with PagingSource
     //can lead to infinite loop. So we use isLimit to block load next
+    @Assisted
     private var isLimit: Boolean,
     private val songRepository: SongRepository,
     private val musicDb: MusicDatabase,
     private val networkRepository: NetworkRepository
 ) : RemoteMediator<Int, Song>() {
+
+    @AssistedFactory
+    interface FactoryAssisted {
+        fun create(isLimit: Boolean): SongRemoteMediator
+    }
+
     private var trackLimit = false
 
     override suspend fun initialize(): InitializeAction {
