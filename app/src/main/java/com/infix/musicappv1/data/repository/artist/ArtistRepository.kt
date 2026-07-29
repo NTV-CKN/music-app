@@ -5,7 +5,6 @@ import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.source.Result
 import com.infix.musicappv1.data.source.remote.param.PagingParam
-import com.infix.musicappv1.data.source.remote.param.SearchParam
 import kotlinx.coroutines.flow.Flow
 
 interface ArtistRepository {
@@ -21,5 +20,5 @@ interface ArtistRepository {
     suspend fun insert(vararg artist: Artist)
     suspend fun getArtistById(artistId: Int): Artist?
     suspend fun loadArtistsPaging(pagingParam: PagingParam): List<Artist>?
-    suspend fun loadSongsByNameArtist(searchParam: SearchParam): Result<List<Song>>
+    suspend fun loadSongsByArtistId(artistId: Int): Result<List<Song>>
 }

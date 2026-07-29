@@ -62,7 +62,7 @@ class ArtistRepositoryImpl @Inject constructor(
         return remote.loadArtistsPaging(pagingParam)
     }
 
-    override suspend fun loadSongsByNameArtist(searchParam: SearchParam): Result<List<Song>> {
-        return remote.loadSongsByNameArtist(searchParam)
+    override suspend fun loadSongsByArtistId(artistId: Int): Result<List<Song>> {
+        return remote.loadSongsByArtistId(artistId)
     }
 }

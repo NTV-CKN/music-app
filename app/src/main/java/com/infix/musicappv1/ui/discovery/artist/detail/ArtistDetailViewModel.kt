@@ -6,7 +6,6 @@ import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.artist.ArtistRepository
 import com.infix.musicappv1.data.source.Result
-import com.infix.musicappv1.data.source.remote.param.SearchParam
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,11 +28,8 @@ class ArtistDetailViewModel @Inject constructor(
     fun setArtistWithSongsByArtistName(artistId: Int, name: String) {
         viewModelScope.launch(Dispatchers.IO) {
             this@ArtistDetailViewModel.artist = artistRepository.getArtistById(artistId)//local
-            val result = artistRepository.loadSongsByNameArtist(
-                SearchParam(
-                    queryType = SearchParam.QUERY_TYPE_SEARCH,
-                    query = name
-                )
+            val result = artistRepository.loadSongsByArtistId(
+                artistId
             )
 
             if (result is Result.Success)

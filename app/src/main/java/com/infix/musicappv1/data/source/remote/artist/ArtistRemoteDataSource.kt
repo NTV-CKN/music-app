@@ -1,15 +1,19 @@
 package com.infix.musicappv1.data.source.remote.artist
 
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.toObjects
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.source.ArtistDataSource
 import com.infix.musicappv1.data.source.Result
 import com.infix.musicappv1.data.source.remote.RetrofitHelper
 import com.infix.musicappv1.data.source.remote.param.PagingParam
-import com.infix.musicappv1.data.source.remote.param.SearchParam
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class ArtistRemoteDataSource @Inject constructor() : ArtistDataSource.Remote {
+class ArtistRemoteDataSource @Inject constructor(
+    private val firestore: FirebaseFirestore
+) : ArtistDataSource.Remote {
     override suspend fun loadArtistsRemote(): Result<List<Artist>> {
         return try {
             val response = RetrofitHelper.musicService.loadArtists()
@@ -34,20 +38,14 @@ class ArtistRemoteDataSource @Inject constructor() : ArtistDataSource.Remote {
         }
     }
 
-    override suspend fun loadSongsByNameArtist(searchParam: SearchParam): Result<List<Song>> {
+    override suspend fun loadSongsByArtistId(artistId: Int): Result<List<Song>> {
         return try {
-            val response =
-                RetrofitHelper.musicService.getSongsOfArtist(
-                    searchParam.queryType,
-                    searchParam.query
-                )
-            if (response.isSuccessful) {
-                if (response.body() != null)
-                    Result.Success(response.body()!!.songs)
-                else
-                    Result.Error(Exception("Body is null"))
-            } else
-                Result.Error(Exception("Unknown error"))
+            val task = firestore.collection("songs")
+                .whereEqualTo("artistId", artistId)
+                .get()
+                .await()
+
+            Result.Success(task.toObjects<Song>())
         } catch (ex: Exception) {
             Result.Error(Exception(ex.message ?: "Unknown error"))
         }
