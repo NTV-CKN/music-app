@@ -21,4 +21,9 @@
         android:icon="@drawable/ic_settings_black"
         android:title="@string/txt_setting"
         app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/navigation_user_profile"
+        android:icon="@drawable/ic_account_circle_24"
+        app:showAsAction="ifRoom"
+        android:title="@string/txt_me"/>
 </menu>

@@ -72,4 +72,9 @@
     <string name="txt_clear_all">Xóa tất cả</string>
     <string name="txt_confirm_clear_all_data">Bạn chắc muốn xóa dữ liệu này chứ?</string>
     <string name="txt_notify_when_lost_internet">Bạn phải cung cấp Internet để sử dụng ứng dụng</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_welcome">Chào mừng đến với Music App</string>
+    <string name="txt_explain_login">Đăng nhập để trải nghiệm kho nhạc VIP</string>
+    <string name="txt_login_with_google">Đăng nhập bằng Google</string>
+    <string name="txt_me">Tôi</string>
 </resources>

@@ -75,6 +75,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txt_welcome">Chào mừng đến với Music App</string>
-    <string name="txt_explain_login">Đăng nhập để trải nghiệm kho nhạc VIP</string>
-    <string name="txt_login_with_google">Đăng nhập bằng Google</string>
+    <string name="txt_explain_login">Please log in to enjoy VIP music content</string>
+    <string name="txt_login_with_google">Login with Google</string>
+    <string name="txt_me">Me</string>
 </resources>

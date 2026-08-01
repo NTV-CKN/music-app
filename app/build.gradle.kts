@@ -90,6 +90,7 @@ dependencies {
     // --- 5. Firebase ---
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.auth)
 
     // --- 6. Android KTX & UI ---
     implementation(libs.androidx.activity.ktx)
