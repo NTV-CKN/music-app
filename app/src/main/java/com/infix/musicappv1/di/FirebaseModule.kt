@@ -1,6 +1,8 @@
 package com.infix.musicappv1.di
 
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import dagger.Module
@@ -16,5 +18,11 @@ object FirebaseModule {
     @Singleton
     fun provideFirestore(): FirebaseFirestore {
         return Firebase.firestore
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthentication(): FirebaseAuth {
+        return Firebase.auth
     }
 }
