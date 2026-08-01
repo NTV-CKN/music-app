@@ -1,6 +1,5 @@
 package com.infix.musicappv1.utils
 
-import android.R.attr.duration
 import android.annotation.SuppressLint
 import java.util.Locale
 import kotlin.time.Duration.Companion.seconds

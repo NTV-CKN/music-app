@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -11,8 +13,12 @@ android {
     namespace = "com.infix.musicappv1"
     //noinspection GradleDependency
     compileSdk = 35
-
+    android.buildFeatures.buildConfig = true
     defaultConfig {
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+        buildConfigField("String", "BASE_URL", properties.getProperty("BASE_URL"))
+
         applicationId = "com.infix.musicappv1"
         minSdk = 26
         //noinspection OldTargetApi
@@ -50,6 +56,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.googleid)
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.datastore.preferences)
@@ -90,6 +97,10 @@ dependencies {
     // --- 5. Firebase ---
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid.v111)
 
     // --- 6. Android KTX & UI ---
     implementation(libs.androidx.activity.ktx)

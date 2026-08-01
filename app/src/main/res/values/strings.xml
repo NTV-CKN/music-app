@@ -72,4 +72,13 @@
     <string name="txt_clear_all">Clear All</string>
     <string name="txt_confirm_clear_all_data">Are you sure delete this data?</string>
     <string name="txt_notify_when_lost_internet">You must provide Internet to use app</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_welcome">Chào mừng đến với Music App</string>
+    <string name="txt_explain_login">Please log in to enjoy VIP music content</string>
+    <string name="txt_login_with_google">Login with Google</string>
+    <string name="txt_me">Me</string>
+    <string name="txt_login_success_args">Login Successful! Hi %s</string>
+    <string name="txt_login_failed">Login Failed: Cannot instantiate user</string>
+    <string name="txt_error_id_token_firebase">Cannot retrieve id token from Firebase</string>
 </resources>
