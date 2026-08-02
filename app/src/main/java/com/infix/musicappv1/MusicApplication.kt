@@ -8,8 +8,11 @@ import android.os.Build
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.google.firebase.auth.FirebaseAuth
 import com.infix.musicappv1.data.repository.PermissionRepository
+import com.infix.musicappv1.data.source.local.db.MusicDatabase
 import com.infix.musicappv1.ui.base.NetworkCallback
+import com.infix.musicappv1.utils.ApiClient
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -19,10 +22,17 @@ class MusicApplication : Application() {
     lateinit var permissionRepository: PermissionRepository
 
     @Inject
+    lateinit var auth: FirebaseAuth
+
+    @Inject
+    lateinit var musicDb: MusicDatabase
+
+    @Inject
     lateinit var networkCallback: NetworkCallback
 
     override fun onCreate() {
         super.onCreate()
+        ApiClient.init(auth, musicDb)
         registerNetworkCallback()
         //observe lifecycle for process of application
         ProcessLifecycleOwner.get().lifecycle.addObserver(object :
