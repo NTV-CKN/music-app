@@ -15,6 +15,7 @@ import com.infix.musicappv1.data.source.local.search.song.SearchKeySongDao
 import com.infix.musicappv1.data.source.local.song.SongDao
 import com.infix.musicappv1.data.source.local.song.SongRemoteKeysDao
 import com.infix.musicappv1.data.source.local.tracking.TrackingUpdateDao
+import com.infix.musicappv1.data.source.local.user.UserDAO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,6 +41,9 @@ object MusicDatabaseModule {
 
     @Provides
     fun provideSongRecentDao(db: MusicDatabase): SongRecentDao = db.songRecentDao()
+
+    @Provides
+    fun provideUserDao(db: MusicDatabase): UserDAO = db.userDao()
 
     @Provides
     fun provideSongDao(db: MusicDatabase): SongDao = db.songDao()
