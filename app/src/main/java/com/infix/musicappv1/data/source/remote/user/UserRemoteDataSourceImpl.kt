@@ -1,5 +1,6 @@
 package com.infix.musicappv1.data.source.remote.user
 
+import android.util.Log
 import com.infix.musicappv1.data.model.user.User
 import com.infix.musicappv1.data.source.Result
 import com.infix.musicappv1.data.source.UserDataSource
@@ -13,8 +14,10 @@ class UserRemoteDataSourceImpl @Inject constructor(
             val loginResponse = userService.login()
             if (loginResponse.isSuccessful) {
                 val body = loginResponse.body()
-                return if (body != null)
+                return if (body != null) {
+                    Log.d("UserRemoteDataSourceImpl", body.user.toString() ?: " null")
                     Result.Success(body.user)
+                }
                 else
                     Result.Error(Exception("Sign in failed! Body is null"))
             }

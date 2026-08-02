@@ -1,11 +1,11 @@
 package com.infix.musicappv1.data.dto
 
+import com.google.gson.annotations.SerializedName
 import com.infix.musicappv1.data.model.user.User
-import kotlinx.serialization.SerialName
 
 data class LoginResponse(
     val success: Boolean,
     val message: String,
-    @SerialName("userData")
+    @SerializedName("userData")
     val user: User
 )

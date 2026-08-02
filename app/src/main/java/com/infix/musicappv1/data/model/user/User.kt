@@ -7,15 +7,15 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "users")
 data class User(
     @PrimaryKey
-    private val uid: String,
+    val uid: String,
     @ColumnInfo("email")
-    private val email: String,
+    val email: String,
     @ColumnInfo("display_name")
-    private val displayName: String,
+    val displayName: String,
     @ColumnInfo("avatar")
-    private val avatar: String,
+    val avatar: String,
     @ColumnInfo("role")
-    private val role: String,
+    val role: String,
     @ColumnInfo("login_at")
-    private val loginAt: Long = System.currentTimeMillis()
+    val loginAt: Long = System.currentTimeMillis()
 )
