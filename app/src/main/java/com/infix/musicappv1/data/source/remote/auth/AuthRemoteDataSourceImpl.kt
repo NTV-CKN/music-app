@@ -5,6 +5,7 @@ import android.util.Log
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.infix.musicappv1.R
+import com.infix.musicappv1.data.model.user.User
 import com.infix.musicappv1.data.source.AuthDataSource
 import com.infix.musicappv1.data.source.UserDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -65,5 +66,9 @@ class AuthRemoteDataSourceImpl @Inject constructor(
             Log.d("AuthRemoteDataSourceImpl", errorMessage)
             onCompleted(errorMessage, false)
         }
+    }
+
+    override suspend fun getUserSession(): User? {
+        return userLocalDataSource.getUserLatest()
     }
 }

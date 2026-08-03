@@ -1,6 +1,7 @@
 package com.infix.musicappv1.data.repository.auth
 
 import com.google.firebase.auth.AuthCredential
+import com.infix.musicappv1.data.model.user.User
 import com.infix.musicappv1.data.source.AuthDataSource
 import javax.inject.Inject
 
@@ -14,4 +15,8 @@ class AuthRepositoryImpl @Inject constructor(
         authCredential,
         onCompleted
     )
+
+    override suspend fun getUserSession(): User? {
+        return remote.getUserSession()
+    }
 }

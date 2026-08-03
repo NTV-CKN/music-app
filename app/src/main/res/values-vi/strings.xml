@@ -80,4 +80,5 @@
     <string name="txt_login_success_args">Đăng nhập thành công! Xin chào %s</string>
     <string name="txt_login_failed">Đăng nhập thất bại: Khởi tạo User không thành công</string>
     <string name="txt_error_id_token_firebase">Không thể lấy ID Token từ Firebase</string>
+    <string name="txt_loading">Đang tải...</string>
 </resources>
