@@ -81,4 +81,5 @@
     <string name="txt_login_success_args">Login Successful! Hi %s</string>
     <string name="txt_login_failed">Login Failed: Cannot instantiate user</string>
     <string name="txt_error_id_token_firebase">Cannot retrieve id token from Firebase</string>
+    <string name="txt_loading">Loading...</string>
 </resources>
