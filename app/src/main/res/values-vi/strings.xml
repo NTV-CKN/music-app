@@ -87,4 +87,7 @@
     <string name="hint_your_email">Email của bạn</string>
     <string name="hint_display_name">Tên hiển thị</string>
     <string name="txt_update_profile">Cập nhật thông tin</string>
+    <string name="txt_signout">Đăng xuất</string>
+    <string name="txt_confirm_sign_out">Bạn có chắc muốn đăng xuất?</string>
+
 </resources>

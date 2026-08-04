@@ -11,4 +11,14 @@ object SnackbarUtils {
             duration
         ).show()
     }
+
+    fun showSnackbarWithAction(view: View, msg: String, titleAction: String, duration: Int, action: ()-> Unit) {
+        Snackbar.make(
+            view,
+            msg,
+            duration
+        )
+            .setAction(titleAction) {action.invoke()}
+            .show()
+    }
 }

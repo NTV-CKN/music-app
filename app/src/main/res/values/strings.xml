@@ -88,4 +88,7 @@
     <string name="hint_your_email">Your Email</string>
     <string name="hint_display_name">Display Name</string>
     <string name="txt_update_profile">Update Profile</string>
+    <string name="txt_signout">Sign-out</string>
+    <string name="txt_confirm_sign_out">Are you sure sign-out?</string>
+
 </resources>
