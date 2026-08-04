@@ -46,7 +46,7 @@ import com.infix.musicappv1.data.source.local.user.UserDAO
         SearchKeySong::class,
         RecentSearchSong::class
     ],
-    version = 10,
+    version = 11,
     // autoMigrations = [AutoMigration(from = 3, to = 4)]
 )
 @TypeConverters(value = [DateConverter::class])
