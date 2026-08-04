@@ -2,9 +2,8 @@ package com.infix.musicappv1.ui.user
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -12,12 +11,15 @@ import androidx.navigation.ui.setupWithNavController
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.user.User
 import com.infix.musicappv1.databinding.ActivityUserManageBinding
+import com.infix.musicappv1.utils.MusicAppUtils
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class UserManagementActivity : AppCompatActivity() {
-    val userKeyIntent = "com.infix.musicappv1.ui.user.UserManagementActivity.USER"
-
     private lateinit var binding: ActivityUserManageBinding
     private var navController: NavController? = null
+
+    private val userManagementViewMode: UserManagementViewModel by viewModels()
 
     private var user: User? = null
 
@@ -26,11 +28,6 @@ class UserManagementActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityUserManageBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
         //If extract user from intent succeeds
         if (extractUser()) {
@@ -39,9 +36,10 @@ class UserManagementActivity : AppCompatActivity() {
     }
 
     private fun extractUser(): Boolean {
-        val user = intent.getSerializableExtra(userKeyIntent)
+        val user = intent.getSerializableExtra(USER_KEY)
         if (user is User) {
             this.user = user
+            userManagementViewMode.setUserState(this.user)
             return true
         }
 
@@ -68,5 +66,16 @@ class UserManagementActivity : AppCompatActivity() {
 
         binding.toolbar.setupWithNavController(navController!!, appBarConfiguration)
         binding.navigationView.setupWithNavController(navController!!)
+
+        //check role
+        if (user != null) {
+            if (user!!.role != MusicAppUtils.ROLE_ADMIN)
+                binding.navigationView.menu
+                    .findItem(R.id.navigate_admin_dashboard).isVisible = false
+        }
+    }
+
+    companion object {
+        const val USER_KEY = "com.infix.musicappv1.ui.user.UserManagementActivity.USER"
     }
 }

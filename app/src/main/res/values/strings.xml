@@ -85,4 +85,7 @@
     <string name="txt_profile_user">Profile</string>
     <string name="txt_paid_subscriptions">Paid subscription</string>
     <string name="txt_admin_panel">Admin panel</string>
+    <string name="hint_your_email">Your Email</string>
+    <string name="hint_display_name">Display Name</string>
+    <string name="txt_update_profile">Update Profile</string>
 </resources>

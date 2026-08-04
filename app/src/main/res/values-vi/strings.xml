@@ -84,4 +84,7 @@
     <string name="txt_profile_user">Thông tin cá nhân</string>
     <string name="txt_paid_subscriptions">Các gói đã mua</string>
     <string name="txt_admin_panel">Trang quản trị</string>
+    <string name="hint_your_email">Email của bạn</string>
+    <string name="hint_display_name">Tên hiển thị</string>
+    <string name="txt_update_profile">Cập nhật thông tin</string>
 </resources>
