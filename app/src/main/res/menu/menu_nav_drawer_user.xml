@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:id="@+id/group_user">
+        <item
+            android:id="@+id/navigate_home"
+            android:icon="@drawable/ic_home_24dp"
+            android:title="@string/txt_home" />
+
+        <item
+            android:id="@+id/navigate_profile"
+            android:icon="@drawable/ic_account_circle_24"
+            android:title="@string/txt_profile_user" />
+
+        <item
+            android:id="@+id/navigate_my_packages"
+            android:icon="@drawable/ic_subscriptions_24px"
+            android:title="@string/txt_paid_subscriptions" />
+    </group>
+
+    <group android:id="@+id/group_admin">
+        <item
+            android:id="@+id/navigate_admin_dashboard"
+            android:icon="@drawable/ic_admin_panel_settings_24px"
+            android:title="@string/txt_admin_panel" />
+    </group>
+</menu>

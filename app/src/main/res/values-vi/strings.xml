@@ -81,4 +81,7 @@
     <string name="txt_login_failed">Đăng nhập thất bại: Khởi tạo User không thành công</string>
     <string name="txt_error_id_token_firebase">Không thể lấy ID Token từ Firebase</string>
     <string name="txt_loading">Đang tải...</string>
+    <string name="txt_profile_user">Thông tin cá nhân</string>
+    <string name="txt_paid_subscriptions">Các gói đã mua</string>
+    <string name="txt_admin_panel">Trang quản trị</string>
 </resources>

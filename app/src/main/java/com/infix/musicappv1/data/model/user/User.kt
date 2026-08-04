@@ -3,6 +3,7 @@ package com.infix.musicappv1.data.model.user
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "users")
 data class User(
@@ -18,4 +19,4 @@ data class User(
     val role: String,
     @ColumnInfo("login_at")
     val loginAt: Long = System.currentTimeMillis()
-)
+) : Serializable

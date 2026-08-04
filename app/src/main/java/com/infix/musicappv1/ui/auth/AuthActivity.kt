@@ -16,7 +16,7 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.user.User
 import com.infix.musicappv1.databinding.ActivityAuthBinding
 import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
-import com.infix.musicappv1.ui.user.UserActivity
+import com.infix.musicappv1.ui.user.UserManagementActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -79,7 +79,7 @@ class AuthActivity : AppCompatActivity() {
 
         if(user != null) {
             finish()
-            val intent = Intent(this, UserActivity::class.java)
+            val intent = Intent(this, UserManagementActivity::class.java)
             startActivity(intent)
         }
     }

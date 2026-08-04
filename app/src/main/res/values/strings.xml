@@ -82,4 +82,7 @@
     <string name="txt_login_failed">Login Failed: Cannot instantiate user</string>
     <string name="txt_error_id_token_firebase">Cannot retrieve id token from Firebase</string>
     <string name="txt_loading">Loading...</string>
+    <string name="txt_profile_user">Profile</string>
+    <string name="txt_paid_subscriptions">Paid subscription</string>
+    <string name="txt_admin_panel">Admin panel</string>
 </resources>
