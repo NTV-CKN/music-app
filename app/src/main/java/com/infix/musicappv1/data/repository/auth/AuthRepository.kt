@@ -10,4 +10,6 @@ interface AuthRepository {
     )
 
     suspend fun getUserSession(): User?
+
+    suspend fun logout()
 }
