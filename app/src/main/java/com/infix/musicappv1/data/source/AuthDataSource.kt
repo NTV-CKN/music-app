@@ -11,5 +11,7 @@ interface AuthDataSource {
         )
 
         suspend fun getUserSession(): User?
+
+        suspend fun logout()
     }
 }

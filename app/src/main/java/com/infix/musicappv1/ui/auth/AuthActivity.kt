@@ -16,7 +16,7 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.user.User
 import com.infix.musicappv1.databinding.ActivityAuthBinding
 import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
-import com.infix.musicappv1.ui.user.UserActivity
+import com.infix.musicappv1.ui.user.UserManagementActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -25,7 +25,9 @@ import kotlinx.coroutines.flow.onEach
 class AuthActivity : AppCompatActivity() {
     private var navController: NavController? = null
     private lateinit var binding: ActivityAuthBinding
-    private lateinit var loadingDialogFragment: LoadingDialogFragment
+    private var loadingDialogFragment: LoadingDialogFragment? = null
+
+    //Initially, the user in AuthViewModel is null, so we track and load it from room
     private var isCallLoadUser = false
 
     private val authViewModel by viewModels<AuthViewModel>()
@@ -40,8 +42,8 @@ class AuthActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        loadingDialogFragment = LoadingDialogFragment()
-        loadingDialogFragment.show(supportFragmentManager, null)
+
+        handleLoadingDialog(true)
 
         navController = supportFragmentManager.findFragmentById(R.id.fragment_host_container_auth)
             ?.findNavController()
@@ -49,10 +51,10 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun observeAuthVM() {
-      authViewModel.userSession
-          .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-          .onEach(::handleUserSession)
-          .launchIn(lifecycleScope)
+        authViewModel.userSession
+            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .onEach(::handleUserSession)
+            .launchIn(lifecycleScope)
 
         authViewModel.isLoading
             .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
@@ -61,25 +63,32 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun handleLoadingDialog(isLoading: Boolean) {
+        if(loadingDialogFragment == null)
+            loadingDialogFragment = LoadingDialogFragment()
+
         try {
             if (isLoading)
-                loadingDialogFragment.show(supportFragmentManager, null)
+                loadingDialogFragment?.show(supportFragmentManager, null)
             else
-                loadingDialogFragment.dismiss()
+                loadingDialogFragment?.dismiss()
         } catch (_: Exception) {
         }
     }
 
     private fun handleUserSession(user: User?) {
-        if(!isCallLoadUser) {
+        if (!isCallLoadUser) {
             authViewModel.loadUserSession()
             isCallLoadUser = true
             return
         }
 
-        if(user != null) {
+        if (user != null) {
             finish()
-            val intent = Intent(this, UserActivity::class.java)
+            handleLoadingDialog(false)
+            val intent = Intent(this, UserManagementActivity::class.java)
+            intent.apply {
+                putExtra(UserManagementActivity.USER_KEY, user)
+            }
             startActivity(intent)
         }
     }

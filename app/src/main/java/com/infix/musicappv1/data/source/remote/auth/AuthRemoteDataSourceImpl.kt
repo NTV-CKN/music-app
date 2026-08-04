@@ -71,4 +71,9 @@ class AuthRemoteDataSourceImpl @Inject constructor(
     override suspend fun getUserSession(): User? {
         return userLocalDataSource.getUserLatest()
     }
+
+    override suspend fun logout() {
+        auth.signOut()
+
+    }
 }

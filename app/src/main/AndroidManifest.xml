@@ -23,7 +23,7 @@
         android:theme="@style/Theme.MusicAppV1"
         android:usesCleartextTraffic="true" >
         <activity
-            android:name=".ui.user.UserActivity"
+            android:name=".ui.user.UserManagementActivity"
             android:exported="false" />
         <activity
             android:name=".ui.auth.AuthActivity"
