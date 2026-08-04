@@ -20,7 +20,8 @@
                 android:id="@+id/toolbar"
                 style="@style/ToolbarStyle"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize" />
+                android:layout_height="?attr/actionBarSize"
+                app:menu="@menu/menu_toolbar_user_management" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -40,6 +41,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/menu_nav_drawer_user" />
+        app:menu="@menu/menu_nav_drawer_user_management" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
