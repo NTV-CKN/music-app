@@ -100,4 +100,9 @@
     <string name="txt_pick_energy">Mức độ sôi động (Energy)</string>
     <string name="txt_switch_song_vip">Bài hát dành cho tài khoản VIP</string>
     <string name="txt_save_song">Lưu bài hát</string>
+    <string name="txt_system">Hệ thống</string>
+    <string name="txt_manage_subscriptions">Quản lý Gói VIP</string>
+    <string name="txt_manage_artist">Quản lý Ca sĩ</string>
+    <string name="txt_manage_album">Quản lý Album</string>
+    <string name="txt_manage_song">Quản lý Bài hát</string>
 </resources>

@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/navigate_song_management"
         android:name="com.infix.musicappv1.ui.admin.song.SongManagementFragment"
-        android:label="fragment_song_management"
+        android:label="@string/txt_manage_song"
         tools:layout="@layout/fragment_song_management" />
 </navigation>

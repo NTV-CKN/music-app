@@ -64,13 +64,11 @@ class UserManagementActivity : AppCompatActivity() {
             R.id.nav_host_fragment_container_user_manage
         )?.findNavController()
 
-        setSupportActionBar(binding.toolbar)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigate_home,
                 R.id.navigate_profile,
-                R.id.navigate_my_packages,
-                R.id.navigate_admin_dashboard
+                R.id.navigate_my_packages
             ),
             drawerLayout = binding.drawerLayout
         )
@@ -84,7 +82,7 @@ class UserManagementActivity : AppCompatActivity() {
         if (user != null) {
             if (user!!.role != MusicAppUtils.ROLE_ADMIN)
                 binding.navigationView.menu
-                    .findItem(R.id.navigate_admin_dashboard).isVisible = false
+                    .findItem(R.id.navigate_admin_panel).isVisible = false
         }
     }
 
