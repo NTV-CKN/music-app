@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
@@ -21,7 +21,10 @@
         android:roundIcon="@drawable/ic_library_music_purple_100"
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicAppV1"
-        android:usesCleartextTraffic="true" >
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.admin.AdminActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.user.UserManagementActivity"
             android:exported="false" />
@@ -41,7 +44,7 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,7 +55,7 @@
         <service
             android:name=".media.PlaybackService"
             android:exported="true"
-            android:foregroundServiceType="mediaPlayback" >
+            android:foregroundServiceType="mediaPlayback">
             <intent-filter>
                 <action android:name="androidx.media3.session.MediaSessionService" />
                 <action android:name="androidx.media3.session.MediaBrowserService" />

@@ -90,5 +90,16 @@
     <string name="txt_update_profile">Update Profile</string>
     <string name="txt_signout">Sign-out</string>
     <string name="txt_confirm_sign_out">Are you sure sign-out?</string>
+    <string name="txt_info_song">Song Information</string>
+    <string name="txt_name_song">Song Name</string>
+    <string name="txt_artist">Artist</string>
+    <string name="txt_pick_artist">Select Artist</string>
+    <string name="txt_pick_album">Select Album</string>
+    <string name="txt_pick_path_song">Song Path or Url</string>
+    <string name="txt_genre">Genre</string>
+    <string name="txt_pick_genre">Select Genre</string>
+    <string name="txt_pick_energy">Energy Level</string>
+    <string name="txt_switch_song_vip">VIP Only</string>
+    <string name="txt_save_song">Save Song</string>
 
 </resources>

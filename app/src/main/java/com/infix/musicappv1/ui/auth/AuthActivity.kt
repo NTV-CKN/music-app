@@ -68,7 +68,7 @@ class AuthActivity : AppCompatActivity() {
 
         try {
             if (isLoading)
-                loadingDialogFragment?.show(supportFragmentManager, null)
+                loadingDialogFragment?.showNow(supportFragmentManager, null)
             else
                 loadingDialogFragment?.dismiss()
         } catch (_: Exception) {
