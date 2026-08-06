@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:id="@+id/group_admin_management">
+
+        <item
+            android:id="@+id/navigate_manage_songs"
+            android:icon="@android:drawable/ic_media_play"
+            android:title="@string/txt_manage_song" />
+
+        <item
+            android:id="@+id/navigate_manage_albums"
+            android:icon="@android:drawable/ic_menu_gallery"
+            android:title="@string/txt_manage_album" />
+
+        <item
+            android:id="@+id/navigate_manage_artists"
+            android:icon="@android:drawable/ic_menu_myplaces"
+            android:title="@string/txt_manage_artist" />
+
+        <item
+            android:id="@+id/navigate_manage_vip_packages"
+            android:icon="@android:drawable/btn_star"
+            android:title="@string/txt_manage_subscriptions" />
+
+    </group>
+
+    <item android:title="@string/txt_system">
+        <menu>
+            <item
+                android:id="@+id/navigate_return_home"
+                android:icon="@drawable/ic_home_24dp"
+                android:title="@string/txt_home" />
+        </menu>
+    </item>
+
+</menu>

@@ -89,5 +89,20 @@
     <string name="txt_update_profile">Cập nhật thông tin</string>
     <string name="txt_signout">Đăng xuất</string>
     <string name="txt_confirm_sign_out">Bạn có chắc muốn đăng xuất?</string>
-
+    <string name="txt_info_song">Thông tin bài hát</string>
+    <string name="txt_name_song">Tên bài hát</string>
+    <string name="txt_artist">Ca sĩ</string>
+    <string name="txt_pick_artist">Chọn ca sĩ</string>
+    <string name="txt_pick_album">Chọn album</string>
+    <string name="txt_pick_path_song">Đường dẫn nhạc (URL / Path)</string>
+    <string name="txt_genre">Thể loại</string>
+    <string name="txt_pick_genre">Chọn thể loại</string>
+    <string name="txt_pick_energy">Mức độ sôi động (Energy)</string>
+    <string name="txt_switch_song_vip">Bài hát dành cho tài khoản VIP</string>
+    <string name="txt_save_song">Lưu bài hát</string>
+    <string name="txt_system">Hệ thống</string>
+    <string name="txt_manage_subscriptions">Quản lý Gói VIP</string>
+    <string name="txt_manage_artist">Quản lý Ca sĩ</string>
+    <string name="txt_manage_album">Quản lý Album</string>
+    <string name="txt_manage_song">Quản lý Bài hát</string>
 </resources>

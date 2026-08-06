@@ -8,5 +8,10 @@
     <fragment
         android:id="@+id/navigate_profile"
         android:name="com.infix.musicappv1.ui.user.profile.UserProfileFragment"
+        android:label="@string/txt_profile_user"
         tools:layout="@layout/fragment_user_profile_fragment" />
+    <activity
+        android:id="@+id/navigate_admin_panel"
+        android:name="com.infix.musicappv1.ui.admin.AdminActivity"
+        android:label="AdminActivity" />
 </navigation>

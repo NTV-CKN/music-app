@@ -1,4 +1,4 @@
-package com.infix.musicappv1.ui.user
+package com.infix.musicappv1.ui.admin
 
 import android.content.Intent
 import android.os.Bundle
@@ -15,60 +15,35 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.infix.musicappv1.R
-import com.infix.musicappv1.data.model.user.User
-import com.infix.musicappv1.databinding.ActivityUserManageBinding
+import com.infix.musicappv1.databinding.ActivityAdminBinding
 import com.infix.musicappv1.ui.MainActivity
 import com.infix.musicappv1.ui.auth.AuthViewModel
-import com.infix.musicappv1.utils.ApiClient
-import com.infix.musicappv1.utils.MusicAppUtils
 import com.infix.musicappv1.utils.SnackbarUtils
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-class UserManagementActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityUserManageBinding
-    private var navController: NavController? = null
-
+class AdminActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityAdminBinding
     private val authViewModel by viewModels<AuthViewModel>()
-    private val userManagementViewMode: UserManagementViewModel by viewModels()
 
-    private var user: User? = null
+    private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityUserManageBinding.inflate(layoutInflater)
+        binding = ActivityAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //If extract user from intent succeeds
-        if (extractUser()) {
-            initDrawerAndNavController()
-            setupToolbarMenu()
-            setupOnLogout()
-        }
-    }
-
-    private fun extractUser(): Boolean {
-        val user = intent.getSerializableExtra(USER_KEY)
-        if (user is User) {
-            this.user = user
-            userManagementViewMode.setUserState(this.user)
-            return true
-        }
-
-        return false
+        initDrawerAndNavController()
+        setupToolbarMenu()
     }
 
     private fun initDrawerAndNavController() {
         navController = supportFragmentManager.findFragmentById(
-            R.id.nav_host_fragment_container_user_manage
+            R.id.nav_host_fragment_container_admin
         )?.findNavController()
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigate_home,
-                R.id.navigate_profile,
-                R.id.navigate_my_packages
+                R.id.navigate_song_management,
             ),
             drawerLayout = binding.drawerLayout
         )
@@ -77,13 +52,6 @@ class UserManagementActivity : AppCompatActivity() {
 
         binding.toolbar.setupWithNavController(navController!!, appBarConfiguration)
         binding.navigationView.setupWithNavController(navController!!)
-
-        //check role
-        if (user != null) {
-            if (user!!.role != MusicAppUtils.ROLE_ADMIN)
-                binding.navigationView.menu
-                    .findItem(R.id.navigate_admin_panel).isVisible = false
-        }
     }
 
     private fun setupToolbarMenu() {
@@ -110,12 +78,6 @@ class UserManagementActivity : AppCompatActivity() {
         }, this, Lifecycle.State.RESUMED)
     }
 
-    private fun setupOnLogout() {
-        ApiClient.setOnLogoutListener {
-            handleOnLogout()
-        }
-    }
-
     private fun handleOnLogout() {
         authViewModel.logout()
         val intent = Intent(this, MainActivity::class.java).apply {
@@ -125,7 +87,4 @@ class UserManagementActivity : AppCompatActivity() {
         finish()
     }
 
-    companion object {
-        const val USER_KEY = "com.infix.musicappv1.ui.user.UserManagementActivity.USER"
-    }
 }

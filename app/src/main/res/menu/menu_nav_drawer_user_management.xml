@@ -22,7 +22,7 @@
 
     <group android:id="@+id/group_admin">
         <item
-            android:id="@+id/navigate_admin_dashboard"
+            android:id="@+id/navigate_admin_panel"
             android:icon="@drawable/ic_admin_panel_settings_24px"
             android:title="@string/txt_admin_panel" />
     </group>
