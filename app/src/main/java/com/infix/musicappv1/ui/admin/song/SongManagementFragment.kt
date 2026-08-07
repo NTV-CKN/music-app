@@ -6,11 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import com.infix.musicappv1.R
+import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.FragmentSongManagementBinding
 import com.infix.musicappv1.ui.adapter.admin.SongAdminPagingDataAdapter
+import com.infix.musicappv1.ui.admin.song.update_add.AddOrUpdateSongViewModel
+import com.infix.musicappv1.ui.dialog.CRUDOptionDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -22,10 +29,13 @@ import kotlinx.coroutines.launch
 class SongManagementFragment : Fragment() {
     private lateinit var binding: FragmentSongManagementBinding
     private lateinit var adapter: SongAdminPagingDataAdapter
+    private lateinit var crudOptionDialog: CRUDOptionDialog<Song>
+    private lateinit var navController: NavController
 
     private var searchJob: Job? = null
 
     private val songManagementViewModel by viewModels<SongManagementViewModel>()
+    private val addOrUpdateSongViewModel by activityViewModels<AddOrUpdateSongViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,14 +51,26 @@ class SongManagementFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        navController = findNavController()
+
+        initCrudOptDialog()
         observeSongManagementVM()
         initRecyclerView()
         setupSearchSong()
+        setupEvents()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         searchJob = null
+    }
+
+    private fun initCrudOptDialog() {
+        crudOptionDialog = CRUDOptionDialog(
+            onUpdate = { song -> },
+            onView = { song -> },
+            onDelete = { song -> }
+        )
     }
 
     private fun observeSongManagementVM() {
@@ -64,11 +86,16 @@ class SongManagementFragment : Fragment() {
     private fun initRecyclerView() {
         adapter = SongAdminPagingDataAdapter(
             { song, pos -> },
-            { song -> }
+            { song -> showCRUDDialog(song) }
         )
 
         binding.rvSongs.adapter = adapter
         songManagementViewModel.setSongsPagingState("")
+    }
+
+    private fun showCRUDDialog(song: Song) {
+        crudOptionDialog.setData(song)
+        crudOptionDialog.show(requireActivity().supportFragmentManager, null)
     }
 
     private fun setupSearchSong() {
@@ -79,6 +106,23 @@ class SongManagementFragment : Fragment() {
                 val query = text?.toString() ?: ""
                 songManagementViewModel.setSongsPagingState(query)
             }
+        }
+    }
+
+    private fun setupEvents() {
+        //FAB Add song
+        binding.fabAddSong.setOnClickListener {
+            addOrUpdateSongViewModel.setIsUpdateSongState(
+                AddOrUpdateSongViewModel.AddOrUpdateSongParams(
+                    isUpdate = false
+                )
+            )
+
+            val action = SongManagementFragmentDirections
+                .actionNavigateSongManagementToAddOrUpdateSong(
+                    addOrUpdate = R.string.txt_add_song
+                )
+            navController.navigate(action)
         }
     }
 }
