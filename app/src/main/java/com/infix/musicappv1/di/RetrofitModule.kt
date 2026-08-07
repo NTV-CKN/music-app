@@ -1,5 +1,6 @@
 package com.infix.musicappv1.di
 
+import com.infix.musicappv1.data.source.remote.MusicService
 import com.infix.musicappv1.data.source.remote.user.UserService
 import com.infix.musicappv1.utils.ApiClient
 import dagger.Module
@@ -16,4 +17,7 @@ object RetrofitModule {
 
     @Provides
     fun getUserService(retrofit: Retrofit): UserService = retrofit.create(UserService::class.java)
+
+    @Provides
+    fun getMusicService(retrofit: Retrofit): MusicService = retrofit.create(MusicService::class.java)
 }

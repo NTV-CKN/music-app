@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongList
 import com.infix.musicappv1.data.source.SongDataSource
-import com.infix.musicappv1.data.source.remote.param.PagingParam
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -12,8 +11,8 @@ class SongRepositoryImpl @Inject constructor(
     private val remote: SongDataSource.Remote,
     private val local: SongDataSource.Local
 ) : SongRepository {
-    override suspend fun loadSongsPaging(pagingParam: PagingParam): SongList? {
-        return remote.loadSongs(pagingParam)
+    override suspend fun loadSongsPaging(query: String, limit: Int, key: Int): SongList? {
+        return remote.loadSongs(query, limit, key)
     }
 
     override fun getAllSongsFlow(): Flow<List<Song>> {

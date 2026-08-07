@@ -8,7 +8,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.repository.artist.ArtistRepository
-import com.infix.musicappv1.data.repository.paging.ArtistRemoteMediator
+import com.infix.musicappv1.data.repository.paging.mediator.ArtistRemoteMediator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

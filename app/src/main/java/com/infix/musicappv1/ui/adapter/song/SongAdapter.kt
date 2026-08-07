@@ -83,11 +83,11 @@ class SongAdapter(
         notifyItemRangeChanged(0, this.songs.size)
     }
 
-    interface SongClickListener {
+    fun interface SongClickListener {
         fun onSongClick(song: Song, pos: Int)
     }
 
-    interface OptionSongClickListener {
+    fun interface OptionSongClickListener {
         fun onOptionClick(song: Song)
     }
 }

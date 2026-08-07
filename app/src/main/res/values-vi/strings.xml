@@ -105,4 +105,6 @@
     <string name="txt_manage_artist">Quản lý Ca sĩ</string>
     <string name="txt_manage_album">Quản lý Album</string>
     <string name="txt_manage_song">Quản lý Bài hát</string>
+    <string name="hint_search_song">Tìm kiếm theo tên bài hát.</string>
+    <string name="txt_song_not_found">Không tìm thấy bài hát phù hợp</string>
 </resources>

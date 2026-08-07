@@ -1,4 +1,4 @@
-package com.infix.musicappv1.data.repository.paging
+package com.infix.musicappv1.data.repository.paging.mediator
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType

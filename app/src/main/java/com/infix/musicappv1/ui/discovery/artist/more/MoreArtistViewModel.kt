@@ -5,7 +5,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.infix.musicappv1.data.repository.artist.ArtistRepository
-import com.infix.musicappv1.data.repository.paging.ArtistRemoteMediator
+import com.infix.musicappv1.data.repository.paging.mediator.ArtistRemoteMediator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

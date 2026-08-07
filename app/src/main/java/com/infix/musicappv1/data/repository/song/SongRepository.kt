@@ -3,11 +3,10 @@ package com.infix.musicappv1.data.repository.song
 import androidx.paging.PagingSource
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongList
-import com.infix.musicappv1.data.source.remote.param.PagingParam
 import kotlinx.coroutines.flow.Flow
 
 interface SongRepository {
-    suspend fun loadSongsPaging(pagingParam: PagingParam): SongList?
+    suspend fun loadSongsPaging(query: String, limit: Int, key: Int): SongList?
     fun getAllSongsFlow(): Flow<List<Song>>
     suspend fun insert(vararg song: Song)
     suspend fun getSongsByNameSongOrNameArtist(key: String): List<Song>
