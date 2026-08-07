@@ -9,5 +9,19 @@
         android:id="@+id/navigate_song_management"
         android:name="com.infix.musicappv1.ui.admin.song.SongManagementFragment"
         android:label="@string/txt_manage_song"
-        tools:layout="@layout/fragment_song_management" />
+        tools:layout="@layout/fragment_song_management">
+        <action
+            android:id="@+id/action_navigate_song_management_to_add_or_update_song"
+            app:destination="@id/navigate_add_or_update_song" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigate_add_or_update_song"
+        android:name="com.infix.musicappv1.ui.admin.song.update_add.AddOrUpdateSongFragment"
+        android:label="{addOrUpdate}"
+        tools:layout="@layout/fragment_add_or_update_song">
+        <argument
+            android:name="addOrUpdate"
+            android:defaultValue="@string/txt_update_song"
+            app:argType="reference" />
+    </fragment>
 </navigation>

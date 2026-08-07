@@ -112,5 +112,7 @@
     <string name="txt_detail_option">Show detail</string>
     <string name="txt_remove_option">Remove data</string>
     <string name="txt_update_option">Update data</string>
+    <string name="txt_update_song">Update song</string>
+    <string name="txt_add_song">Add song</string>
 
 </resources>

@@ -111,4 +111,6 @@
     <string name="txt_detail_option">Xem chi tiết</string>
     <string name="txt_remove_option">Xóa dữ liệu</string>
     <string name="txt_update_option">Chỉnh sửa thông tin</string>
+    <string name="txt_update_song">Cập nhật bài hát</string>
+    <string name="txt_add_song">Thêm bài hát</string>
 </resources>
