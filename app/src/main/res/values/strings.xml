@@ -108,5 +108,9 @@
     <string name="txt_manage_song">Manage Songs</string>
     <string name="hint_search_song">Find by name song</string>
     <string name="txt_song_not_found">Song not found</string>
+    <string name="txt_option">Option</string>
+    <string name="txt_detail_option">Show detail</string>
+    <string name="txt_remove_option">Remove data</string>
+    <string name="txt_update_option">Update data</string>
 
 </resources>

@@ -107,4 +107,8 @@
     <string name="txt_manage_song">Quản lý Bài hát</string>
     <string name="hint_search_song">Tìm kiếm theo tên bài hát.</string>
     <string name="txt_song_not_found">Không tìm thấy bài hát phù hợp</string>
+    <string name="txt_option">Tùy chọn</string>
+    <string name="txt_detail_option">Xem chi tiết</string>
+    <string name="txt_remove_option">Xóa dữ liệu</string>
+    <string name="txt_update_option">Chỉnh sửa thông tin</string>
 </resources>

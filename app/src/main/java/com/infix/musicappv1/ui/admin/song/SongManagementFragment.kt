@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.FragmentSongManagementBinding
 import com.infix.musicappv1.ui.adapter.admin.SongAdminPagingDataAdapter
+import com.infix.musicappv1.ui.dialog.CRUDOptionDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -22,6 +24,7 @@ import kotlinx.coroutines.launch
 class SongManagementFragment : Fragment() {
     private lateinit var binding: FragmentSongManagementBinding
     private lateinit var adapter: SongAdminPagingDataAdapter
+    private lateinit var crudOptionDialog: CRUDOptionDialog<Song>
 
     private var searchJob: Job? = null
 
@@ -41,6 +44,7 @@ class SongManagementFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initCrudOptDialog()
         observeSongManagementVM()
         initRecyclerView()
         setupSearchSong()
@@ -49,6 +53,14 @@ class SongManagementFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         searchJob = null
+    }
+
+    private fun initCrudOptDialog() {
+        crudOptionDialog = CRUDOptionDialog(
+            onUpdate = {song ->},
+            onView = {song -> },
+            onDelete = {song -> }
+        )
     }
 
     private fun observeSongManagementVM() {
@@ -64,11 +76,16 @@ class SongManagementFragment : Fragment() {
     private fun initRecyclerView() {
         adapter = SongAdminPagingDataAdapter(
             { song, pos -> },
-            { song -> }
+            { song -> showCRUDDialog(song)}
         )
 
         binding.rvSongs.adapter = adapter
         songManagementViewModel.setSongsPagingState("")
+    }
+
+    private fun showCRUDDialog(song: Song) {
+        crudOptionDialog.setData(song)
+        crudOptionDialog.show(requireActivity().supportFragmentManager, null)
     }
 
     private fun setupSearchSong() {
