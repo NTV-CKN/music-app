@@ -2,13 +2,9 @@ package com.infix.musicappv1.ui.user
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -87,27 +83,23 @@ class UserManagementActivity : AppCompatActivity() {
     }
 
     private fun setupToolbarMenu() {
-        addMenuProvider(object : androidx.core.view.MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.menu_toolbar_user_management, menu)
-            }
+        binding.toolbar.inflateMenu(R.menu.menu_toolbar_user_management)
 
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return if (menuItem.itemId == R.id.menu_action_sign_out) {
-                    SnackbarUtils.showSnackbarWithAction(
-                        binding.root,
-                        getString(R.string.txt_confirm_sign_out),
-                        getString(R.string.txt_signout),
-                        Snackbar.LENGTH_LONG
-                    ) {
-                        handleOnLogout()
-                    }
-                    true
-                } else {
-                    false
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            if (menuItem.itemId == R.id.menu_action_sign_out) {
+                SnackbarUtils.showSnackbarWithAction(
+                    binding.root,
+                    getString(R.string.txt_confirm_sign_out),
+                    getString(R.string.txt_signout),
+                    Snackbar.LENGTH_LONG
+                ) {
+                    handleOnLogout()
                 }
+                true
+            } else {
+                false
             }
-        }, this, Lifecycle.State.RESUMED)
+        }
     }
 
     private fun setupOnLogout() {

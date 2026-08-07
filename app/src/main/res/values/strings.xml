@@ -106,5 +106,7 @@
     <string name="txt_manage_artist">Manage Artists</string>
     <string name="txt_manage_album">Manage Albums</string>
     <string name="txt_manage_song">Manage Songs</string>
+    <string name="hint_search_song">Find by name song</string>
+    <string name="txt_song_not_found">Song not found</string>
 
 </resources>

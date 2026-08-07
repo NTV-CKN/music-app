@@ -19,7 +19,9 @@ import com.infix.musicappv1.databinding.ActivityAdminBinding
 import com.infix.musicappv1.ui.MainActivity
 import com.infix.musicappv1.ui.auth.AuthViewModel
 import com.infix.musicappv1.utils.SnackbarUtils
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AdminActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminBinding
     private val authViewModel by viewModels<AuthViewModel>()
