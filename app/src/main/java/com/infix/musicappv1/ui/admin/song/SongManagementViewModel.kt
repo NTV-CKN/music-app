@@ -29,8 +29,8 @@ class SongManagementViewModel @Inject constructor(
                 prefetchDistance = 5
             ),
             pagingSourceFactory = { factory.create(query) }
-        ).flow.cachedIn(viewModelScope)
-    }
+        ).flow
+    }.cachedIn(viewModelScope)
 
     fun setSongsPagingState(query: String) {
         if (_currentQuery.value != query) {
