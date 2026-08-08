@@ -113,4 +113,6 @@
     <string name="txt_update_option">Chỉnh sửa thông tin</string>
     <string name="txt_update_song">Cập nhật bài hát</string>
     <string name="txt_add_song">Thêm bài hát</string>
+    <string name="txt_error_format">Sai định dạng</string>
+
 </resources>

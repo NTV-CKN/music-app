@@ -115,4 +115,6 @@
     <string name="txt_update_song">Update song</string>
     <string name="txt_add_song">Add song</string>
 
+    <string name="txt_error_format">Wrong format</string>
+
 </resources>
