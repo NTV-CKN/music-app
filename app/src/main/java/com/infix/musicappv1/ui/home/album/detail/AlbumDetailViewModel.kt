@@ -8,7 +8,6 @@ import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.album.AlbumRepository
 import com.infix.musicappv1.data.source.Result
-import com.infix.musicappv1.data.source.remote.param.SearchParam
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -34,11 +33,8 @@ class AlbumDetailViewModel @Inject constructor(
 
     fun loadSongs(albumId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val searchParam = SearchParam(
-                queryType = SearchParam.QUERY_TYPE_ALBUM_WITH_SONG,
-                query = albumId
-            )
-            val result = albumRepository.loadSongsByAlbumId(searchParam)
+
+            val result = albumRepository.loadSongsByAlbumId(albumId)
             if (result is Result.Success) {
                 _songs.emit(result.data)
                 songsTrack = result.data

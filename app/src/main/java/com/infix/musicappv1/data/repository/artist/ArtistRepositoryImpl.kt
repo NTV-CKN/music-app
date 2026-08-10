@@ -13,10 +13,6 @@ class ArtistRepositoryImpl @Inject constructor(
     private val local: ArtistDataSource.Local,
     private val remote: ArtistDataSource.Remote
 ) : ArtistRepository {
-    override suspend fun loadArtistsRemote(): Result<List<Artist>> {
-        return remote.loadArtistsRemote()
-    }
-
     override fun getArtistsPaging(): PagingSource<Int, Artist> {
         return local.getArtistsPaging()
     }

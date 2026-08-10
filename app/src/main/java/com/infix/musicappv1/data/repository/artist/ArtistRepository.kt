@@ -8,7 +8,6 @@ import com.infix.musicappv1.data.source.Result
 import kotlinx.coroutines.flow.Flow
 
 interface ArtistRepository {
-    suspend fun loadArtistsRemote(): Result<List<Artist>>
     fun getArtistsPaging(): PagingSource<Int, Artist>
     fun getNArtistsPaging(limit: Int = 10): PagingSource<Int, Artist>
     fun getLimitArtists(limit: Int = 10): Flow<List<Artist>>

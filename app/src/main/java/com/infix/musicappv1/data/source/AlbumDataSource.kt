@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.album.AlbumList
 import com.infix.musicappv1.data.model.song.Song
-import com.infix.musicappv1.data.source.remote.param.SearchParam
 import kotlinx.coroutines.flow.Flow
 
 interface AlbumDataSource {
@@ -15,7 +14,7 @@ interface AlbumDataSource {
             key: Int
         ): AlbumList?
 
-        suspend fun loadSongsByAlbumId(searchParam: SearchParam): Result<List<Song>>
+        suspend fun loadSongsByAlbumId(albumId: String): Result<List<Song>>
     }
 
     interface Local {

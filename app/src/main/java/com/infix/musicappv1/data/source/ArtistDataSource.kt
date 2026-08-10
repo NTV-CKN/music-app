@@ -21,7 +21,7 @@ interface ArtistDataSource {
     }
 
     interface Remote {
-        suspend fun loadArtistsRemote(): Result<List<Artist>>
+//        suspend fun loadArtistsRemote(): Result<List<Artist>>
         suspend fun loadArtistsPaging(
             query: String,
             limit: Int,

@@ -101,6 +101,7 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid.v111)
+    implementation(libs.firebase.storage)
 
     // --- 6. Android KTX & UI ---
     implementation(libs.androidx.activity.ktx)
