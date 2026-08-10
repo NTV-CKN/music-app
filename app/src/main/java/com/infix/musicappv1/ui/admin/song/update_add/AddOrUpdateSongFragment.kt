@@ -15,11 +15,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.snackbar.Snackbar
+import com.infix.musicappv1.data.model.album.Album
+import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.databinding.FragmentAddOrUpdateSongBinding
 import com.infix.musicappv1.enums.Genre
 import com.infix.musicappv1.ui.admin.bottom_sheet.SAAPickerBottomSheet
 import com.infix.musicappv1.ui.admin.bottom_sheet.SAAPickerViewModel
 import com.infix.musicappv1.utils.FormatSongPathUtils
+import com.infix.musicappv1.utils.SnackbarUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -101,11 +105,19 @@ class AddOrUpdateSongFragment : Fragment() {
 
         //select artist
         binding.tvArtist.setOnClickListener {
-            openSaaPickerSheet(SAAPickerViewModel.TypeSAAPicker.ARTIST)
+            openSaaPickerSheet<Artist>(SAAPickerViewModel.TypeSAAPicker.ARTIST) { artist ->
+                binding.tvArtist.text = artist.name
+                addOrUpdateSongViewModel.params.value?.song?.artist = artist.name
+                addOrUpdateSongViewModel.params.value?.song?.artistId = artist.id
+            }
         }
+
         //select album
         binding.tvAlbum.setOnClickListener {
-            openSaaPickerSheet(SAAPickerViewModel.TypeSAAPicker.ALBUM)
+            openSaaPickerSheet<Album>(SAAPickerViewModel.TypeSAAPicker.ALBUM) { album ->
+                binding.tvAlbum.text = album.name
+                addOrUpdateSongViewModel.params.value?.song?.album = album.name
+            }
         }
 
         //edt path/url song
@@ -116,6 +128,9 @@ class AddOrUpdateSongFragment : Fragment() {
 
         //vip
         setupSwitchVipClick()
+
+        //save song
+        handleSaveSong()
     }
 
     private fun initializeForm() {
@@ -165,10 +180,14 @@ class AddOrUpdateSongFragment : Fragment() {
         }
     }
 
-    private fun openSaaPickerSheet(type: SAAPickerViewModel.TypeSAAPicker) {
+    private fun <T> openSaaPickerSheet(
+        type: SAAPickerViewModel.TypeSAAPicker,
+        onItemClick: (data: T) -> Unit
+    ) {
         SAAPickerBottomSheet.openSaaPickerSheet(
             type,
-            requireActivity().supportFragmentManager
+            requireActivity().supportFragmentManager,
+            onItemClick
         )
     }
 
@@ -181,7 +200,7 @@ class AddOrUpdateSongFragment : Fragment() {
         //on text change
         binding.edtSource.doOnTextChanged { text, _, _, _ ->
             val str = text.toString()
-            if(!str.isEmpty() && !FormatSongPathUtils.isValidUriOrUrl(str)) {
+            if (!str.isEmpty() && !FormatSongPathUtils.isValidUriOrUrl(str)) {
                 binding.tilSource.error = getString(com.infix.musicappv1.R.string.txt_error_format)
             } else {
                 binding.tilSource.error = null
@@ -200,6 +219,75 @@ class AddOrUpdateSongFragment : Fragment() {
     private fun setupSwitchVipClick() {
         binding.switchIsVip.setOnCheckedChangeListener { _, isChecked ->
             addOrUpdateSongViewModel.params.value?.song?.isVip = isChecked
+        }
+    }
+
+    private fun handleSaveSong() {
+        binding.btnSave.setOnClickListener {
+            val error = addOrUpdateSongViewModel.validateSong()
+            if (error != null) {
+                handleValidationError(error)
+
+                return@setOnClickListener
+            }
+        }
+    }
+
+    private fun handleValidationError(error: AddOrUpdateSongViewModel.ValidationError) {
+        when (error) {
+            is AddOrUpdateSongViewModel.ValidationError.EmptyImage -> {
+                SnackbarUtils.showBaseSnackbar(
+                    binding.root,
+                    getString(com.infix.musicappv1.R.string.error_image_song_empty),
+                    Snackbar.LENGTH_SHORT
+                )
+            }
+
+            is AddOrUpdateSongViewModel.ValidationError.EmptyTitle -> {
+                val message = getString(com.infix.musicappv1.R.string.error_title_song_empty)
+                binding.edtTitle.error = message
+                binding.edtTitle.requestFocus()
+                SnackbarUtils.showBaseSnackbar(
+                    binding.root,
+                    message,
+                    Snackbar.LENGTH_SHORT
+                )
+            }
+
+            is AddOrUpdateSongViewModel.ValidationError.InvalidArtist -> {
+                SnackbarUtils.showBaseSnackbar(
+                    binding.root,
+                    getString(com.infix.musicappv1.R.string.error_artist_song_empty),
+                    Snackbar.LENGTH_SHORT
+                )
+            }
+
+            is AddOrUpdateSongViewModel.ValidationError.InvalidGenre -> {
+                SnackbarUtils.showBaseSnackbar(
+                    binding.root,
+                    getString(com.infix.musicappv1.R.string.error_genre_song_empty),
+                    Snackbar.LENGTH_SHORT
+                )
+            }
+
+            is AddOrUpdateSongViewModel.ValidationError.EmptySource -> {
+                val message = getString(com.infix.musicappv1.R.string.error_source_song_empty)
+                binding.tilSource.error = message
+                binding.edtSource.requestFocus()
+                SnackbarUtils.showBaseSnackbar(
+                    binding.root,
+                    message,
+                    Snackbar.LENGTH_SHORT
+                )
+            }
+
+            AddOrUpdateSongViewModel.ValidationError.EmptyAlbum -> {
+                SnackbarUtils.showBaseSnackbar(
+                    binding.root,
+                    getString(com.infix.musicappv1.R.string.error_album_song_empty),
+                    Snackbar.LENGTH_SHORT
+                )
+            }
         }
     }
 }

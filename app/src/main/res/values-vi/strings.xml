@@ -115,5 +115,10 @@
     <string name="txt_add_song">Thêm bài hát</string>
     <string name="txt_error_format">Sai định dạng</string>
     <string name="txt_search_by_name">Tìm kiếm theo tên</string>
-
+    <string name="error_image_song_empty">Vui lòng chọn ảnh bìa bài hát</string>
+    <string name="error_title_song_empty">Tên bài hát không được để trống</string>
+    <string name="error_artist_song_empty">Vui lòng chọn ca sĩ trình bày</string>
+    <string name="error_genre_song_empty">Vui lòng chọn thể loại nhạc</string>
+    <string name="error_source_song_empty">Vui lòng nhập đường dẫn bài hát</string>
+    <string name="error_album_song_empty">Vui lòng chọn album</string>
 </resources>
