@@ -21,7 +21,7 @@ interface MusicService {
     @GET("/resources/braniumapis/artists.json")
     suspend fun loadArtists(): Response<ArtistList>
 
-    @GET("v1/admin-song/songs")
+    @GET("v1/admin/songs")
     suspend fun loadSongsPaging(
         @Query("query") query: String,
         @Query("limit") limit: Int,

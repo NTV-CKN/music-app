@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -34,6 +35,22 @@ class AddOrUpdateSongFragment : Fragment() {
         uri?.let {
             selectedAudioUri = it
             binding.edtSource.setText(it.toString())
+            addOrUpdateSongViewModel.params.value?.song?.source = selectedAudioUri.toString()
+        }
+    }
+
+    //Photo picker
+    private var selectedImageUri: Uri? = null
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        uri?.let {
+            selectedImageUri = it
+            binding.ivCover.apply {
+                setPadding(0, 0, 0, 0)
+                setImageURI(it)
+            }
+            addOrUpdateSongViewModel.params.value?.song?.image = selectedImageUri.toString()
         }
     }
 
@@ -77,7 +94,8 @@ class AddOrUpdateSongFragment : Fragment() {
             addOrUpdateSongViewModel.params.value?.song?.title = text.toString()
         }
 
-        //edt path song
+        //image song
+        setupPhotoPicker()
 
         //select artist
         //select album
@@ -127,6 +145,14 @@ class AddOrUpdateSongFragment : Fragment() {
     ) {
         if (addOrUpdateSongParams.isUpdate) {
             //inflate data
+        }
+    }
+
+    private fun setupPhotoPicker() {
+        binding.ivCover.setOnClickListener {
+            pickImageLauncher.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            )
         }
     }
 

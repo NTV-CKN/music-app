@@ -20,6 +20,23 @@
             android:text="@string/txt_info_song"
             android:textAppearance="?attr/textAppearanceHeadlineMedium"
             android:textStyle="bold" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_cover"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:background="?attr/colorSurfaceVariant"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+            app:srcCompat="@android:drawable/ic_menu_gallery"
+            app:strokeColor="?attr/colorOutline"
+            app:strokeWidth="1dp" />
+
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
