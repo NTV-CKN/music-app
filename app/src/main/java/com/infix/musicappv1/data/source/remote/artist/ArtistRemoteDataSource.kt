@@ -37,7 +37,7 @@ class ArtistRemoteDataSource @Inject constructor(
         limit: Int,
         key: Int
     ): ArtistList? {
-        val result = musicService.loadArtistsPaging(query, limit, limit)
+        val result = musicService.loadArtistsPaging(query, limit, key)
         return if (result.isSuccessful) {
             result.body() ?: ArtistList()
         } else

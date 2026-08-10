@@ -6,7 +6,6 @@ import com.infix.musicappv1.data.model.playlist.PlaylistList
 import com.infix.musicappv1.data.model.song.SongList
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface MusicService {
@@ -26,14 +25,14 @@ interface MusicService {
         @Query("key") key: Int
     ): Response<SongList>
 
-    @POST("v1/admin/artists")
+    @GET("v1/admin/artists")
     suspend fun loadArtistsPaging(
         @Query("query") query: String,
         @Query("limit") limit: Int,
         @Query("key") key: Int
     ): Response<ArtistList>
 
-    @POST("v1/admin/albums")
+    @GET("v1/admin/albums")
     suspend fun loadAlbumsPaging(
         @Query("query") query: String,
         @Query("limit") limit: Int,

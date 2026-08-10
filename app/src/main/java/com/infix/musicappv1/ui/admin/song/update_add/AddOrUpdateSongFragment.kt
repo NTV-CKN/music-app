@@ -17,6 +17,8 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.infix.musicappv1.databinding.FragmentAddOrUpdateSongBinding
 import com.infix.musicappv1.enums.Genre
+import com.infix.musicappv1.ui.admin.bottom_sheet.SAAPickerBottomSheet
+import com.infix.musicappv1.ui.admin.bottom_sheet.SAAPickerViewModel
 import com.infix.musicappv1.utils.FormatSongPathUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -98,7 +100,14 @@ class AddOrUpdateSongFragment : Fragment() {
         setupPhotoPicker()
 
         //select artist
+        binding.tvArtist.setOnClickListener {
+            openSaaPickerSheet(SAAPickerViewModel.TypeSAAPicker.ARTIST)
+        }
         //select album
+        binding.tvAlbum.setOnClickListener {
+            openSaaPickerSheet(SAAPickerViewModel.TypeSAAPicker.ALBUM)
+        }
+
         //edt path/url song
         setupAudioPicker()
 
@@ -154,6 +163,13 @@ class AddOrUpdateSongFragment : Fragment() {
                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
             )
         }
+    }
+
+    private fun openSaaPickerSheet(type: SAAPickerViewModel.TypeSAAPicker) {
+        SAAPickerBottomSheet.openSaaPickerSheet(
+            type,
+            requireActivity().supportFragmentManager
+        )
     }
 
     private fun setupAudioPicker() {

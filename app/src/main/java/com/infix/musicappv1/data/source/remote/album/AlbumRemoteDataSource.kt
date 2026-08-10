@@ -17,7 +17,7 @@ class AlbumRemoteDataSource @Inject constructor(
         limit: Int,
         key: Int
     ): AlbumList? {
-        val result = musicService.loadAlbumsPaging(query, limit, limit)
+        val result = musicService.loadAlbumsPaging(query, limit, key)
         return if (result.isSuccessful) {
             result.body() ?: AlbumList()
         } else

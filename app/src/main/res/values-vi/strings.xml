@@ -114,5 +114,6 @@
     <string name="txt_update_song">Cập nhật bài hát</string>
     <string name="txt_add_song">Thêm bài hát</string>
     <string name="txt_error_format">Sai định dạng</string>
+    <string name="txt_search_by_name">Tìm kiếm theo tên</string>
 
 </resources>
