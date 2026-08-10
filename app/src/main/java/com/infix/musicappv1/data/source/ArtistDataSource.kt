@@ -2,8 +2,8 @@ package com.infix.musicappv1.data.source
 
 import androidx.paging.PagingSource
 import com.infix.musicappv1.data.model.artist.Artist
+import com.infix.musicappv1.data.model.artist.ArtistList
 import com.infix.musicappv1.data.model.song.Song
-import com.infix.musicappv1.data.source.remote.param.PagingParam
 import kotlinx.coroutines.flow.Flow
 
 interface ArtistDataSource {
@@ -22,7 +22,12 @@ interface ArtistDataSource {
 
     interface Remote {
         suspend fun loadArtistsRemote(): Result<List<Artist>>
-        suspend fun loadArtistsPaging(pagingParam: PagingParam): List<Artist>?
+        suspend fun loadArtistsPaging(
+            query: String,
+            limit: Int,
+            key: Int
+        ): ArtistList?
+
         suspend fun loadSongsByArtistId(artistId: Int): Result<List<Song>>
     }
 }

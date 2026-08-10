@@ -2,11 +2,10 @@ package com.infix.musicappv1.data.repository.artist
 
 import androidx.paging.PagingSource
 import com.infix.musicappv1.data.model.artist.Artist
+import com.infix.musicappv1.data.model.artist.ArtistList
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.source.ArtistDataSource
 import com.infix.musicappv1.data.source.Result
-import com.infix.musicappv1.data.source.remote.param.PagingParam
-import com.infix.musicappv1.data.source.remote.param.SearchParam
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -58,9 +57,14 @@ class ArtistRepositoryImpl @Inject constructor(
         return local.getArtistById(artistId)
     }
 
-    override suspend fun loadArtistsPaging(pagingParam: PagingParam): List<Artist>? {
-        return remote.loadArtistsPaging(pagingParam)
+    override suspend fun loadArtistsPaging(
+        query: String,
+        limit: Int,
+        key: Int
+    ): ArtistList? {
+        return remote.loadArtistsPaging(query, limit, key)
     }
+
 
     override suspend fun loadSongsByArtistId(artistId: Int): Result<List<Song>> {
         return remote.loadSongsByArtistId(artistId)
