@@ -18,10 +18,12 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.artist.Artist
+import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.FragmentAddOrUpdateSongBinding
 import com.infix.musicappv1.enums.Genre
 import com.infix.musicappv1.ui.admin.bottom_sheet.SAAPickerBottomSheet
 import com.infix.musicappv1.ui.admin.bottom_sheet.SAAPickerViewModel
+import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
 import com.infix.musicappv1.utils.FormatSongPathUtils
 import com.infix.musicappv1.utils.SnackbarUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,6 +34,8 @@ import kotlinx.coroutines.flow.onEach
 class AddOrUpdateSongFragment : Fragment() {
     private lateinit var binding: FragmentAddOrUpdateSongBinding
     private val addOrUpdateSongViewModel by activityViewModels<AddOrUpdateSongViewModel>()
+
+    private lateinit var loadingDialogFragment: LoadingDialogFragment
 
     //File picker
     private var selectedAudioUri: Uri? = null
@@ -74,6 +78,8 @@ class AddOrUpdateSongFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadingDialogFragment = LoadingDialogFragment()
+
         observeAddOrUpdateVM()
         setupEvents()
     }
@@ -84,12 +90,26 @@ class AddOrUpdateSongFragment : Fragment() {
     }
 
     private fun observeAddOrUpdateVM() {
+        //Song and Option update
         addOrUpdateSongViewModel.params
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach {
                 if (it != null)
                     handleAddOrUpdateParams(it)
             }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+        //Is loading
+        addOrUpdateSongViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading == null) return@observe
+
+            try {
+                if (isLoading)
+                    loadingDialogFragment.show(requireActivity().supportFragmentManager, null)
+                else
+                    loadingDialogFragment.dismissNow()
+            } catch (_: Exception) {
+            }
+        }
     }
 
     private fun setupEvents() {
@@ -227,8 +247,26 @@ class AddOrUpdateSongFragment : Fragment() {
             val error = addOrUpdateSongViewModel.validateSong()
             if (error != null) {
                 handleValidationError(error)
-
                 return@setOnClickListener
+            }
+
+            addOrUpdateSongViewModel.saveSong { resultResponse ->
+                SnackbarUtils.showBaseSnackbar(
+                    binding.root,
+                    resultResponse.message,
+                    Snackbar.LENGTH_SHORT
+                )
+
+                if (resultResponse.success) {
+                    val params = addOrUpdateSongViewModel.params.value
+                    if (params != null && !params.isUpdate)
+                        addOrUpdateSongViewModel.setIsUpdateSongState(
+                            AddOrUpdateSongViewModel.AddOrUpdateSongParams(
+                                false,
+                                Song()
+                            )
+                        )
+                }
             }
         }
     }

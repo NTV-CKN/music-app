@@ -1,9 +1,14 @@
 package com.infix.musicappv1.data.repository.song
 
 import androidx.paging.PagingSource
+import com.infix.musicappv1.data.dto.BaseResultResponse
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongList
+import com.infix.musicappv1.data.source.Result
 import com.infix.musicappv1.data.source.SongDataSource
+import com.infix.musicappv1.ui.admin.song.update_add.AddOrUpdateSongViewModel
+import com.infix.musicappv1.utils.FormatSongPathUtils
+import com.infix.musicappv1.utils.GenerateIdHelper
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -48,8 +53,61 @@ class SongRepositoryImpl @Inject constructor(
         return local.getAllSongsPaging()
     }
 
+    override suspend fun saveSong(song: Song): Result<BaseResultResponse> {
+        try {
+            song.id = GenerateIdHelper.generateSongId()
+            val imageUpload: String? =
+                if (!FormatSongPathUtils.isAndroidUri(song.image))
+                    null
+                else
+                    song.image
+            val sourceUpload: String? =
+                if (!FormatSongPathUtils.isAndroidUri(song.source))
+                    null
+                else
+                    song.source
+
+            val resultUpload = uploadSourcesSong(
+                song.id,
+                imageUpload,
+                sourceUpload
+            )
+
+//            if (!checkUploadSuccess(resultUpload, song)) {
+//                return Result.Error(Exception("Không thể tải tệp tin"))
+//            }
+
+            resultUpload.sourceUrl?.let { song.source = it }
+            resultUpload.imageUrl?.let { song.image = it }
+
+            val response = remote.saveSong(song)
+            return if (response.isSuccessful) {
+                Result.Success(
+                    response.body() ?: BaseResultResponse(
+                        true, "Body là null"
+                    )
+                )
+            } else {
+                Result.Success(
+                    BaseResultResponse(
+                        false, "Thao tác không thành công"
+                    )
+                )
+            }
+        } catch (ex: Exception) {
+            return Result.Error(ex)
+        }
+    }
+
+    override suspend fun uploadSourcesSong(
+        id: String,
+        image: String?,
+        source: String?
+    ): AddOrUpdateSongViewModel.MediaUploadResult {
+        return remote.uploadSourcesSong(id, image = image, source = source)
+    }
+
     override suspend fun getSongsByNameSongOrNameArtist(key: String): List<Song> {
         return local.getSongsByNameSongOrNameArtist(key)
     }
-
 }

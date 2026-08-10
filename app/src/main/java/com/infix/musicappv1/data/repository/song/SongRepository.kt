@@ -1,8 +1,11 @@
 package com.infix.musicappv1.data.repository.song
 
 import androidx.paging.PagingSource
+import com.infix.musicappv1.data.dto.BaseResultResponse
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongList
+import com.infix.musicappv1.data.source.Result
+import com.infix.musicappv1.ui.admin.song.update_add.AddOrUpdateSongViewModel
 import kotlinx.coroutines.flow.Flow
 
 interface SongRepository {
@@ -16,4 +19,12 @@ interface SongRepository {
     fun getTop15SongMostHeard(): Flow<List<Song>>
     fun getTop40SongMostHeard(): Flow<List<Song>>
     fun getAllSongsPaging(): PagingSource<Int, Song>
+
+    //admin
+    suspend fun saveSong(song: Song): Result<BaseResultResponse>
+    suspend fun uploadSourcesSong(
+        id: String,
+        image: String?,
+        source: String?
+    ): AddOrUpdateSongViewModel.MediaUploadResult
 }

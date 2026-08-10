@@ -6,7 +6,6 @@ import com.infix.musicappv1.data.model.album.AlbumList
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.source.AlbumDataSource
 import com.infix.musicappv1.data.source.Result
-import com.infix.musicappv1.data.source.remote.param.SearchParam
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -39,7 +38,7 @@ class AlbumRepositoryImpl @Inject constructor(
         return local.loadNAlbumPaging(limit)
     }
 
-    override suspend fun loadSongsByAlbumId(searchParam: SearchParam): Result<List<Song>> {
-        return remote.loadSongsByAlbumId(searchParam)
+    override suspend fun loadSongsByAlbumId(albumId: String): Result<List<Song>> {
+        return remote.loadSongsByAlbumId(albumId)
     }
 }

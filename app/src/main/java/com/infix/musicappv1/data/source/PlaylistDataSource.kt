@@ -19,6 +19,6 @@ interface PlaylistDataSource {
         fun getLimitPlaylistCustomWithSong(limit: Int = 10): Flow<List<PlaylistWithSongs>?>
     }
     interface Remote{
-        suspend fun loadSystemPlaylists(): Result<List<Playlist>>
+//        suspend fun loadSystemPlaylists(): Result<List<Playlist>>
     }
 }

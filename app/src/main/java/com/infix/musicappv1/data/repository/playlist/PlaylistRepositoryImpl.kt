@@ -51,8 +51,4 @@ class PlaylistRepositoryImpl @Inject constructor(
     override fun getLimitPlaylistCustomWithSong(limit: Int): Flow<List<PlaylistWithSongs>?> {
         return local.getLimitPlaylistCustomWithSong(limit)
     }
-
-    override suspend fun loadSystemPlaylists(): Result<List<Playlist>> {
-        return remote.loadSystemPlaylists()
-    }
 }
