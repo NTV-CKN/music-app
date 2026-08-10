@@ -11,7 +11,7 @@ import javax.inject.Inject
 class AddOrUpdateSongViewModel @Inject constructor(): ViewModel() {
     data class AddOrUpdateSongParams(
         val isUpdate: Boolean,
-        val song: Song? = null,
+        val song: Song = Song(),
         val current: Long = System.currentTimeMillis()
     )
 
