@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.infix.musicappv1.data.model.album.Album
+import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.databinding.FragmentAddOrUpdateSongBinding
 import com.infix.musicappv1.enums.Genre
 import com.infix.musicappv1.ui.admin.bottom_sheet.SAAPickerBottomSheet
@@ -101,11 +103,18 @@ class AddOrUpdateSongFragment : Fragment() {
 
         //select artist
         binding.tvArtist.setOnClickListener {
-            openSaaPickerSheet(SAAPickerViewModel.TypeSAAPicker.ARTIST)
+            openSaaPickerSheet<Artist>(SAAPickerViewModel.TypeSAAPicker.ARTIST) {artist ->
+                binding.tvArtist.text = artist.name
+                addOrUpdateSongViewModel.params.value?.song?.artist = artist.name
+                addOrUpdateSongViewModel.params.value?.song?.artistId = artist.id
+            }
         }
         //select album
         binding.tvAlbum.setOnClickListener {
-            openSaaPickerSheet(SAAPickerViewModel.TypeSAAPicker.ALBUM)
+            openSaaPickerSheet<Album>(SAAPickerViewModel.TypeSAAPicker.ALBUM){ album ->
+                binding.tvAlbum.text = album.name
+                addOrUpdateSongViewModel.params.value?.song?.album = album.name
+            }
         }
 
         //edt path/url song
@@ -165,10 +174,14 @@ class AddOrUpdateSongFragment : Fragment() {
         }
     }
 
-    private fun openSaaPickerSheet(type: SAAPickerViewModel.TypeSAAPicker) {
+    private fun <T> openSaaPickerSheet(
+        type: SAAPickerViewModel.TypeSAAPicker,
+        onItemClick: (data: T) -> Unit
+    ) {
         SAAPickerBottomSheet.openSaaPickerSheet(
             type,
-            requireActivity().supportFragmentManager
+            requireActivity().supportFragmentManager,
+            onItemClick
         )
     }
 
@@ -181,7 +194,7 @@ class AddOrUpdateSongFragment : Fragment() {
         //on text change
         binding.edtSource.doOnTextChanged { text, _, _, _ ->
             val str = text.toString()
-            if(!str.isEmpty() && !FormatSongPathUtils.isValidUriOrUrl(str)) {
+            if (!str.isEmpty() && !FormatSongPathUtils.isValidUriOrUrl(str)) {
                 binding.tilSource.error = getString(com.infix.musicappv1.R.string.txt_error_format)
             } else {
                 binding.tilSource.error = null

@@ -23,7 +23,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class SAAPickerBottomSheet<T : Any>(
-    private val type: SAAPickerViewModel.TypeSAAPicker
+    private val type: SAAPickerViewModel.TypeSAAPicker,
+    private val onItemClick: (data: T) -> Unit
 ) : BottomSheetDialogFragment() {
     private lateinit var binding: DialogFragmentSaaPickerBinding
     private lateinit var adapter: SAAPickerPagingDataAdapter<T>
@@ -54,7 +55,10 @@ class SAAPickerBottomSheet<T : Any>(
     }
 
     private fun initRecyclerView() {
-        adapter = SAAPickerPagingDataAdapter { item -> }
+        adapter = SAAPickerPagingDataAdapter { item ->
+            onItemClick.invoke(item)
+            dismiss()
+        }
 
         binding.rvSongsSaaPicker.adapter = adapter
     }
@@ -68,7 +72,8 @@ class SAAPickerBottomSheet<T : Any>(
                     .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                     .onEach {
                         Log.d("SSI", "SONG")
-                        adapter.submitData(it as PagingData<T>) }
+                        adapter.submitData(it as PagingData<T>)
+                    }
                     .launchIn(viewLifecycleOwner.lifecycleScope)
             }
 
@@ -79,7 +84,8 @@ class SAAPickerBottomSheet<T : Any>(
                     .onEach {
                         Log.d("SSI", "ALBUM")
 
-                        adapter.submitData(it as PagingData<T>) }
+                        adapter.submitData(it as PagingData<T>)
+                    }
                     .launchIn(viewLifecycleOwner.lifecycleScope)
             }
 
@@ -90,7 +96,8 @@ class SAAPickerBottomSheet<T : Any>(
                     .onEach {
                         Log.d("SSI", "ARTIST")
 
-                        adapter.submitData(it as PagingData<T>) }
+                        adapter.submitData(it as PagingData<T>)
+                    }
                     .launchIn(viewLifecycleOwner.lifecycleScope)
             }
         }
@@ -107,23 +114,34 @@ class SAAPickerBottomSheet<T : Any>(
     }
 
     companion object {
-        fun openSaaPickerSheet(
+        @Suppress("UNCHECKED_CAST")
+        fun <T> openSaaPickerSheet(
             type: SAAPickerViewModel.TypeSAAPicker,
             fragmentManager: FragmentManager,
+            onItemClick: (data: T) -> Unit
         ) {
             when (type) {
                 SAAPickerViewModel.TypeSAAPicker.SONG -> {
-                    SAAPickerBottomSheet<Song>(SAAPickerViewModel.TypeSAAPicker.SONG)
+                    SAAPickerBottomSheet(
+                        SAAPickerViewModel.TypeSAAPicker.SONG,
+                        onItemClick as (data: Song) -> Unit,
+                    )
                         .show(fragmentManager, null)
                 }
 
                 SAAPickerViewModel.TypeSAAPicker.ALBUM -> {
-                    SAAPickerBottomSheet<Album>(SAAPickerViewModel.TypeSAAPicker.ALBUM)
+                    SAAPickerBottomSheet(
+                        SAAPickerViewModel.TypeSAAPicker.ALBUM,
+                        onItemClick as (data: Album) -> Unit,
+                    )
                         .show(fragmentManager, null)
                 }
 
                 SAAPickerViewModel.TypeSAAPicker.ARTIST -> {
-                    SAAPickerBottomSheet<Artist>(SAAPickerViewModel.TypeSAAPicker.ARTIST)
+                    SAAPickerBottomSheet(
+                        SAAPickerViewModel.TypeSAAPicker.ARTIST,
+                        onItemClick as (data: Artist) -> Unit,
+                    )
                         .show(fragmentManager, null)
                 }
             }
