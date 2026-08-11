@@ -21,7 +21,7 @@ interface SongRepository {
     fun getAllSongsPaging(): PagingSource<Int, Song>
 
     //admin
-    suspend fun saveSong(song: Song): Result<BaseResultResponse>
+    suspend fun saveSong(song: Song, isUpdate: Boolean): Result<BaseResultResponse>
     suspend fun uploadSourcesSong(
         id: String,
         image: String?,

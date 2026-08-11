@@ -70,7 +70,7 @@ class AddOrUpdateSongViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             val song = params.value!!.song
-            val response = songRepository.saveSong(song)
+            val response = songRepository.saveSong(song, params.value!!.isUpdate)
 
             if (response is Result.Success) {
                 callback.invoke(response.data)

@@ -53,9 +53,11 @@ class SongRepositoryImpl @Inject constructor(
         return local.getAllSongsPaging()
     }
 
-    override suspend fun saveSong(song: Song): Result<BaseResultResponse> {
+    override suspend fun saveSong(song: Song, isUpdate: Boolean): Result<BaseResultResponse> {
         try {
+            if (!isUpdate || song.id.isBlank()) {
             song.id = GenerateIdHelper.generateSongId()
+        }
             val imageUpload: String? =
                 if (!FormatSongPathUtils.isAndroidUri(song.image))
                     null
@@ -73,24 +75,25 @@ class SongRepositoryImpl @Inject constructor(
                 sourceUpload
             )
 
-//            if (!checkUploadSuccess(resultUpload, song)) {
-//                return Result.Error(Exception("Không thể tải tệp tin"))
-//            }
-
             resultUpload.sourceUrl?.let { song.source = it }
             resultUpload.imageUrl?.let { song.image = it }
 
-            val response = remote.saveSong(song)
+            val response = if (isUpdate) {
+                remote.updateSong(song)
+            } else {
+                remote.saveSong(song)
+            }
+
             return if (response.isSuccessful) {
                 Result.Success(
                     response.body() ?: BaseResultResponse(
-                        true, "Body là null"
+                        true, "Thao tác thành công"
                     )
                 )
             } else {
                 Result.Success(
                     BaseResultResponse(
-                        false, "Thao tác không thành công"
+                        false, "Thao tác thất bại"
                     )
                 )
             }
