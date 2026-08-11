@@ -31,7 +31,17 @@ class CRUDOptionDialog<T>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setEvents()
+    }
 
+    private fun setEvents() {
+        //update
+        binding.btnOptionUpdate.setOnClickListener {
+            data?.let {
+                onUpdate.invoke(it)
+                dismiss()
+            }
+        }
     }
 
     fun setData(data: T?) {

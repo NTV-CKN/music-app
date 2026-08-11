@@ -12,6 +12,7 @@ interface SongDataSource {
     interface Remote {
         suspend fun loadSongs(query: String, limit: Int, key: Int): SongList?
         suspend fun saveSong(song: Song): Response<BaseResultResponse>
+        suspend fun updateSong(song: Song): Response<BaseResultResponse>
         suspend fun uploadSourcesSong(
             id: String,
             image: String?,

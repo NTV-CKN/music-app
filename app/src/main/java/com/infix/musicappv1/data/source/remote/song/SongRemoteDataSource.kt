@@ -32,6 +32,10 @@ class SongRemoteDataSource @Inject constructor(
         return musicService.saveSong(song)
     }
 
+    override suspend fun updateSong(song: Song): Response<BaseResultResponse> {
+        return musicService.updateSong(song)
+    }
+
     override suspend fun uploadSourcesSong(
         id: String,
         image: String?,

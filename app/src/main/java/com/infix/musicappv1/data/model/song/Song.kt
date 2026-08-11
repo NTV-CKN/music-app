@@ -24,7 +24,6 @@ open class Song(
     var energy: Float = 0.5f
 ) {
     var isVip = isVip
-        set(value) {}
 
     override fun toString(): String {
         return "Song(id='$id', title='$title', album='$album', artist='$artist', source='$source', image='$image', duration=$duration, favorite=$favorite, counter=$counter, replay=$replay)"
@@ -41,5 +40,24 @@ open class Song(
 
     override fun hashCode(): Int {
         return id.hashCode()
+    }
+
+    fun clone(): Song {
+        return Song(
+            id = id,
+            title = title,
+            artistId = artistId,
+            album = album,
+            artist = artist,
+            source = source,
+            image = image,
+            duration = duration,
+            favorite = favorite,
+            counter = counter,
+            replay = replay,
+            isVip = isVip,
+            genre = genre,
+            energy = energy
+        )
     }
 }

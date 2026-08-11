@@ -10,11 +10,13 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.artist.Artist
@@ -187,9 +189,7 @@ class AddOrUpdateSongFragment : Fragment() {
     private fun handleAddOrUpdateParams(
         addOrUpdateSongParams: AddOrUpdateSongViewModel.AddOrUpdateSongParams
     ) {
-        if (addOrUpdateSongParams.isUpdate) {
-            //inflate data
-        }
+        bindSongData(addOrUpdateSongParams.song)
     }
 
     private fun setupPhotoPicker() {
@@ -327,5 +327,46 @@ class AddOrUpdateSongFragment : Fragment() {
                 )
             }
         }
+    }
+
+    //initialize song data
+    private fun bindSongData(song: Song) {
+        binding.edtTitle.setText(song.title)
+        binding.tvArtist.text = song.artist.ifBlank {
+            getString(com.infix.musicappv1.R.string.txt_pick_artist)
+        }
+
+        binding.tvAlbum.text = song.album.ifBlank {
+            getString(com.infix.musicappv1.R.string.txt_pick_album)
+        }
+
+        val genreIndex = Genre.entries.indexOfFirst {
+            it.name.equals(song.genre, ignoreCase = true)
+        }
+
+        if (genreIndex >= 0) {
+            binding.spGenre.setSelection(genreIndex)
+        }
+
+        if (song.source.isBlank()) {
+            selectedAudioUri = null
+            binding.edtSource.setText("")
+        } else {
+            selectedAudioUri = song.source.toUri()
+            binding.edtSource.setText(song.source)
+        }
+
+        if (song.image.isBlank()) {
+            selectedImageUri = null
+        } else {
+            selectedImageUri = song.image.toUri()
+            Glide.with(binding.root)
+                .load(song.image)
+                .error(com.infix.musicappv1.R.drawable.ic_song_24)
+                .into(binding.ivCover)
+        }
+
+        binding.sliderEnergy.value = song.energy.coerceIn(0f, 1f)
+        binding.switchIsVip.isChecked = song.isVip
     }
 }
