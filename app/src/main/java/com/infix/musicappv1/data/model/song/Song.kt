@@ -42,4 +42,23 @@ open class Song(
     override fun hashCode(): Int {
         return id.hashCode()
     }
+
+    fun clone(): Song {
+        return Song(
+            id = id,
+            title = title,
+            artistId = artistId,
+            album = album,
+            artist = artist,
+            source = source,
+            image = image,
+            duration = duration,
+            favorite = favorite,
+            counter = counter,
+            replay = replay,
+            isVip = isVip,
+            genre = genre,
+            energy = energy
+        )
+    }
 }

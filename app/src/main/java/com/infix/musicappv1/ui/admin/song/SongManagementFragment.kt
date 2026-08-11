@@ -66,8 +66,22 @@ class SongManagementFragment : Fragment() {
     }
 
     private fun initCrudOptDialog() {
+        //add logic items selected for crudOptionDialog
         crudOptionDialog = CRUDOptionDialog(
-            onUpdate = { song -> },
+            onUpdate = { song ->
+                addOrUpdateSongViewModel.setIsUpdateSongState(
+                    AddOrUpdateSongViewModel.AddOrUpdateSongParams(
+                        true,
+                        song.clone()
+                    )
+                )
+
+                findNavController().navigate(
+                    SongManagementFragmentDirections.actionNavigateSongManagementToAddOrUpdateSong(
+                        R.string.txt_update_song
+                    )
+                )
+            },
             onView = { song -> },
             onDelete = { song -> }
         )
