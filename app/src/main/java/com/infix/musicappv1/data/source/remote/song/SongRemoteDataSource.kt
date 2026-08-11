@@ -63,4 +63,8 @@ class SongRemoteDataSource @Inject constructor(
             sourceUrl = uploadedSourceUrl
         )
     }
+
+    override suspend fun removeSong(body: Map<String, String>): Response<BaseResultResponse> {
+        return musicService.removeSong(body)
+    }
 }

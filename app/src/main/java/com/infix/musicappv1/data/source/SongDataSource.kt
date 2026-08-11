@@ -18,6 +18,7 @@ interface SongDataSource {
             image: String?,
             source: String?
         ): AddOrUpdateSongViewModel.MediaUploadResult
+        suspend fun removeSong(body: Map<String, String>): Response<BaseResultResponse>
     }
 
     interface Local {

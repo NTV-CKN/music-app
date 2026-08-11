@@ -12,12 +12,15 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.FragmentSongManagementBinding
 import com.infix.musicappv1.ui.adapter.admin.SongAdminPagingDataAdapter
 import com.infix.musicappv1.ui.admin.song.update_add.AddOrUpdateSongViewModel
 import com.infix.musicappv1.ui.dialog.CRUDOptionDialog
+import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
+import com.infix.musicappv1.utils.SnackbarUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -31,6 +34,7 @@ class SongManagementFragment : Fragment() {
     private lateinit var adapter: SongAdminPagingDataAdapter
     private lateinit var crudOptionDialog: CRUDOptionDialog<Song>
     private lateinit var navController: NavController
+    private lateinit var loadingDialogFragment: LoadingDialogFragment
 
     private var searchJob: Job? = null
 
@@ -52,6 +56,7 @@ class SongManagementFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
+        loadingDialogFragment = LoadingDialogFragment()
 
         initCrudOptDialog()
         observeSongManagementVM()
@@ -83,7 +88,7 @@ class SongManagementFragment : Fragment() {
                 )
             },
             onView = { song -> },
-            onDelete = { song -> }
+            onDelete = ::handleRemoveSong
         )
     }
 
@@ -95,6 +100,18 @@ class SongManagementFragment : Fragment() {
                 adapter.submitData(it)
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        //is loading
+        songManagementViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading == null) return@observe
+            try {
+                if (isLoading)
+                    loadingDialogFragment.show(requireActivity().supportFragmentManager, null)
+                else
+                    loadingDialogFragment.dismissNow()
+            } catch (_: Exception) {
+            }
+        }
     }
 
     private fun initRecyclerView() {
@@ -137,6 +154,28 @@ class SongManagementFragment : Fragment() {
                     addOrUpdate = R.string.txt_add_song
                 )
             navController.navigate(action)
+        }
+    }
+
+    private fun handleRemoveSong(song: Song) {
+        val callback: (success: Boolean, msg: String) -> Unit = { _, msg ->
+            SnackbarUtils.showBaseSnackbar(
+                binding.root,
+                msg,
+                Snackbar.LENGTH_SHORT
+            )
+        }
+
+        SnackbarUtils.showSnackbarWithAction(
+            binding.root,
+            getString(R.string.txt_confirm_clear_all_data),
+            "Ok",
+            Snackbar.LENGTH_LONG
+        ) {
+            songManagementViewModel.removeSong(
+                song,
+                callback
+            )
         }
     }
 }

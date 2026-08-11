@@ -38,4 +38,7 @@ interface MusicService {
 
     @POST("v1/admin/update-song")
     suspend fun updateSong(@Body song: Song): Response<BaseResultResponse>
+
+    @POST("v1/admin/remove-song")
+    suspend fun removeSong(@Body map: Map<String, String>): Response<BaseResultResponse>
 }

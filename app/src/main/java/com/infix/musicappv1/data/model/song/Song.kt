@@ -19,11 +19,10 @@ open class Song(
     var favorite: Boolean = false,
     var counter: Int = 0,
     var replay: Int = 0,
-    isVip: Boolean = false,
+    var isVip: Boolean = false,
     var genre: String = "",
     var energy: Float = 0.5f
 ) {
-    var isVip = isVip
 
     override fun toString(): String {
         return "Song(id='$id', title='$title', album='$album', artist='$artist', source='$source', image='$image', duration=$duration, favorite=$favorite, counter=$counter, replay=$replay)"

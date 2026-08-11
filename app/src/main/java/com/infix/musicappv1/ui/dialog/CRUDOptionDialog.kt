@@ -42,6 +42,14 @@ class CRUDOptionDialog<T>(
                 dismiss()
             }
         }
+
+        //remove
+        binding.btnOptionDelete.setOnClickListener {
+            data?.let {
+                onDelete.invoke(it)
+                dismiss()
+            }
+        }
     }
 
     fun setData(data: T?) {
