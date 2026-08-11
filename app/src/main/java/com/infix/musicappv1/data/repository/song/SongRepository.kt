@@ -27,4 +27,5 @@ interface SongRepository {
         image: String?,
         source: String?
     ): AddOrUpdateSongViewModel.MediaUploadResult
+    suspend fun removeSong(songId: String): Result<BaseResultResponse>
 }

@@ -56,8 +56,8 @@ class SongRepositoryImpl @Inject constructor(
     override suspend fun saveSong(song: Song, isUpdate: Boolean): Result<BaseResultResponse> {
         try {
             if (!isUpdate || song.id.isBlank()) {
-            song.id = GenerateIdHelper.generateSongId()
-        }
+                song.id = GenerateIdHelper.generateSongId()
+            }
             val imageUpload: String? =
                 if (!FormatSongPathUtils.isAndroidUri(song.image))
                     null
@@ -108,6 +108,33 @@ class SongRepositoryImpl @Inject constructor(
         source: String?
     ): AddOrUpdateSongViewModel.MediaUploadResult {
         return remote.uploadSourcesSong(id, image = image, source = source)
+    }
+
+    override suspend fun removeSong(songId: String): Result<BaseResultResponse> {
+        try {
+            if (songId.isEmpty()) {
+                throw Exception("Mã bài hát đang trống")
+            }
+
+            val response = remote.removeSong(
+                mapOf(
+                    "id" to songId
+                )
+            )
+
+            if (response.isSuccessful) {
+                return Result.Success(
+                    response.body() ?: BaseResultResponse(
+                        true,
+                        "Success: Unknown message"
+                    )
+                )
+            }
+
+            throw Exception("Xóa bài hát thất bại")
+        } catch (ex: Exception) {
+            return Result.Error<BaseResultResponse>(ex)
+        }
     }
 
     override suspend fun getSongsByNameSongOrNameArtist(key: String): List<Song> {
