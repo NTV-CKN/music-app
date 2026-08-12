@@ -123,5 +123,7 @@
     <string name="error_genre_song_empty">Please select a genre</string>
     <string name="error_source_song_empty">Please enter the song URL</string>
     <string name="error_album_song_empty">Please select an album</string>
+    <string name="hint_search_album">Find by album name</string>
+    <string name="txt_size_album_args">%s songs</string>
 
 </resources>
