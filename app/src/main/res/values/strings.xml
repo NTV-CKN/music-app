@@ -125,5 +125,8 @@
     <string name="error_album_song_empty">Please select an album</string>
     <string name="hint_search_album">Find by album name</string>
     <string name="txt_size_album_args">%s songs</string>
+    <string name="txt_info_album">Information Album</string>
+    <string name="txt_name_album">Album Name</string>
+    <string name="txt_save_album">Save Album</string>
 
 </resources>
