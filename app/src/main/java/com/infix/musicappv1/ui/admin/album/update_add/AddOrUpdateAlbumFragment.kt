@@ -11,9 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.infix.musicappv1.databinding.FragmentAddOrUpdateAlbumBinding
 import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class AddOrUpdateAlbumFragment : Fragment() {
     private lateinit var binding: FragmentAddOrUpdateAlbumBinding
     private lateinit var loadingDialogFragment: LoadingDialogFragment

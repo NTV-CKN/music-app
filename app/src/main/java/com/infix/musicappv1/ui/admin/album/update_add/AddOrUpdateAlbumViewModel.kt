@@ -23,7 +23,7 @@ class AddOrUpdateAlbumViewModel @Inject constructor(
     data class AddOrUpdateAlbumParams(
         val isUpdate: Boolean,
         val album: Album = Album(),
-        val songs: MutableList<Song>,
+        val songs: MutableList<Song> = mutableListOf(),
         val current: Long = System.currentTimeMillis()
     ) {
         fun cloneBySongs(songs: MutableList<Song>): AddOrUpdateAlbumParams {

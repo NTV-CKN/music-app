@@ -128,5 +128,7 @@
     <string name="txt_info_album">Information Album</string>
     <string name="txt_name_album">Album Name</string>
     <string name="txt_save_album">Save Album</string>
+    <string name="txt_update_album">Update Album</string>
+    <string name="txt_add_album">Add Album</string>
 
 </resources>

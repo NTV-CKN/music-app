@@ -28,5 +28,19 @@
         android:id="@+id/navigate_manage_albums"
         android:name="com.infix.musicappv1.ui.admin.album.AlbumManagementFragment"
         android:label="@string/txt_manage_album"
-        tools:layout="@layout/fragment_album_management"/>
+        tools:layout="@layout/fragment_album_management">
+        <action
+            android:id="@+id/action_navigate_manage_albums_to_navigate_add_or_update_album"
+            app:destination="@id/navigate_add_or_update_album" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigate_add_or_update_album"
+        android:name="com.infix.musicappv1.ui.admin.album.update_add.AddOrUpdateAlbumFragment"
+        android:label="{addOrUpdate}"
+        tools:layout="@layout/fragment_add_or_update_album">
+        <argument
+            android:name="addOrUpdate"
+            android:defaultValue="@string/txt_update_album"
+            app:argType="reference" />
+    </fragment>
 </navigation>

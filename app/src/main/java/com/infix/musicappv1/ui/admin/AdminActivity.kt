@@ -46,6 +46,7 @@ class AdminActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigate_song_management,
+                R.id.navigate_manage_albums,
             ),
             drawerLayout = binding.drawerLayout
         )
