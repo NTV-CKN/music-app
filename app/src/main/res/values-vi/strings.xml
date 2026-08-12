@@ -126,4 +126,6 @@
     <string name="txt_info_album">Thông tin Album</string>
     <string name="txt_name_album">Tên album</string>
     <string name="txt_save_album">Lưu Album</string>
+    <string name="txt_update_album">Cập nhật Album</string>
+    <string name="txt_add_album">Thêm Album</string>
 </resources>
