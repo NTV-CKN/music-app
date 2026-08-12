@@ -24,4 +24,9 @@
             android:defaultValue="@string/txt_update_song"
             app:argType="reference" />
     </fragment>
+    <fragment
+        android:id="@+id/navigate_manage_albums"
+        android:name="com.infix.musicappv1.ui.admin.album.AlbumManagementFragment"
+        android:label="@string/txt_manage_album"
+        tools:layout="@layout/fragment_album_management"/>
 </navigation>

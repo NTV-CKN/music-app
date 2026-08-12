@@ -121,4 +121,9 @@
     <string name="error_genre_song_empty">Vui lòng chọn thể loại nhạc</string>
     <string name="error_source_song_empty">Vui lòng nhập đường dẫn bài hát</string>
     <string name="error_album_song_empty">Vui lòng chọn album</string>
+    <string name="hint_search_album">Tìm theo tên album</string>
+    <string name="txt_size_album_args">%s bài hát</string>
+    <string name="txt_info_album">Thông tin Album</string>
+    <string name="txt_name_album">Tên album</string>
+    <string name="txt_save_album">Lưu Album</string>
 </resources>
