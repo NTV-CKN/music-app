@@ -56,7 +56,7 @@ class SongRepositoryImpl @Inject constructor(
     override suspend fun saveSong(song: Song, isUpdate: Boolean): Result<BaseResultResponse> {
         try {
             if (!isUpdate || song.id.isBlank()) {
-                song.id = GenerateIdHelper.generateSongId()
+                song.id = GenerateIdHelper.generateId()
             }
             val imageUpload: String? =
                 if (!FormatSongPathUtils.isAndroidUri(song.image))

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.infix.musicappv1.R
@@ -21,6 +23,7 @@ import com.infix.musicappv1.databinding.FragmentAddOrUpdateAlbumBinding
 import com.infix.musicappv1.ui.admin.bottom_sheet.SAAPickerBottomSheet
 import com.infix.musicappv1.ui.admin.bottom_sheet.SAAPickerViewModel
 import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
+import com.infix.musicappv1.utils.GenerateIdHelper
 import com.infix.musicappv1.utils.SnackbarUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -85,7 +88,7 @@ class AddOrUpdateAlbumFragment : Fragment() {
     }
 
     private fun initRvSelectedSong() {
-        selectedSongAdapter = SelectedSongAdapter { song -> removeSong(song)}
+        selectedSongAdapter = SelectedSongAdapter { song -> removeSong(song) }
 
         binding.rvSelectedSongs.adapter = selectedSongAdapter
     }
@@ -170,18 +173,34 @@ class AddOrUpdateAlbumFragment : Fragment() {
                 handleValidationError(error)
                 return@setOnClickListener
             }
+            if (addOrUpdateAlbumVM.params.value == null) {
+                return@setOnClickListener
+            }
 
-//             addOrUpdateAlbumVM.saveAlbum(selectedSongs) { resultResponse ->
-//                SnackbarUtils.showBaseSnackbar(
-//                    binding.root,
-//                    resultResponse.message,
-//                    Snackbar.LENGTH_SHORT
-//                )
-//
-//                if (resultResponse.success) {
-//                    requireActivity().onBackPressedDispatcher.onBackPressed()
-//                }
-//            }
+            val albumTmp = addOrUpdateAlbumVM.params.value!!.album
+            albumTmp.size = selectedSongs.size
+            albumTmp.songs = selectedSongs.map { song ->
+                return@map song.id
+            }
+
+            if (!addOrUpdateAlbumVM.params.value!!.isUpdate) {
+                albumTmp.id = GenerateIdHelper.generateId()
+            }
+
+            addOrUpdateAlbumVM.saveAlbum(
+                albumTmp,
+                addOrUpdateAlbumVM.params.value!!.isUpdate
+            ) { success, msg ->
+                Toast.makeText(
+                    requireContext(),
+                    msg,
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                if (success) {
+                    findNavController().popBackStack()
+                }
+            }
         }
     }
 

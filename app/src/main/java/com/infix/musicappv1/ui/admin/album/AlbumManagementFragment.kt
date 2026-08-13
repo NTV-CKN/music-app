@@ -64,7 +64,7 @@ class AlbumManagementFragment : Fragment() {
                 addOrUpdateAlbumVM.setAlbumParamsState(
                     AddOrUpdateAlbumViewModel.AddOrUpdateAlbumParams(
                         isUpdate = true,
-                        album
+                        album.clone()
                     )
                 )
 
@@ -84,7 +84,8 @@ class AlbumManagementFragment : Fragment() {
                 crudOptionDialog.setData(album)
                 try {
                     crudOptionDialog.show(requireActivity().supportFragmentManager, null)
-                }catch (_: Exception){}
+                } catch (_: Exception) {
+                }
             }
         )
 
@@ -106,6 +107,12 @@ class AlbumManagementFragment : Fragment() {
                 delay(400)
                 albumManagementVM.setQuerySearchState(text.toString())
             }
+        }
+
+        //refresh
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            albumManagementVM.setQuerySearchState(albumManagementVM.currentQuery.value.query)
+            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 }

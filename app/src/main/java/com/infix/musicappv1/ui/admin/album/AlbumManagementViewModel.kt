@@ -17,7 +17,12 @@ import javax.inject.Inject
 class AlbumManagementViewModel @Inject constructor(
     private val factory: AlbumPagingSource.AssistedFactory
 ) : ViewModel() {
-    private val _currentQuery = MutableStateFlow("")
+    data class WrapQuery(
+        val query: String,
+        val current: Long = System.currentTimeMillis()
+    )
+
+    private val _currentQuery = MutableStateFlow(WrapQuery(""))
     val currentQuery = _currentQuery.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -25,12 +30,12 @@ class AlbumManagementViewModel @Inject constructor(
         Pager(
             config = PagingConfig(pageSize = 20, initialLoadSize = 20, prefetchDistance = 5),
             pagingSourceFactory = {
-                factory.create(query)
+                factory.create(query.query)
             }
         ).flow
     }.cachedIn(viewModelScope)
 
     fun setQuerySearchState(query: String) {
-        _currentQuery.value = query
+        _currentQuery.value = WrapQuery(query)
     }
 }
