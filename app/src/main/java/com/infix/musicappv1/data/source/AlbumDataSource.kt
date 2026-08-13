@@ -19,6 +19,7 @@ interface AlbumDataSource {
         suspend fun loadSongsByAlbumId(albumId: String): Result<List<Song>>
 
         //admin
+        suspend fun deleteAlbum(body: Map<String, String>): Response<BaseResultResponse>
         suspend fun saveAlbum(album: Album): Response<BaseResultResponse>
         suspend fun uploadArtwork(artwork: String, id: String): String?
     }

@@ -43,6 +43,30 @@ class AlbumRepositoryImpl @Inject constructor(
         return remote.loadSongsByAlbumId(albumId)
     }
 
+    override suspend fun deleteAlbum(albumId: String): Result<BaseResultResponse> {
+        if(albumId.isEmpty()) {
+            return Result.Error(Exception("Album id không được để trống"))
+        }
+
+        try {
+            val response = remote.deleteAlbum(
+                mapOf("id" to albumId)
+            )
+
+            if(response.isSuccessful) {
+                return Result.Success(
+                    response.body() ?: BaseResultResponse(
+                        true, "Unknown message"
+                    )
+                )
+            }
+
+            throw Exception("Xóa album thất bại")
+        }catch (ex: Exception) {
+            return Result.Error<BaseResultResponse>(ex)
+        }
+    }
+
     override suspend fun saveAlbum(album: Album, isUpdate: Boolean): Result<BaseResultResponse> {
         try {
             val uploadedStorage = remote.uploadArtwork(
@@ -69,6 +93,5 @@ class AlbumRepositoryImpl @Inject constructor(
         } catch (ex: Exception) {
             return Result.Error(ex)
         }
-
     }
 }

@@ -45,4 +45,7 @@ interface MusicService {
 
     @POST("v1/admin/save-album")
     suspend fun saveAlbum(@Body album: Album): Response<BaseResultResponse>
+
+    @POST("v1/admin/delete-album")
+    suspend fun deleteAlbum(@Body body: Map<String, String>): Response<BaseResultResponse>
 }

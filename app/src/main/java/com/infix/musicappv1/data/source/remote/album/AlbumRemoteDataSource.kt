@@ -58,6 +58,10 @@ class AlbumRemoteDataSource @Inject constructor(
         }
     }
 
+    override suspend fun deleteAlbum(body: Map<String, String>): Response<BaseResultResponse> {
+        return musicService.deleteAlbum(body)
+    }
+
     override suspend fun saveAlbum(album: Album): Response<BaseResultResponse> {
         return musicService.saveAlbum(album)
     }

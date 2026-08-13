@@ -17,5 +17,6 @@ interface AlbumRepository {
     suspend fun loadSongsByAlbumId(albumId: String): Result<List<Song>>
 
     //admin
+    suspend fun deleteAlbum(albumId: String): Result<BaseResultResponse>
     suspend fun saveAlbum(album: Album, isUpdate: Boolean): Result<BaseResultResponse>
 }
