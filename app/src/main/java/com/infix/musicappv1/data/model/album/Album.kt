@@ -27,4 +27,14 @@ data class Album(
     override fun hashCode(): Int {
         return id.hashCode()
     }
+
+    fun clone(): Album {
+        return Album(
+            id,
+            name,
+            songs,
+            size,
+            artwork
+        )
+    }
 }

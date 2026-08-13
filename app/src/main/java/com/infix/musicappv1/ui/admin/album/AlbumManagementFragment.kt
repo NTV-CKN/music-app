@@ -11,12 +11,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.databinding.FragmentAlbumManagementBinding
 import com.infix.musicappv1.ui.adapter.admin.AlbumAdminPagingDataAdapter
 import com.infix.musicappv1.ui.admin.album.update_add.AddOrUpdateAlbumViewModel
 import com.infix.musicappv1.ui.dialog.CRUDOptionDialog
+import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
+import com.infix.musicappv1.utils.SnackbarUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -29,6 +32,7 @@ class AlbumManagementFragment : Fragment() {
     private lateinit var binding: FragmentAlbumManagementBinding
     private lateinit var adapter: AlbumAdminPagingDataAdapter
     private lateinit var crudOptionDialog: CRUDOptionDialog<Album>
+    private lateinit var loadingDialogFragment: LoadingDialogFragment
 
     private val albumManagementVM by viewModels<AlbumManagementViewModel>()
     private val addOrUpdateAlbumVM by activityViewModels<AddOrUpdateAlbumViewModel>()
@@ -50,6 +54,7 @@ class AlbumManagementFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadingDialogFragment = LoadingDialogFragment()
 
         initializeCrudOptionDialog()
         initializeRv()
@@ -64,7 +69,7 @@ class AlbumManagementFragment : Fragment() {
                 addOrUpdateAlbumVM.setAlbumParamsState(
                     AddOrUpdateAlbumViewModel.AddOrUpdateAlbumParams(
                         isUpdate = true,
-                        album
+                        album.clone()
                     )
                 )
 
@@ -74,7 +79,8 @@ class AlbumManagementFragment : Fragment() {
                     )
                 )
             },
-            onDelete = { album -> }
+            onDelete = ::handleDeleteAlbum
+
         )
     }
 
@@ -84,7 +90,8 @@ class AlbumManagementFragment : Fragment() {
                 crudOptionDialog.setData(album)
                 try {
                     crudOptionDialog.show(requireActivity().supportFragmentManager, null)
-                }catch (_: Exception){}
+                } catch (_: Exception) {
+                }
             }
         )
 
@@ -97,14 +104,67 @@ class AlbumManagementFragment : Fragment() {
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach { adapter.submitData(it) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        //is loading
+        albumManagementVM.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading == null) return@observe
+
+            try {
+                if (isLoading)
+                    loadingDialogFragment.show(requireActivity().supportFragmentManager, null)
+                else
+                    loadingDialogFragment.dismissNow()
+            } catch (_: Exception) {
+            }
+        }
     }
 
     private fun setEvents() {
+        //fab add
+        binding.fabAddSong.setOnClickListener {
+            addOrUpdateAlbumVM.setAlbumParamsState(
+                AddOrUpdateAlbumViewModel.AddOrUpdateAlbumParams(
+                    false
+                )
+            )
+            findNavController().navigate(
+                AlbumManagementFragmentDirections.actionNavigateManageAlbumsToNavigateAddOrUpdateAlbum(
+                    R.string.txt_add_album
+                )
+            )
+        }
+
+        //search
         binding.edtSearch.doOnTextChanged { text, _, _, _ ->
             searchJob?.cancel()
             searchJob = viewLifecycleOwner.lifecycleScope.launch {
                 delay(400)
                 albumManagementVM.setQuerySearchState(text.toString())
+            }
+        }
+
+        //refresh
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            albumManagementVM.setQuerySearchState(albumManagementVM.currentQuery.value.query)
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
+    }
+
+    private fun handleDeleteAlbum(album: Album) {
+        SnackbarUtils.showSnackbarWithAction(
+            binding.root,
+            getString(R.string.txt_confirm_clear_all_data),
+            "Ok",
+            Snackbar.LENGTH_LONG
+        ) {
+            albumManagementVM.deleteAlbum(album) { response ->
+                SnackbarUtils.showBaseSnackbar(
+                    binding.root,
+                    response.message,
+                    Snackbar.LENGTH_SHORT
+                )
+
+                albumManagementVM.setQuerySearchState(albumManagementVM.currentQuery.value.query)
             }
         }
     }

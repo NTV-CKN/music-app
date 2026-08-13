@@ -1,5 +1,7 @@
 package com.infix.musicappv1.data.repository.album
+
 import androidx.paging.PagingSource
+import com.infix.musicappv1.data.dto.BaseResultResponse
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.album.AlbumList
 import com.infix.musicappv1.data.model.song.Song
@@ -13,4 +15,8 @@ interface AlbumRepository {
     fun loadAlbumsPaging(): PagingSource<Int, Album>
     fun loadNAlbumPaging(limit: Int = 9): PagingSource<Int, Album>
     suspend fun loadSongsByAlbumId(albumId: String): Result<List<Song>>
+
+    //admin
+    suspend fun deleteAlbum(albumId: String): Result<BaseResultResponse>
+    suspend fun saveAlbum(album: Album, isUpdate: Boolean): Result<BaseResultResponse>
 }

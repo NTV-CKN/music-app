@@ -66,6 +66,27 @@ class AddOrUpdateAlbumViewModel @Inject constructor(
         return null
     }
 
+    fun saveAlbum(
+        album: Album,
+        isUpdate: Boolean,
+        callback: (success: Boolean, msg: String) -> Unit
+    ) {
+        _isLoading.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = albumRepository.saveAlbum(album, isUpdate)
+
+            withContext(Dispatchers.Main) {
+                if (result is Result.Success) {
+                    callback.invoke(result.data.success, result.data.message)
+                } else if (result is Result.Error) {
+                    callback.invoke(false, result.err.message ?: "Unknown error")
+                }
+
+                _isLoading.value = false
+            }
+        }
+    }
+
     fun setAlbumParamsState(params: AddOrUpdateAlbumParams) {
         _params.value = params
 

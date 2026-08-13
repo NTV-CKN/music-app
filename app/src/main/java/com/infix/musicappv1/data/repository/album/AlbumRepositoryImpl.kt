@@ -1,6 +1,7 @@
 package com.infix.musicappv1.data.repository.album
 
 import androidx.paging.PagingSource
+import com.infix.musicappv1.data.dto.BaseResultResponse
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.album.AlbumList
 import com.infix.musicappv1.data.model.song.Song
@@ -40,5 +41,57 @@ class AlbumRepositoryImpl @Inject constructor(
 
     override suspend fun loadSongsByAlbumId(albumId: String): Result<List<Song>> {
         return remote.loadSongsByAlbumId(albumId)
+    }
+
+    override suspend fun deleteAlbum(albumId: String): Result<BaseResultResponse> {
+        if(albumId.isEmpty()) {
+            return Result.Error(Exception("Album id không được để trống"))
+        }
+
+        try {
+            val response = remote.deleteAlbum(
+                mapOf("id" to albumId)
+            )
+
+            if(response.isSuccessful) {
+                return Result.Success(
+                    response.body() ?: BaseResultResponse(
+                        true, "Unknown message"
+                    )
+                )
+            }
+
+            throw Exception("Xóa album thất bại")
+        }catch (ex: Exception) {
+            return Result.Error<BaseResultResponse>(ex)
+        }
+    }
+
+    override suspend fun saveAlbum(album: Album, isUpdate: Boolean): Result<BaseResultResponse> {
+        try {
+            val uploadedStorage = remote.uploadArtwork(
+                album.artwork,
+                album.id
+            )
+
+            if (uploadedStorage != null) {
+                album.artwork = uploadedStorage
+            }
+
+            val response = remote.saveAlbum(album)
+            if (response.isSuccessful) {
+                return Result.Success(
+                    response.body()
+                        ?: BaseResultResponse(
+                            true,
+                            "Unknown message"
+                        )
+                )
+            }
+
+            throw Exception("Lưu album thất bại")
+        } catch (ex: Exception) {
+            return Result.Error(ex)
+        }
     }
 }
