@@ -32,7 +32,7 @@ interface ArtistDao {
         FROM artists
         WHERE artist_id = :artistId
     """)
-    fun getArtistById(artistId: Int): Artist?
+    fun getArtistById(artistId: Long): Artist?
 
     @Query(
         """

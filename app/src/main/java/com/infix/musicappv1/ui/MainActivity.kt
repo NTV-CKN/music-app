@@ -17,7 +17,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.Lifecycle
@@ -211,9 +211,9 @@ class MainActivity : AppCompatActivity() {
         const val PREF_PREV_SESSION = "com.infix.musicappv1.ui.MainActivity.PREF_PREV_SESSION"
         val KEY_SONG_ID: Preferences.Key<String> =
             stringPreferencesKey("com.infix.musicappv1.ui.MainActivity.KEY_SONG_ID")
-        val KEY_ID_PLAYLIST: Preferences.Key<Int> =
-            intPreferencesKey("com.infix.musicappv1.ui.MainActivity.KEY_ID_ALBUM")
+        val KEY_ID_PLAYLIST: Preferences.Key<Long> =
+            longPreferencesKey("com.infix.musicappv1.ui.MainActivity.KEY_ID_ALBUM")
         val KEY_ID_PLAYLIST_CUSTOM =
-            intPreferencesKey("com.infix.musicappv1.ui.MainActivity.KEY_ID_PLAYLIST_CUSTOM")
+            longPreferencesKey("com.infix.musicappv1.ui.MainActivity.KEY_ID_PLAYLIST_CUSTOM")
     }
 }

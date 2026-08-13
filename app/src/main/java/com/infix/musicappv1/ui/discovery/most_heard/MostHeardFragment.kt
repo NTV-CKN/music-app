@@ -11,8 +11,8 @@ import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentMostHeardBinding
 import com.infix.musicappv1.enums.PlaylistEnum
-import com.infix.musicappv1.ui.base.BasePlayMusicFragment
 import com.infix.musicappv1.ui.adapter.song.SongAdapter
+import com.infix.musicappv1.ui.base.BasePlayMusicFragment
 import com.infix.musicappv1.ui.discovery.DiscoveryFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -55,7 +55,7 @@ class MostHeardFragment : BasePlayMusicFragment() {
                     playSong(
                         pos,
                         Playlist(
-                            playlistId = PlaylistEnum.MOST_HEARD.playlistId,
+                            playlistId = PlaylistEnum.MOST_HEARD.playlistId.toLong(),
                             namePlaylist = PlaylistEnum.MOST_HEARD.name
                         ),
                         songs

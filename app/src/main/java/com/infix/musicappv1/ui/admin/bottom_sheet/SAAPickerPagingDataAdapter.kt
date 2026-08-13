@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -15,6 +16,7 @@ import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.databinding.ItemSaaPickerBinding
+import com.infix.musicappv1.ui.admin.album.update_add.AddOrUpdateAlbumFragment
 
 class SAAPickerPagingDataAdapter<T : Any>(
     private val onItemClick: OnItemClick<T>,
@@ -118,6 +120,8 @@ class SAAViewHolder<T>(
                 title = data.title
                 subtitle = data.artist
                 img = data.image
+
+                initializeOption(data)
             }
 
             is Artist -> {
@@ -140,4 +144,36 @@ class SAAViewHolder<T>(
             .error(R.drawable.ic_song_24)
             .into(binding.imgItemSong)
     }
+
+    private fun initializeOption(data: T) {
+        binding.btnItemSongOption.visibility = View.VISIBLE
+
+        if (data is Song) {
+            val source = if (AddOrUpdateAlbumFragment.checkContainSong(data))
+                R.drawable.ic_checkbox_ticked
+            else
+                R.drawable.ic_checkbox_outline
+            Glide.with(binding.root)
+                .load(source)
+                .error(R.drawable.ic_checkbox_outline)
+                .into(binding.btnItemSongOption)
+
+            //option click
+            binding.btnItemSongOption.setOnClickListener {
+                val isAddSuccess = AddOrUpdateAlbumFragment.addSong(data)
+                val source = if (isAddSuccess) {
+                    R.drawable.ic_checkbox_ticked
+                } else {
+                    AddOrUpdateAlbumFragment.removeSong(data)
+                    R.drawable.ic_checkbox_outline
+                }
+
+                Glide.with(binding.root)
+                    .load(source)
+                    .error(R.drawable.ic_checkbox_outline)
+                    .into(binding.btnItemSongOption)
+            }
+        }
+    }
+
 }

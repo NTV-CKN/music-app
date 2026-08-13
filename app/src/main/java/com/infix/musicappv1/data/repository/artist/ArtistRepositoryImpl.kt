@@ -49,7 +49,7 @@ class ArtistRepositoryImpl @Inject constructor(
         local.insert(*artist)
     }
 
-    override suspend fun getArtistById(artistId: Int): Artist? {
+    override suspend fun getArtistById(artistId: Long): Artist? {
         return local.getArtistById(artistId)
     }
 
@@ -62,7 +62,7 @@ class ArtistRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun loadSongsByArtistId(artistId: Int): Result<List<Song>> {
+    override suspend fun loadSongsByArtistId(artistId: Long): Result<List<Song>> {
         return remote.loadSongsByArtistId(artistId)
     }
 }

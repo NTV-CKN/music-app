@@ -9,7 +9,7 @@ import com.google.firebase.firestore.PropertyName
 data class Artist(
     @PrimaryKey
     @ColumnInfo("artist_id")
-    val id: Int = 0,
+    val id: Long = 0,
     @ColumnInfo("artist_name")
     val name: String = "",
     @ColumnInfo("artist_avatar")
@@ -31,6 +31,6 @@ data class Artist(
     }
 
     override fun hashCode(): Int {
-        return id
+        return id.toInt()
     }
 }

@@ -64,7 +64,7 @@ interface PlaylistDao {
 
     @Transaction
     @Query("SELECT * FROM playlists WHERE playlist_id = :playlistId")
-    suspend fun getPlaylistWithSongsById(playlistId: Int): PlaylistWithSongs?
+    suspend fun getPlaylistWithSongsById(playlistId: Long): PlaylistWithSongs?
 
     @Transaction
     @Query(

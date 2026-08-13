@@ -30,7 +30,7 @@ class ArtistLocalDataSource @Inject constructor(
         return artistDao.getLimitArtistInterested(limit)
     }
 
-    override suspend fun getArtistById(artistId: Int): Artist? {
+    override suspend fun getArtistById(artistId: Long): Artist? {
        return artistDao.getArtistById(artistId)
     }
 

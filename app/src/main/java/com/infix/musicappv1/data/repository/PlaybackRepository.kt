@@ -127,7 +127,7 @@ class PlaybackRepository @Inject constructor(
         }
     }
 
-    suspend fun getPlaylistWithSongs(playlistId: Int): PlaylistWithSongs? {
+    suspend fun getPlaylistWithSongs(playlistId: Long): PlaylistWithSongs? {
         return db.playlistDao().getPlaylistWithSongsById(playlistId)
     }
 

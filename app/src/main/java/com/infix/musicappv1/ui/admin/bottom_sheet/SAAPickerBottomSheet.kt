@@ -1,5 +1,6 @@
 package com.infix.musicappv1.ui.admin.bottom_sheet
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,7 +25,8 @@ import kotlinx.coroutines.launch
 
 class SAAPickerBottomSheet<T : Any>(
     private val type: SAAPickerViewModel.TypeSAAPicker,
-    private val onItemClick: (data: T) -> Unit
+    private val onItemClick: (data: T) -> Unit,
+    private val onDismissCallback: (() -> Unit )? = null
 ) : BottomSheetDialogFragment() {
     private lateinit var binding: DialogFragmentSaaPickerBinding
     private lateinit var adapter: SAAPickerPagingDataAdapter<T>
@@ -52,6 +54,11 @@ class SAAPickerBottomSheet<T : Any>(
         initRecyclerView()
         initializeAndObserve()
         setSearchEvent()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDismissCallback?.invoke()
     }
 
     private fun initRecyclerView() {

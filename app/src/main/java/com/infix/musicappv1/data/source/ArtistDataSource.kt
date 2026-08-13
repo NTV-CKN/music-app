@@ -13,7 +13,7 @@ interface ArtistDataSource {
         fun getLimitArtists(limit: Int = 10): Flow<List<Artist>>
         fun getAllInterestedArtist(): Flow<List<Artist>>
         fun getLimitInterestArtist(limit: Int = 10): Flow<List<Artist>>
-        suspend fun getArtistById(artistId: Int): Artist?
+        suspend fun getArtistById(artistId: Long): Artist?
         suspend fun delete(vararg artist: Artist)
         suspend fun update(vararg artist: Artist)
         suspend fun insert(vararg artist: Artist)
@@ -28,6 +28,6 @@ interface ArtistDataSource {
             key: Int
         ): ArtistList?
 
-        suspend fun loadSongsByArtistId(artistId: Int): Result<List<Song>>
+        suspend fun loadSongsByArtistId(artistId: Long): Result<List<Song>>
     }
 }

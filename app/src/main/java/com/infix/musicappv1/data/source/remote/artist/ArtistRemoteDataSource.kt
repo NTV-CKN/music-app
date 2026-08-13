@@ -42,7 +42,7 @@ class ArtistRemoteDataSource @Inject constructor(
             ArtistList()
     }
 
-    override suspend fun loadSongsByArtistId(artistId: Int): Result<List<Song>> {
+    override suspend fun loadSongsByArtistId(artistId: Long): Result<List<Song>> {
         return try {
             val task = firestore.collection("songs")
                 .whereEqualTo("artistId", artistId)

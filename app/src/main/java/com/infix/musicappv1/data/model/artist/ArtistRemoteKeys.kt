@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class ArtistRemoteKeys(
     @PrimaryKey
     @ColumnInfo("artist_id")
-    val artistId: Int,
+    val artistId: Long,
     @ColumnInfo("create_at")
     val  createAt: Long = System.currentTimeMillis()
 )
