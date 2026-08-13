@@ -65,7 +65,7 @@ class AlbumDetailFragment : BasePlayMusicFragment() {
                             pos,
                             Playlist(
                                 namePlaylist = album.name,
-                                playlistId = album.id.toInt()
+                                playlistId = album.id.toLong()
                             ),
                             songs
                         )

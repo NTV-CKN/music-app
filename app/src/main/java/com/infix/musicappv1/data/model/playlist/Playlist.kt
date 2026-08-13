@@ -17,7 +17,7 @@ data class Playlist(
     @PrimaryKey
     @ColumnInfo("playlist_id")
     @SerializedName("id")
-    var playlistId: Int = autoId++,
+    var playlistId: Long = autoId++.toLong(),
     @ColumnInfo("name")
     @SerializedName("name")
     var namePlaylist: String = "",
@@ -82,7 +82,7 @@ data class Playlist(
         var result = playlistId
         result = 31 * result + playAt.hashCode()
         result = 31 * result + _songsObject.hashCode()
-        return result
+        return result.toInt()
     }
 
 

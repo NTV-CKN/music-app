@@ -55,7 +55,7 @@ class AddOrUpdateSongViewModel @Inject constructor(
         return when {
             song.image.isBlank() -> ValidationError.EmptyImage
             song.title.isBlank() -> ValidationError.EmptyTitle
-            song.artistId == 0 || song.artist.isBlank() -> ValidationError.InvalidArtist
+            song.artistId == 0L || song.artist.isBlank() -> ValidationError.InvalidArtist
             song.album.isEmpty() -> ValidationError.EmptyAlbum
             song.genre.isBlank() -> ValidationError.InvalidGenre
             song.source.isBlank() -> ValidationError.EmptySource

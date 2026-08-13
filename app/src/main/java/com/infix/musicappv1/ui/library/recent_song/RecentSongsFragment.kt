@@ -70,7 +70,7 @@ class RecentSongsFragment : BasePlayMusicFragment() {
                         pos,
                         Playlist(
                             namePlaylist = PlaylistEnum.RECENT.value,
-                            playlistId = PlaylistEnum.RECENT.playlistId
+                            playlistId = PlaylistEnum.RECENT.playlistId.toLong()
                         ),
                         songRecentViewModel.songRecents.value ?: emptyList()
                     )
@@ -106,7 +106,7 @@ class RecentSongsFragment : BasePlayMusicFragment() {
                 playlistDetailViewModel.getPlaylistWithName(PlaylistEnum.RECENT.value)
             playlist = playlist ?: Playlist(
                 namePlaylist = PlaylistEnum.RECENT.value,
-                playlistId = PlaylistEnum.RECENT.playlistId
+                playlistId = PlaylistEnum.RECENT.playlistId.toLong()
             )
             withContext(Dispatchers.Main) {
                 playlist.updateSongs(songRecentViewModel.songRecents.value ?: emptyList())

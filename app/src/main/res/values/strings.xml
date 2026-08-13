@@ -130,5 +130,8 @@
     <string name="txt_save_album">Save Album</string>
     <string name="txt_update_album">Update Album</string>
     <string name="txt_add_album">Add Album</string>
+    <string name="error_songs_album_empty">Songs are empty</string>
+    <string name="error_artwork_album_empty">Artwork is empty</string>
+    <string name="error_name_album_empty">Album name is empty</string>
 
 </resources>

@@ -25,7 +25,7 @@ class ArtistDetailViewModel @Inject constructor(
 
     //cause we paging song and full song if only user scroll reached at More recommend song
     //So we get songs of name artist with API to avoid song not full but artist detail click
-    fun setArtistWithSongsByArtistName(artistId: Int, name: String) {
+    fun setArtistWithSongsByArtistName(artistId: Long, name: String) {
         viewModelScope.launch(Dispatchers.IO) {
             this@ArtistDetailViewModel.artist = artistRepository.getArtistById(artistId)//local
             val result = artistRepository.loadSongsByArtistId(

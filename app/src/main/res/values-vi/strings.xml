@@ -128,4 +128,7 @@
     <string name="txt_save_album">Lưu Album</string>
     <string name="txt_update_album">Cập nhật Album</string>
     <string name="txt_add_album">Thêm Album</string>
+    <string name="error_songs_album_empty">Vui lòng chọn các bài hát cho album</string>
+    <string name="error_artwork_album_empty">Ảnh album rỗng</string>
+    <string name="error_name_album_empty">Tên album rỗng</string>
 </resources>

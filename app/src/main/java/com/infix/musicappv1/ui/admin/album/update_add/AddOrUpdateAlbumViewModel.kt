@@ -48,6 +48,24 @@ class AddOrUpdateAlbumViewModel @Inject constructor(
     private val _params = MutableStateFlow<AddOrUpdateAlbumParams?>(null)
     val params = _params.asStateFlow()
 
+    fun validateAlbum(selectedSongs: List<Song>): ValidationError? {
+        val currentAlbum = _params.value?.album ?: return ValidationError.EmptyTitle
+
+        if (currentAlbum.name.isBlank()) {
+            return ValidationError.EmptyTitle
+        }
+
+        if (currentAlbum.artwork.isBlank()) {
+            return ValidationError.EmptyImage
+        }
+
+        if (selectedSongs.isEmpty()) {
+            return ValidationError.EmptySongList
+        }
+
+        return null
+    }
+
     fun setAlbumParamsState(params: AddOrUpdateAlbumParams) {
         _params.value = params
 

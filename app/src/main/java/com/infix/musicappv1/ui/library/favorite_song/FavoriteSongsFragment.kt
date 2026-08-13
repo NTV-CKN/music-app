@@ -12,8 +12,8 @@ import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentFavoriteSongsBinding
 import com.infix.musicappv1.enums.PlaylistEnum
-import com.infix.musicappv1.ui.base.BasePlayMusicFragment
 import com.infix.musicappv1.ui.adapter.song.SongAdapter
+import com.infix.musicappv1.ui.base.BasePlayMusicFragment
 import com.infix.musicappv1.ui.detail.PlaylistDetailViewModel
 import com.infix.musicappv1.ui.library.LibraryFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
@@ -71,7 +71,7 @@ class FavoriteSongsFragment : BasePlayMusicFragment() {
                         pos,
                         Playlist(
                             namePlaylist = PlaylistEnum.FAVORITES.value,
-                            playlistId = PlaylistEnum.FAVORITES.playlistId
+                            playlistId = PlaylistEnum.FAVORITES.playlistId.toLong()
                         ),
                         favoriteSongsViewModel.songsFavorite.value ?: emptyList()
                     )
@@ -104,7 +104,7 @@ class FavoriteSongsFragment : BasePlayMusicFragment() {
                 playlistDetailViewModel.getPlaylistWithName(PlaylistEnum.FAVORITES.value)
             playlist = playlist ?: Playlist(
                 namePlaylist = PlaylistEnum.FAVORITES.value,
-                playlistId = PlaylistEnum.FAVORITES.playlistId
+                playlistId = PlaylistEnum.FAVORITES.playlistId.toLong()
             )
             withContext(Dispatchers.Main) {
                 playlist.updateSongs(favoriteSongsViewModel.songsFavorite.value ?: emptyList())

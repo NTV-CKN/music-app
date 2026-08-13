@@ -17,7 +17,7 @@ interface ArtistRepository {
     suspend fun delete(vararg artist: Artist)
     suspend fun update(vararg artist: Artist)
     suspend fun insert(vararg artist: Artist)
-    suspend fun getArtistById(artistId: Int): Artist?
+    suspend fun getArtistById(artistId: Long): Artist?
     suspend fun loadArtistsPaging(query: String, limit: Int, key: Int): ArtistList?
-    suspend fun loadSongsByArtistId(artistId: Int): Result<List<Song>>
+    suspend fun loadSongsByArtistId(artistId: Long): Result<List<Song>>
 }

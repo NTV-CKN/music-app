@@ -86,7 +86,7 @@ class PlayingSongSharedViewModel @Inject constructor(private val playbackReposit
 
     //We only restore when value of currentPlaylist and indexToPlay is NULL
     //Notice: Now I'm still not store playlist, so this func not stable yet
-    fun restorePrevSession(songId: String?, playlistId: Int?) {
+    fun restorePrevSession(songId: String?, playlistId: Long?) {
         //check value of stateflow is null
         if (currentPlaylist.value == null && indexToPlay.value == null && playlistId != null && songId != null) {
             viewModelScope.launch(Dispatchers.IO) {

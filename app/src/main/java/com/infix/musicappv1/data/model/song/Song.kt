@@ -10,7 +10,7 @@ open class Song(
     @ColumnInfo("song_id")
     var id: String = "",
     var title: String = "",
-    var artistId: Int = 0,
+    var artistId: Long = 0,
     var album: String = "",
     var artist: String = "",
     var source: String = "",
