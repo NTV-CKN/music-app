@@ -1,5 +1,6 @@
 package com.infix.musicappv1.ui.admin.album.update_add
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +15,7 @@ class SelectedSongAdapter(
 
     private var songList: List<Song> = emptyList()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateSongs(newSongs: List<Song>) {
         this.songList = newSongs
         notifyDataSetChanged()

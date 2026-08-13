@@ -50,6 +50,8 @@ class AddOrUpdateAlbumViewModel @Inject constructor(
 
     fun setAlbumParamsState(params: AddOrUpdateAlbumParams) {
         _params.value = params
+
+        //We must load all songs from Firestore for the album if isUpdateState is true.
         if (params.isUpdate && params.album.songs.isNotEmpty()) {
             _isLoading.value = true
             viewModelScope.launch(Dispatchers.IO) {
