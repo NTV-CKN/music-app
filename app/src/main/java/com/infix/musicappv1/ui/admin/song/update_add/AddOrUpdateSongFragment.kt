@@ -27,6 +27,7 @@ import com.infix.musicappv1.ui.admin.bottom_sheet.SAAPickerBottomSheet
 import com.infix.musicappv1.ui.admin.bottom_sheet.SAAPickerViewModel
 import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
 import com.infix.musicappv1.utils.FormatSongPathUtils
+import com.infix.musicappv1.utils.MusicAppUtils.getAudioDurationInSeconds
 import com.infix.musicappv1.utils.SnackbarUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -47,7 +48,12 @@ class AddOrUpdateSongFragment : Fragment() {
         uri?.let {
             selectedAudioUri = it
             binding.edtSource.setText(it.toString())
-            addOrUpdateSongViewModel.params.value?.song?.source = selectedAudioUri.toString()
+            val durationInSeconds = getAudioDurationInSeconds(requireContext(), it)
+
+            addOrUpdateSongViewModel.params.value?.song?.apply {
+                source = selectedAudioUri.toString()
+                duration = durationInSeconds.toInt()
+            }
         }
     }
 
