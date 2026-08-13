@@ -101,6 +101,21 @@ class AlbumManagementFragment : Fragment() {
     }
 
     private fun setEvents() {
+        //fab add
+        binding.fabAddSong.setOnClickListener {
+            addOrUpdateAlbumVM.setAlbumParamsState(
+                AddOrUpdateAlbumViewModel.AddOrUpdateAlbumParams(
+                    false
+                )
+            )
+            findNavController().navigate(
+                AlbumManagementFragmentDirections.actionNavigateManageAlbumsToNavigateAddOrUpdateAlbum(
+                    R.string.txt_add_album
+                )
+            )
+        }
+
+        //search
         binding.edtSearch.doOnTextChanged { text, _, _, _ ->
             searchJob?.cancel()
             searchJob = viewLifecycleOwner.lifecycleScope.launch {
