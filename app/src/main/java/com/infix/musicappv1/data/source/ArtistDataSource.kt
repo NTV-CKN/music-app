@@ -1,10 +1,12 @@
 package com.infix.musicappv1.data.source
 
 import androidx.paging.PagingSource
+import com.infix.musicappv1.data.dto.BaseResultResponse
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.model.artist.ArtistList
 import com.infix.musicappv1.data.model.song.Song
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 
 interface ArtistDataSource {
     interface Local {
@@ -29,5 +31,8 @@ interface ArtistDataSource {
         ): ArtistList?
 
         suspend fun loadSongsByArtistId(artistId: Long): Result<List<Song>>
+        //admin
+        suspend fun saveArtist(artist: Artist): Response<BaseResultResponse>
+        suspend fun uploadAvatar(avatar: String, id: String): String?
     }
 }

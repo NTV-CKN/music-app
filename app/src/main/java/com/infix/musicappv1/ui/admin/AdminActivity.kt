@@ -45,7 +45,7 @@ class AdminActivity : AppCompatActivity() {
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigate_song_management,
+                R.id.navigate_manage_songs,
                 R.id.navigate_manage_albums,
                 R.id.navigate_manage_artists,
             ),
