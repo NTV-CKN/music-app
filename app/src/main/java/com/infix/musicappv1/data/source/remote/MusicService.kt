@@ -52,4 +52,7 @@ interface MusicService {
 
     @POST("v1/admin/save-artist")
     suspend fun saveArtist(@Body artist: Artist): Response<BaseResultResponse>
+
+    @POST("v1/admin/delete-artist")
+    suspend fun deleteArtist(@Body body: Map<String, Long>): Response<BaseResultResponse>
 }

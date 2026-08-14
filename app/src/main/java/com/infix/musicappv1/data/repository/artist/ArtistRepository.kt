@@ -24,4 +24,5 @@ interface ArtistRepository {
 
     //admin
     suspend fun saveArtist(artist: Artist, isUpdate: Boolean): Result<BaseResultResponse>
+    suspend fun deleteArtist(id: Long) : Result<BaseResultResponse>
 }

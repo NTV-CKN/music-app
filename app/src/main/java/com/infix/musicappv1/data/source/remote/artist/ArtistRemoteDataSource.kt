@@ -78,4 +78,8 @@ class ArtistRemoteDataSource @Inject constructor(
 
         return uploadedAvatarUrl
     }
+
+    override suspend fun deleteArtist(body: Map<String, Long>): Response<BaseResultResponse> {
+        return musicService.deleteArtist(body)
+    }
 }
