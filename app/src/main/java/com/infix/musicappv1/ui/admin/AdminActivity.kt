@@ -47,6 +47,7 @@ class AdminActivity : AppCompatActivity() {
             setOf(
                 R.id.navigate_song_management,
                 R.id.navigate_manage_albums,
+                R.id.navigate_manage_artists,
             ),
             drawerLayout = binding.drawerLayout
         )

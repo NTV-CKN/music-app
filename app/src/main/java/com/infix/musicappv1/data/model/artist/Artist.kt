@@ -9,18 +9,18 @@ import com.google.firebase.firestore.PropertyName
 data class Artist(
     @PrimaryKey
     @ColumnInfo("artist_id")
-    val id: Long = 0,
+    var id: Long = 0,
     @ColumnInfo("artist_name")
-    val name: String = "",
+    var name: String = "",
     @ColumnInfo("artist_avatar")
-    val avatar: String = "",
+    var avatar: String = "",
     @ColumnInfo("artist_interested")
-    val amountInterested: Int = 0,
+    var amountInterested: Int = 0,
     @ColumnInfo("artist_is_interested")
     @get:PropertyName("artist_is_interested")
     @set:PropertyName("artist_is_interested")
     var isInterested: Boolean = false
-){
+) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -32,5 +32,15 @@ data class Artist(
 
     override fun hashCode(): Int {
         return id.toInt()
+    }
+
+    fun clone() : Artist{
+        return Artist(
+            id,
+            name,
+            avatar,
+            amountInterested,
+            isInterested
+        )
     }
 }

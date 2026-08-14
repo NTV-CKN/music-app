@@ -58,6 +58,20 @@
         app:srcCompat="@drawable/ic_interest_off"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
+    <ImageButton
+        android:id="@+id/btn_option_artist"
+        android:layout_width="@dimen/width_42"
+        android:layout_height="@dimen/height_42"
+        android:layout_marginEnd="@dimen/margin_end_16"
+        android:background="?attr/selectableItemBackground"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/guideline8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline8"
+        app:srcCompat="@drawable/ic_more_horiz_24px"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline8"
         android:layout_width="wrap_content"
