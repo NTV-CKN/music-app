@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.databinding.FragmentArtistManagementBinding
@@ -18,6 +19,7 @@ import com.infix.musicappv1.ui.adapter.admin.ArtistAdminPagingDataAdapter
 import com.infix.musicappv1.ui.admin.artist.add_update.AddOrUpdateArtistViewModel
 import com.infix.musicappv1.ui.dialog.CRUDOptionDialog
 import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
+import com.infix.musicappv1.utils.SnackbarUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -87,7 +89,7 @@ class ArtistManagementFragment : Fragment() {
                     )
                 )
             },
-            onDelete = { artist -> },
+            onDelete = ::handleDeleteArtist,
             onView = { artist -> }
         )
     }
@@ -143,6 +145,29 @@ class ArtistManagementFragment : Fragment() {
                 artistManagementVM.currentQuery.value.query
             )
             binding.swipeRefreshLayout.isRefreshing = false
+        }
+    }
+
+    private fun handleDeleteArtist(artist: Artist) {
+        SnackbarUtils.showSnackbarWithAction(
+            binding.root,
+            getString(R.string.txt_confirm_clear_all_data),
+            "Ok",
+            Snackbar.LENGTH_LONG
+        ) {
+            artistManagementVM.deleteArtist(
+                artist
+            ) {response ->
+                SnackbarUtils.showBaseSnackbar(
+                    binding.root,
+                    response.message,
+                    Snackbar.LENGTH_SHORT
+                )
+
+                if(response.success) {
+                    artistManagementVM.setQuerySearchState(artistManagementVM.currentQuery.value.query)
+                }
+            }
         }
     }
 }

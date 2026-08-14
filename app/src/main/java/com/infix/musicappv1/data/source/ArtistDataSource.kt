@@ -34,5 +34,6 @@ interface ArtistDataSource {
         //admin
         suspend fun saveArtist(artist: Artist): Response<BaseResultResponse>
         suspend fun uploadAvatar(avatar: String, id: String): String?
+        suspend fun deleteArtist(body: Map<String, Long>): Response<BaseResultResponse>
     }
 }

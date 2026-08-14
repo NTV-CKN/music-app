@@ -70,7 +70,7 @@ class ArtistRepositoryImpl @Inject constructor(
 
     override suspend fun saveArtist(artist: Artist, isUpdate: Boolean): Result<BaseResultResponse> {
         try {
-            if(!isUpdate) artist.id = GenerateIdHelper.generateIdLong()
+            if (!isUpdate) artist.id = GenerateIdHelper.generateIdLong()
 
             val uploadedStorage = remote.uploadAvatar(
                 artist.avatar,
@@ -93,6 +93,29 @@ class ArtistRepositoryImpl @Inject constructor(
             }
 
             throw Exception("Lưu artist thất bại")
+        } catch (ex: Exception) {
+            return Result.Error(ex)
+        }
+    }
+
+    override suspend fun deleteArtist(id: Long): Result<BaseResultResponse> {
+        try {
+            val response = remote.deleteArtist(
+                mapOf(
+                    "id" to id
+                )
+            )
+
+            if (response.isSuccessful) {
+                return Result.Success(
+                    response.body() ?: BaseResultResponse(
+                        success = true,
+                        "Unknown message"
+                    )
+                )
+            }
+
+            throw Exception("Xóa artist thất bại")
         } catch (ex: Exception) {
             return Result.Error(ex)
         }
