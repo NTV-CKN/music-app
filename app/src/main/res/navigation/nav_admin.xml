@@ -47,5 +47,19 @@
         android:id="@+id/navigate_manage_artists"
         tools:layout="@layout/fragment_artist_management"
         android:name="com.infix.musicappv1.ui.admin.artist.ArtistManagementFragment"
-        android:label="@string/txt_manage_artist" />
+        android:label="@string/txt_manage_artist" >
+        <action
+            android:id="@+id/action_navigate_manage_artists_to_navigate_add_or_update_artist"
+            app:destination="@id/navigate_add_or_update_artist" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigate_add_or_update_artist"
+        android:name="com.infix.musicappv1.ui.admin.artist.add_update.AddOrUpdateArtistFragment"
+        android:label="{addOrUpdate}"
+        tools:layout="@layout/fragment_add_or_update_artist">
+        <argument
+            android:name="addOrUpdate"
+            android:defaultValue="@string/txt_update_album"
+            app:argType="reference" />
+    </fragment>
 </navigation>

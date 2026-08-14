@@ -6,4 +6,8 @@ object GenerateIdHelper {
     fun generateId(): String {
         return (System.currentTimeMillis() + Random.nextInt(1, 1000)).toString()
     }
+
+    fun generateIdLong(): Long {
+        return (System.currentTimeMillis() + Random.nextInt(1, 1000))
+    }
 }

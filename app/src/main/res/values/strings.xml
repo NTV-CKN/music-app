@@ -133,6 +133,15 @@
     <string name="error_songs_album_empty">Songs are empty</string>
     <string name="error_artwork_album_empty">Artwork is empty</string>
     <string name="error_name_album_empty">Album name is empty</string>
+
+    <string name="error_name_artist_empty">Artist name is empty</string>
+    <string name="error_avatar_artist_empty">Avatar is empty</string>
     <string name="hint_search_artist">Find by Artist name</string>
+    <string name="txt_save_artist">Save Artist</string>
+    <string name="txt_info_artist">Information Artist</string>
+    <string name="txt_update_artist">Update Artist</string>
+    <string name="txt_add_artist">Add Artist</string>
+    <string name="hint_enter_artist_name">Enter artist name</string>
+
 
 </resources>

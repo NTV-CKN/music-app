@@ -56,7 +56,7 @@
 <string name="txt_list_of_artist">Danh sách nghệ sĩ</string>
 <string name="txt_amount_interested">Số lượng yêu thích: %d</string>
 <string name="txt_your_interested_artist">Nghệ sĩ yêu thích của bạn: %s</string>
-<string name="txt_name_artist">Tên nghệ sĩ: %s</string>
+<string name="txt_name_artist_args">Tên nghệ sĩ: %s</string>
 <string name="txt_song_most_heard">Bài hát nghe nhiều nhất ></string>
 <string name="txt_top_40_song">Top 40 bài hát nghe nhiều nhất</string>
 <string name="txt_interested_artist">Nghệ sĩ yêu thích</string>
@@ -131,4 +131,14 @@
     <string name="error_songs_album_empty">Vui lòng chọn các bài hát cho album</string>
     <string name="error_artwork_album_empty">Ảnh album rỗng</string>
     <string name="error_name_album_empty">Tên album rỗng</string>
+
+    <string name="error_name_artist_empty">Tên nghệ sĩ không được để trống</string>
+    <string name="error_avatar_artist_empty">Ảnh đại diện nghệ sĩ không được trống</string>
+    <string name="hint_search_artist">Tìm theo tên nghệ sĩ</string>
+    <string name="txt_save_artist">Lưu Nghệ Sĩ</string>
+    <string name="txt_info_artist">Thông tin nghệ sĩ</string>
+    <string name="txt_update_artist">Cập Nhật Nghệ Sĩ</string>
+    <string name="txt_add_artist">Thêm Nghệ Sĩ</string>
+    <string name="hint_enter_artist_name">Nhập tên nghệ sĩ</string>
+
 </resources>
