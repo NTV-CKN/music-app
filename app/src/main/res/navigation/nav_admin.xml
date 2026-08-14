@@ -43,4 +43,9 @@
             android:defaultValue="@string/txt_update_album"
             app:argType="reference" />
     </fragment>
+    <fragment
+        android:id="@+id/navigate_manage_artists"
+        tools:layout="@layout/fragment_artist_management"
+        android:name="com.infix.musicappv1.ui.admin.artist.ArtistManagementFragment"
+        android:label="@string/txt_manage_artist" />
 </navigation>

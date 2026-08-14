@@ -133,5 +133,6 @@
     <string name="error_songs_album_empty">Songs are empty</string>
     <string name="error_artwork_album_empty">Artwork is empty</string>
     <string name="error_name_album_empty">Album name is empty</string>
+    <string name="hint_search_artist">Find by Artist name</string>
 
 </resources>
