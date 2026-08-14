@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.databinding.FragmentArtistManagementBinding
 import com.infix.musicappv1.ui.adapter.admin.ArtistAdminPagingDataAdapter
+import com.infix.musicappv1.ui.dialog.CRUDOptionDialog
 import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -24,6 +26,7 @@ class ArtistManagementFragment : Fragment() {
     private lateinit var binding: FragmentArtistManagementBinding
     private lateinit var loadingDialogFragment: LoadingDialogFragment
     private lateinit var adapter: ArtistAdminPagingDataAdapter
+    private lateinit var crudOptionDialog: CRUDOptionDialog<Artist>
 
     private var searchJob: Job? = null
 
@@ -47,16 +50,28 @@ class ArtistManagementFragment : Fragment() {
         loadingDialogFragment = LoadingDialogFragment()
 
         initializeRv()
+        setupCrudOptionDialog()
         observeArtistManagementVM()
         setupEvents()
     }
 
     private fun initializeRv() {
         adapter = ArtistAdminPagingDataAdapter(
-            {artist -> }
+            {artist ->
+                crudOptionDialog.setData(artist)
+                crudOptionDialog.show(requireActivity().supportFragmentManager, null)
+            }
         )
 
         binding.rvArtists.adapter = adapter
+    }
+
+    private fun setupCrudOptionDialog() {
+        crudOptionDialog = CRUDOptionDialog(
+            onUpdate = {artist -> },
+            onDelete = {artist -> },
+            onView = {artist -> }
+        )
     }
 
     private fun observeArtistManagementVM() {
