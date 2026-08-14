@@ -1,6 +1,7 @@
 package com.infix.musicappv1.data.repository.artist
 
 import androidx.paging.PagingSource
+import com.infix.musicappv1.data.dto.BaseResultResponse
 import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.model.artist.ArtistList
 import com.infix.musicappv1.data.model.song.Song
@@ -20,4 +21,7 @@ interface ArtistRepository {
     suspend fun getArtistById(artistId: Long): Artist?
     suspend fun loadArtistsPaging(query: String, limit: Int, key: Int): ArtistList?
     suspend fun loadSongsByArtistId(artistId: Long): Result<List<Song>>
+
+    //admin
+    suspend fun saveArtist(artist: Artist, isUpdate: Boolean): Result<BaseResultResponse>
 }

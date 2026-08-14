@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_admin"
-    app:startDestination="@id/navigate_song_management">
+    app:startDestination="@id/navigate_manage_songs">
 
     <fragment
-        android:id="@+id/navigate_song_management"
+        android:id="@+id/navigate_manage_songs"
         android:name="com.infix.musicappv1.ui.admin.song.SongManagementFragment"
         android:label="@string/txt_manage_song"
         tools:layout="@layout/fragment_song_management">

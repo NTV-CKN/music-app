@@ -3,6 +3,7 @@ package com.infix.musicappv1.data.source.remote
 import com.infix.musicappv1.data.dto.BaseResultResponse
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.album.AlbumList
+import com.infix.musicappv1.data.model.artist.Artist
 import com.infix.musicappv1.data.model.artist.ArtistList
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongList
@@ -48,4 +49,7 @@ interface MusicService {
 
     @POST("v1/admin/delete-album")
     suspend fun deleteAlbum(@Body body: Map<String, String>): Response<BaseResultResponse>
+
+    @POST("v1/admin/save-artist")
+    suspend fun saveArtist(@Body artist: Artist): Response<BaseResultResponse>
 }

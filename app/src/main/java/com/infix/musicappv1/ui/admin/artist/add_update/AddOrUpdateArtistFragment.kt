@@ -20,7 +20,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.infix.musicappv1.R
 import com.infix.musicappv1.databinding.FragmentAddOrUpdateArtistBinding
 import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
-import com.infix.musicappv1.utils.GenerateIdHelper
 import com.infix.musicappv1.utils.SnackbarUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -142,10 +141,6 @@ class AddOrUpdateArtistFragment : Fragment() {
             }
 
             val artistTmp = addOrUpdateArtistVM.params.value!!.artist
-
-            if (!addOrUpdateArtistVM.params.value!!.isUpdate) {
-                artistTmp.id = GenerateIdHelper.generateIdLong()
-            }
 
             addOrUpdateArtistVM.saveArtist(
                 artistTmp,
