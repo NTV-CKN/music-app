@@ -113,6 +113,21 @@ class ArtistManagementFragment : Fragment() {
     }
 
     private fun setupEvents() {
+        //fab add
+        binding.fabAddArtist.setOnClickListener {
+            addOrUpdateArtistVM.setArtistParamsState(
+                AddOrUpdateArtistViewModel.AddOrUpdateArtistParams(
+                    isUpdate = false
+                )
+            )
+
+            findNavController().navigate(
+                ArtistManagementFragmentDirections.actionNavigateManageArtistsToNavigateAddOrUpdateArtist(
+                    R.string.txt_add_artist
+                )
+            )
+        }
+
         //search
         binding.edtSearch.doOnTextChanged { text, _, _, _ ->
             searchJob?.cancel()
