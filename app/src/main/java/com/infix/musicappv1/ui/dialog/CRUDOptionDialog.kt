@@ -15,6 +15,10 @@ class CRUDOptionDialog<T>(
 ) : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentCrudDialogBinding
 
+    private var isVisibleDelete: Boolean = true
+    private var isVisibleView: Boolean = true
+    private var isVisibleUpdate: Boolean = true
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,6 +36,7 @@ class CRUDOptionDialog<T>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setEvents()
+        applyVisibility()
     }
 
     private fun setEvents() {
@@ -52,7 +57,23 @@ class CRUDOptionDialog<T>(
         }
     }
 
-    fun setData(data: T?) {
+    private fun applyVisibility() {
+        if (::binding.isInitialized) {
+            binding.btnOptionDelete.visibility = if (isVisibleDelete) View.VISIBLE else View.GONE
+            binding.btnOptionRead.visibility = if (isVisibleView) View.VISIBLE else View.GONE
+            binding.btnOptionUpdate.visibility = if (isVisibleUpdate) View.VISIBLE else View.GONE
+        }
+    }
+
+    fun setData(
+        data: T?,
+        isVisibleDelete: Boolean = true,
+        isVisibleView: Boolean = true,
+        isVisibleUpdate: Boolean = true
+    ) {
         this.data = data
+        this.isVisibleDelete = isVisibleDelete
+        this.isVisibleView = isVisibleView
+        this.isVisibleUpdate = isVisibleUpdate
     }
 }

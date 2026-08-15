@@ -56,7 +56,7 @@
 <string name="txt_list_of_artist">Danh sách nghệ sĩ</string>
 <string name="txt_amount_interested">Số lượng yêu thích: %d</string>
 <string name="txt_your_interested_artist">Nghệ sĩ yêu thích của bạn: %s</string>
-<string name="txt_name_artist_args">Tên nghệ sĩ: %s</string>
+    <string name="txt_name_artist">Tên nghệ sĩ: %s</string>
 <string name="txt_song_most_heard">Bài hát nghe nhiều nhất ></string>
 <string name="txt_top_40_song">Top 40 bài hát nghe nhiều nhất</string>
 <string name="txt_interested_artist">Nghệ sĩ yêu thích</string>
@@ -140,5 +140,21 @@
     <string name="txt_update_artist">Cập Nhật Nghệ Sĩ</string>
     <string name="txt_add_artist">Thêm Nghệ Sĩ</string>
     <string name="hint_enter_artist_name">Nhập tên nghệ sĩ</string>
+
+    <!--    subscription-->
+    <string name="txt_duration_days_args">%s ngày</string>
+    <string name="txt_state_active">Hoạt động</string>
+    <string name="txt_state_unactive">Không hoạt động</string>
+    <string name="txt_price_with_vnd">%s VNĐ</string>
+    <string name="hint_search_subscription">Tìm theo tên gói</string>
+    <string name="txt_info_subscription">Thông tin gói dịch vụ</string>
+    <string name="txt_name_subscription">Tên gói dịch vụ</string>
+    <string name="txt_description_subscription">Mô tả gói dịch vụ</string>
+    <string name="txt_price_subscription">Giá gói dịch vụ</string>
+    <string name="txt_duration_subscription">Thời gian khả dụng</string>
+    <string name="txt_status_subscription">Trạng thái gói dịch vụ</string>
+    <string name="txt_save_subscription">Lưu Gói Dịch Vụ</string>
+    <string name="txt_update_subscription">Cập nhật gói dịch vụ</string>
+    <string name="txt_add_subscription">Thêm gói dịch vụ</string>
 
 </resources>

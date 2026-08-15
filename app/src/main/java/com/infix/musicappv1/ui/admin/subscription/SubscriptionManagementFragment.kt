@@ -1,4 +1,4 @@
-package com.infix.musicappv1.ui.admin.song
+package com.infix.musicappv1.ui.admin.subscription
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,10 +14,10 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.infix.musicappv1.R
-import com.infix.musicappv1.data.model.song.Song
-import com.infix.musicappv1.databinding.FragmentSongManagementBinding
-import com.infix.musicappv1.ui.adapter.admin.SongAdminPagingDataAdapter
-import com.infix.musicappv1.ui.admin.song.update_add.AddOrUpdateSongViewModel
+import com.infix.musicappv1.data.model.Subscription
+import com.infix.musicappv1.databinding.FragmentSubscriptionManagementBinding
+import com.infix.musicappv1.ui.adapter.SubscriptionPagingDataAdapter
+import com.infix.musicappv1.ui.admin.subscription.add_update.AddOrUpdateSubscriptionViewModel
 import com.infix.musicappv1.ui.dialog.CRUDOptionDialog
 import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
 import com.infix.musicappv1.utils.SnackbarUtils
@@ -29,27 +29,25 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SongManagementFragment : Fragment() {
-    private lateinit var binding: FragmentSongManagementBinding
-    private lateinit var adapter: SongAdminPagingDataAdapter
-    private lateinit var crudOptionDialog: CRUDOptionDialog<Song>
+class SubscriptionManagementFragment : Fragment() {
+
+    private lateinit var binding: FragmentSubscriptionManagementBinding
+    private lateinit var adapter: SubscriptionPagingDataAdapter
+    private lateinit var crudOptionDialog: CRUDOptionDialog<Subscription>
     private lateinit var navController: NavController
     private lateinit var loadingDialogFragment: LoadingDialogFragment
 
+    private val addOrUpdateSubscriptionViewModel by activityViewModels<AddOrUpdateSubscriptionViewModel>()
+    private val viewModel by viewModels<SubscriptionManagementViewModel>()
+
     private var searchJob: Job? = null
 
-    private val songManagementViewModel by viewModels<SongManagementViewModel>()
-    private val addOrUpdateSongViewModel by activityViewModels<AddOrUpdateSongViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSongManagementBinding.inflate(
-            inflater,
-            container,
-            false
-        )
+        binding = FragmentSubscriptionManagementBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -59,9 +57,9 @@ class SongManagementFragment : Fragment() {
         loadingDialogFragment = LoadingDialogFragment()
 
         initCrudOptDialog()
-        observeSongManagementVM()
+        observeViewModel()
         initRecyclerView()
-        setupSearchSong()
+        setupSearch()
         setupEvents()
     }
 
@@ -71,38 +69,33 @@ class SongManagementFragment : Fragment() {
     }
 
     private fun initCrudOptDialog() {
-        //add logic items selected for crudOptionDialog
         crudOptionDialog = CRUDOptionDialog(
-            onUpdate = { song ->
-                addOrUpdateSongViewModel.setIsUpdateSongState(
-                    AddOrUpdateSongViewModel.AddOrUpdateSongParams(
-                        true,
-                        song.clone()
+            onUpdate = { subscription ->
+                addOrUpdateSubscriptionViewModel.setIsUpdateSubscriptionState(
+                    AddOrUpdateSubscriptionViewModel.AddOrUpdateSubscriptionParams(
+                        isUpdate = true,
+                        subscription.clone()
                     )
                 )
 
                 findNavController().navigate(
-                    SongManagementFragmentDirections.actionNavigateSongManagementToAddOrUpdateSong(
-                        R.string.txt_update_song
+                    SubscriptionManagementFragmentDirections.actionNavigateManageVipPackagesToNavigateAddOrUpdateSubscription(
+                        R.string.txt_update_subscription
                     )
                 )
             },
-            onView = { song -> },
-            onDelete = ::handleRemoveSong
+            onView = { subscription -> },
+            onDelete = ::handleRemoveSubscription
         )
     }
 
-    private fun observeSongManagementVM() {
-        //Song PagingData
-        songManagementViewModel.songPagingData
+    private fun observeViewModel() {
+        viewModel.subscriptionPagingData
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach {
-                adapter.submitData(it)
-            }
+            .onEach { adapter.submitData(it) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        //is loading
-        songManagementViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             if (isLoading == null) return@observe
             try {
                 if (isLoading)
@@ -115,56 +108,57 @@ class SongManagementFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        adapter = SongAdminPagingDataAdapter(
-            { song, pos -> },
-            { song -> showCRUDDialog(song) }
+        adapter = SubscriptionPagingDataAdapter(
+            isAdmin = true,
+            onSubscriptionClick = { subscription -> },
+            onOptionClick = { subscription -> showCRUDDialog(subscription) }
         )
 
-        binding.rvSongs.adapter = adapter
-        songManagementViewModel.setSongsPagingState("")
+        binding.rvSubscriptions.adapter = adapter
     }
 
-    private fun showCRUDDialog(song: Song) {
-        crudOptionDialog.setData(song)
+    private fun showCRUDDialog(subscription: Subscription) {
+        crudOptionDialog.setData(subscription, isVisibleDelete = false)
         crudOptionDialog.show(requireActivity().supportFragmentManager, null)
     }
 
-    private fun setupSearchSong() {
+    private fun setupSearch() {
         binding.edtSearch.doOnTextChanged { text, _, _, _ ->
             searchJob?.cancel()
             searchJob = viewLifecycleOwner.lifecycleScope.launch {
                 delay(400)
                 val query = text?.toString() ?: ""
-                songManagementViewModel.setSongsPagingState(query)
+                viewModel.setSubscriptionPagingState(query)
             }
         }
     }
 
     private fun setupEvents() {
-        //FAB Add song
-        binding.fabAddSong.setOnClickListener {
-            addOrUpdateSongViewModel.setIsUpdateSongState(
-                AddOrUpdateSongViewModel.AddOrUpdateSongParams(
+        //fab
+        binding.fabAddSubscription.setOnClickListener {
+            addOrUpdateSubscriptionViewModel.setIsUpdateSubscriptionState(
+                AddOrUpdateSubscriptionViewModel.AddOrUpdateSubscriptionParams(
                     isUpdate = false
                 )
             )
 
-            val action = SongManagementFragmentDirections
-                .actionNavigateSongManagementToAddOrUpdateSong(
-                    addOrUpdate = R.string.txt_add_song
+            findNavController().navigate(
+                SubscriptionManagementFragmentDirections.actionNavigateManageVipPackagesToNavigateAddOrUpdateSubscription(
+                    R.string.txt_add_subscription
                 )
-            navController.navigate(action)
+            )
+        }
+
+        //swipe
+        binding.swipeRefresh.setOnRefreshListener {
+            adapter.refresh()
+            binding.swipeRefresh.isRefreshing = false
         }
     }
 
-    private fun handleRemoveSong(song: Song) {
+    private fun handleRemoveSubscription(subscription: Subscription) {
         val callback: (success: Boolean, msg: String) -> Unit = { _, msg ->
-            SnackbarUtils.showBaseSnackbar(
-                binding.root,
-                msg,
-                Snackbar.LENGTH_SHORT
-            )
-            adapter.refresh()
+            SnackbarUtils.showBaseSnackbar(binding.root, msg, Snackbar.LENGTH_SHORT)
         }
 
         SnackbarUtils.showSnackbarWithAction(
@@ -173,10 +167,7 @@ class SongManagementFragment : Fragment() {
             "Ok",
             Snackbar.LENGTH_LONG
         ) {
-            songManagementViewModel.removeSong(
-                song,
-                callback
-            )
+            viewModel.removeSubscription(subscription, callback)
         }
     }
 }

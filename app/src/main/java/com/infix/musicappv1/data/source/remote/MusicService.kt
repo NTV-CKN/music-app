@@ -1,6 +1,8 @@
 package com.infix.musicappv1.data.source.remote
 
 import com.infix.musicappv1.data.dto.BaseResultResponse
+import com.infix.musicappv1.data.model.Subscription
+import com.infix.musicappv1.data.model.SubscriptionList
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.album.AlbumList
 import com.infix.musicappv1.data.model.artist.Artist
@@ -35,6 +37,13 @@ interface MusicService {
         @Query("key") key: Int
     ): Response<AlbumList>
 
+    @GET("v1/admin/subscriptions")
+    suspend fun loadSubscriptionsPaging(
+        @Query("query") query: String,
+        @Query("limit") limit: Int,
+        @Query("key") key: Int
+    ): Response<SubscriptionList>
+
     @POST("v1/admin/save-song")
     suspend fun saveSong(@Body song: Song): Response<BaseResultResponse>
 
@@ -55,4 +64,13 @@ interface MusicService {
 
     @POST("v1/admin/delete-artist")
     suspend fun deleteArtist(@Body body: Map<String, Long>): Response<BaseResultResponse>
+
+    @POST("v1/admin/save-subscription")
+    suspend fun saveSubscription(@Body subscription: Subscription): Response<BaseResultResponse>
+
+    @POST("v1/admin/update-subscription")
+    suspend fun updateSubscription(@Body subscription: Subscription): Response<BaseResultResponse>
+
+    @POST("v1/admin/remove-subscription")
+    suspend fun removeSubscription(@Body body: Map<String, String>): Response<BaseResultResponse>
 }
