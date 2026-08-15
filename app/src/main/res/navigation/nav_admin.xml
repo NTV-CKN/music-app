@@ -66,5 +66,19 @@
         android:id="@+id/navigate_manage_vip_packages"
         android:name="com.infix.musicappv1.ui.admin.subscription.SubscriptionManagementFragment"
         android:label="@string/txt_manage_subscriptions"
-        tools:layout="@layout/fragment_subscription_management" />
+        tools:layout="@layout/fragment_subscription_management" >
+        <action
+            android:id="@+id/action_navigate_manage_vip_packages_to_navigate_add_or_update_subscription"
+            app:destination="@id/navigate_add_or_update_subscription" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigate_add_or_update_subscription"
+        android:name="com.infix.musicappv1.ui.admin.subscription.add_update.AddOrUpdateSubscriptionFragment"
+        android:label="{addOrUpdate}"
+        tools:layout="@layout/fragment_add_or_update_subscription">
+        <argument
+            android:name="addOrUpdate"
+            android:defaultValue="@string/txt_update_album"
+            app:argType="reference" />
+    </fragment>
 </navigation>

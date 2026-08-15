@@ -21,6 +21,7 @@ class SubscriptionRepositoryImpl @Inject constructor(
             if (subscription.id.isBlank()) {
                 subscription.id = GenerateIdHelper.generateId()
             }
+
             val response = remote.saveSubscription(subscription)
             if (response.isSuccessful) {
                 Result.Success(

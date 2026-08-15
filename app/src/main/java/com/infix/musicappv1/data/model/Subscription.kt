@@ -6,7 +6,20 @@ data class Subscription(
     var description: String = "",
     var price: Double = 0.0,
     var durationDays: Int = 30,
-    var isActive: Boolean,
+    var isActive: Boolean = true,
     var createAt: String = "",
     var updateAt: String = ""
-)
+) {
+    fun clone(): Subscription {
+        return Subscription(
+            id,
+            name,
+            description,
+            price,
+            durationDays,
+            isActive,
+            createAt,
+            updateAt
+        )
+    }
+}

@@ -143,10 +143,19 @@
     <string name="txt_add_artist">Add Artist</string>
     <string name="hint_enter_artist_name">Enter artist name</string>
 
-<!--    subscription-->
+    <!--    subscription-->
     <string name="txt_duration_days_args">%s days</string>
     <string name="txt_state_active">Active</string>
     <string name="txt_state_unactive">Unactive</string>
     <string name="txt_price_with_vnd">%s VNĐ</string>
     <string name="hint_search_subscription">Find by name subscription</string>
+    <string name="txt_info_subscription">Subscription Information</string>
+    <string name="txt_name_subscription">Subscription Name</string>
+    <string name="txt_description_subscription">Subscription Description</string>
+    <string name="txt_price_subscription">Subscription Price</string>
+    <string name="txt_duration_subscription">Duration</string>
+    <string name="txt_status_subscription">Subscription Status</string>
+    <string name="txt_save_subscription">Save Subscription</string>
+    <string name="txt_update_subscription">Update Subscription</string>
+    <string name="txt_add_subscription">Add Subscription</string>
 </resources>

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,7 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.Subscription
 import com.infix.musicappv1.databinding.FragmentSubscriptionManagementBinding
 import com.infix.musicappv1.ui.adapter.SubscriptionPagingDataAdapter
+import com.infix.musicappv1.ui.admin.subscription.add_update.AddOrUpdateSubscriptionViewModel
 import com.infix.musicappv1.ui.dialog.CRUDOptionDialog
 import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
 import com.infix.musicappv1.utils.SnackbarUtils
@@ -35,8 +37,11 @@ class SubscriptionManagementFragment : Fragment() {
     private lateinit var navController: NavController
     private lateinit var loadingDialogFragment: LoadingDialogFragment
 
-    private var searchJob: Job? = null
+    private val addOrUpdateSubscriptionViewModel by activityViewModels<AddOrUpdateSubscriptionViewModel>()
     private val viewModel by viewModels<SubscriptionManagementViewModel>()
+
+    private var searchJob: Job? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,7 +71,18 @@ class SubscriptionManagementFragment : Fragment() {
     private fun initCrudOptDialog() {
         crudOptionDialog = CRUDOptionDialog(
             onUpdate = { subscription ->
+                addOrUpdateSubscriptionViewModel.setIsUpdateSubscriptionState(
+                    AddOrUpdateSubscriptionViewModel.AddOrUpdateSubscriptionParams(
+                        isUpdate = true,
+                        subscription.clone()
+                    )
+                )
 
+                findNavController().navigate(
+                    SubscriptionManagementFragmentDirections.actionNavigateManageVipPackagesToNavigateAddOrUpdateSubscription(
+                        R.string.txt_update_subscription
+                    )
+                )
             },
             onView = { subscription -> },
             onDelete = ::handleRemoveSubscription
@@ -99,12 +115,6 @@ class SubscriptionManagementFragment : Fragment() {
         )
 
         binding.rvSubscriptions.adapter = adapter
-        viewModel.setSubscriptionPagingState("")
-
-        binding.swipeRefresh.setOnRefreshListener {
-            adapter.refresh()
-            binding.swipeRefresh.isRefreshing = false
-        }
     }
 
     private fun showCRUDDialog(subscription: Subscription) {
@@ -126,7 +136,23 @@ class SubscriptionManagementFragment : Fragment() {
     private fun setupEvents() {
         //fab
         binding.fabAddSubscription.setOnClickListener {
+            addOrUpdateSubscriptionViewModel.setIsUpdateSubscriptionState(
+                AddOrUpdateSubscriptionViewModel.AddOrUpdateSubscriptionParams(
+                    isUpdate = false
+                )
+            )
 
+            findNavController().navigate(
+                SubscriptionManagementFragmentDirections.actionNavigateManageVipPackagesToNavigateAddOrUpdateSubscription(
+                    R.string.txt_add_subscription
+                )
+            )
+        }
+
+        //swipe
+        binding.swipeRefresh.setOnRefreshListener {
+            adapter.refresh()
+            binding.swipeRefresh.isRefreshing = false
         }
     }
 

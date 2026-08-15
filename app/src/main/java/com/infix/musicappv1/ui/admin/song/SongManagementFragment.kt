@@ -164,6 +164,7 @@ class SongManagementFragment : Fragment() {
                 msg,
                 Snackbar.LENGTH_SHORT
             )
+            adapter.refresh()
         }
 
         SnackbarUtils.showSnackbarWithAction(

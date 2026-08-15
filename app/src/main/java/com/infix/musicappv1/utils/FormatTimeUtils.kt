@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.Locale
 import kotlin.time.Duration.Companion.seconds
 
@@ -33,6 +34,15 @@ object FormatTimeUtils {
             formatter.format(instant)
         } catch (_: Exception) {
             date
+        }
+    }
+
+    fun toIsoString(date: Date?): String {
+        if (date == null) return ""
+        return try {
+            DateTimeFormatter.ISO_INSTANT.format(date.toInstant())
+        } catch (_: Exception) {
+            ""
         }
     }
 }

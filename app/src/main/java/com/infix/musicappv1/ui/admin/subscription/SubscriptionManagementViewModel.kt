@@ -26,11 +26,15 @@ class SubscriptionManagementViewModel @Inject constructor(
     private val factory: SubscriptionPagingSource.AssistedFactory,
     private val subscriptionRepository: SubscriptionRepository
 ) : ViewModel() {
+    data class WrapQuery(
+        val query: String,
+        val current: Long = System.currentTimeMillis()
+    )
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _currentQuery = MutableStateFlow("")
+    private val _currentQuery = MutableStateFlow(WrapQuery(""))
     val currentQuery = _currentQuery.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -41,17 +45,18 @@ class SubscriptionManagementViewModel @Inject constructor(
                 initialLoadSize = 20,
                 prefetchDistance = 5
             ),
-            pagingSourceFactory = { factory.create(query) }
+            pagingSourceFactory = { factory.create(query.query) }
         ).flow
     }.cachedIn(viewModelScope)
 
     fun setSubscriptionPagingState(query: String) {
-        if (_currentQuery.value != query) {
-            _currentQuery.value = query
-        }
+        _currentQuery.value = WrapQuery(query)
     }
 
-    fun removeSubscription(subscription: Subscription, callback: (success: Boolean, msg: String) -> Unit) {
+    fun removeSubscription(
+        subscription: Subscription,
+        callback: (success: Boolean, msg: String) -> Unit
+    ) {
         _isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             val result = subscriptionRepository.removeSubscription(subscription.id)
@@ -59,7 +64,7 @@ class SubscriptionManagementViewModel @Inject constructor(
             withContext(Dispatchers.Main) {
                 if (result is Result.Success) {
                     callback.invoke(result.data.success, result.data.message)
-                    _currentQuery.value += " "
+                    _currentQuery.value = WrapQuery(_currentQuery.value.query)
                 } else if (result is Result.Error) {
                     callback.invoke(false, result.err.message ?: "Unknown error")
                 }
