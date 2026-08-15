@@ -141,4 +141,10 @@
     <string name="txt_add_artist">Thêm Nghệ Sĩ</string>
     <string name="hint_enter_artist_name">Nhập tên nghệ sĩ</string>
 
+    <!--    subscription-->
+    <string name="txt_duration_days_args">%s ngày</string>
+    <string name="txt_state_active">Hoạt động</string>
+    <string name="txt_state_unactive">Không hoạt động</string>
+    <string name="txt_price_with_vnd">%s VNĐ</string>
+    <string name="hint_search_subscription">Tìm theo tên gói</string>
 </resources>

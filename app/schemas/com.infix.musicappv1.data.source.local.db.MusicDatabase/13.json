@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 12,
-    "identityHash": "bc6b605a690934aa2e9ef80d377ebe09",
+    "version": 13,
+    "identityHash": "02ffbc69e44998d3ba80805286d12017",
     "entities": [
       {
         "tableName": "albums",
@@ -54,7 +54,7 @@
       },
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` TEXT NOT NULL, `email` TEXT NOT NULL, `display_name` TEXT NOT NULL, `avatar` TEXT NOT NULL, `role` TEXT NOT NULL, `login_at` INTEGER NOT NULL, `isVip` INTEGER NOT NULL, `vipExpiryDate` TEXT NOT NULL, PRIMARY KEY(`uid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` TEXT NOT NULL, `email` TEXT NOT NULL, `display_name` TEXT NOT NULL, `avatar` TEXT NOT NULL, `role` TEXT NOT NULL, `login_at` INTEGER NOT NULL, `isVip` INTEGER NOT NULL, `vipExpiryDate` TEXT, PRIMARY KEY(`uid`))",
         "fields": [
           {
             "fieldPath": "uid",
@@ -102,7 +102,7 @@
             "fieldPath": "vipExpiryDate",
             "columnName": "vipExpiryDate",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -707,7 +707,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bc6b605a690934aa2e9ef80d377ebe09')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '02ffbc69e44998d3ba80805286d12017')"
     ]
   }
 }

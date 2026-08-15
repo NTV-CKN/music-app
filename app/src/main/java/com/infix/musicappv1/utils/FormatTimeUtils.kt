@@ -1,6 +1,9 @@
 package com.infix.musicappv1.utils
 
 import android.annotation.SuppressLint
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.time.Duration.Companion.seconds
 
@@ -20,5 +23,16 @@ object FormatTimeUtils {
             return "00:00"
 
         return String.format(Locale.ENGLISH, "%02d:%02d", minute, second)
+    }
+
+    fun toFormattedDate(date: String): String {
+        return try {
+            val instant = Instant.parse(date)
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+                .withZone(ZoneId.systemDefault())
+            formatter.format(instant)
+        } catch (_: Exception) {
+            date
+        }
     }
 }

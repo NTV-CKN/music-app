@@ -20,5 +20,5 @@ data class User(
     @ColumnInfo("login_at")
     val loginAt: Long = System.currentTimeMillis(),
     val isVip: Boolean = false,
-    val vipExpiryDate: String
+    val vipExpiryDate: String?
 ) : Serializable
