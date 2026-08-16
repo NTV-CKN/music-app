@@ -14,4 +14,8 @@
         android:id="@+id/navigate_admin_panel"
         android:name="com.infix.musicappv1.ui.admin.AdminActivity"
         android:label="AdminActivity" />
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:label="@string/txt_setting"
+        android:name="com.infix.musicappv1.ui.settings.SettingsFragment" />
 </navigation>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
     <group android:id="@+id/group_user">
@@ -18,6 +19,14 @@
             android:id="@+id/navigate_my_packages"
             android:icon="@drawable/ic_subscriptions_24px"
             android:title="@string/txt_paid_subscriptions" />
+    </group>
+
+    <group android:id="@+id/group_setting">
+        <item
+            android:id="@+id/navigation_settings"
+            android:icon="@drawable/ic_settings_black"
+            android:title="@string/txt_setting"
+            app:showAsAction="ifRoom|withText" />
     </group>
 
     <group android:id="@+id/group_admin">

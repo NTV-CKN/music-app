@@ -161,4 +161,5 @@
 
     <string name="txt_subscribe_now">Subscribe Now</string>
     <string name="txt_vip_saving_subscription">VIP SAVING</string>
+    <string name="txt_vip_subscription">VIP Subscription</string>
 </resources>

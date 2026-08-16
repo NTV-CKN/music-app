@@ -165,9 +165,7 @@
         android:name="com.infix.musicappv1.ui.home.album.detail.AlbumDetailFragment"
         android:label="fragment_album_detail"
         tools:layout="@layout/fragment_album_detail" />
-    <fragment
-        android:id="@+id/navigation_settings"
-        android:name="com.infix.musicappv1.ui.settings.SettingsFragment" />
+
     <fragment
         android:id="@+id/navigate_search_song"
         android:name="com.infix.musicappv1.ui.search.SearchSongFragment"
@@ -178,4 +176,8 @@
         android:name="com.infix.musicappv1.ui.auth.AuthActivity"
         android:label="activity_auth"
         tools:layout="@layout/activity_auth" />
+    <fragment
+        android:id="@+id/navigate_subscription"
+        android:name="com.infix.musicappv1.ui.vip_subscription.SubscriptionFragment"
+        android:label="SubscriptionFragment" />
 </navigation>

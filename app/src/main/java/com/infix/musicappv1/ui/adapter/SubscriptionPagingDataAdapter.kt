@@ -11,6 +11,7 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.Subscription
 import com.infix.musicappv1.databinding.ItemSubscriptionAdminBinding
 import com.infix.musicappv1.databinding.ItemSubscriptionBinding
+import com.infix.musicappv1.utils.FormatUnitUtils
 
 class SubscriptionPagingDataAdapter(
     private val isAdmin: Boolean = false,
@@ -124,7 +125,7 @@ class SubscriptionPagingDataAdapter(
 
                 tvPrice.text = context.getString(
                     R.string.txt_price_with_vnd,
-                    item.price.toString()
+                    FormatUnitUtils.toVndFormatted(item.price)
                 )
 
                 tvDuration.text = "/ ${context.getString(
@@ -156,7 +157,6 @@ class SubscriptionPagingDataAdapter(
                     cardSubscription.strokeColor = colorOutlineVariant
                     cardSubscription.strokeWidth = 1.dpToPx(context)
 
-                    tvPrice.setTextColor(colorPrimary)
                     btnSelect.backgroundTintList = android.content.res.ColorStateList.valueOf(colorPrimary)
                     btnSelect.setTextColor(colorOnPrimary)
                 }
