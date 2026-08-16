@@ -26,10 +26,15 @@ class SongManagementViewModel @Inject constructor(
     private val factory: SongPagingSource.AssistedFactory,
     private val songRepository: SongRepository
 ) : ViewModel() {
+    data class WrapQuery(
+        val query: String,
+        val current: Long = System.currentTimeMillis()
+    )
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _currentQuery = MutableStateFlow("")
+    private val _currentQuery = MutableStateFlow(WrapQuery(""))
     val currentQuery = _currentQuery.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -40,14 +45,12 @@ class SongManagementViewModel @Inject constructor(
                 initialLoadSize = 20,
                 prefetchDistance = 5
             ),
-            pagingSourceFactory = { factory.create(query) }
+            pagingSourceFactory = { factory.create(query.query) }
         ).flow
     }.cachedIn(viewModelScope)
 
     fun setSongsPagingState(query: String) {
-        if (_currentQuery.value != query) {
-            _currentQuery.value = query
-        }
+            _currentQuery.value = WrapQuery(query)
     }
 
     fun removeSong(song: Song, callback: (success: Boolean, msg: String) -> Unit) {
@@ -59,7 +62,7 @@ class SongManagementViewModel @Inject constructor(
             withContext(Dispatchers.Main) {
                 if (result is Result.Success) {
                     callback.invoke(result.data.success, result.data.message)
-                    _currentQuery.value += " "
+                    _currentQuery.value = WrapQuery(_currentQuery.value.query)
                 } else if (result is Result.Error) {
                     callback.invoke(false, result.err.message ?: "Unknown error")
                 }

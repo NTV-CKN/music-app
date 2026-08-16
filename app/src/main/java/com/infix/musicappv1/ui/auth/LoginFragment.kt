@@ -1,6 +1,7 @@
 package com.infix.musicappv1.ui.auth
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -82,6 +83,7 @@ class LoginFragment : Fragment() {
                     }
                 }
             } catch (e: Exception) {
+                Log.e("LoginFragment", e.message ?:"c")
                 SnackbarUtils.showBaseSnackbar(
                     binding.root,
                     e.message?:"unknown",
