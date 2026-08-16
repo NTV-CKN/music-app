@@ -64,7 +64,8 @@ class UserManagementActivity : AppCompatActivity() {
             setOf(
                 R.id.navigate_home,
                 R.id.navigate_profile,
-                R.id.navigate_my_packages
+                R.id.navigate_my_packages,
+                R.id.navigation_settings,
             ),
             drawerLayout = binding.drawerLayout
         )

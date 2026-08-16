@@ -82,6 +82,7 @@ class MainActivity : AppCompatActivity() {
         initializeNavHostFragment()
         setupObserver()
         calculateDensityOfApp()
+        setEvents()
     }
 
     private fun calculateDensityOfApp() {
@@ -166,6 +167,20 @@ class MainActivity : AppCompatActivity() {
         navController = navHost.findNavController()
 
         binding.bottomNav.setupWithNavController(navController)
+
+//        when (destination.id) {
+//            R.string.txt_title_subscription, R.id.checkoutFragment -> {
+//                binding.bottomNav.isVisible = false
+//                binding.fcvMiniPlayer.isVisible = false
+//                binding.btnVipCenter.isVisible = false
+//            }
+//
+//            else -> {
+//                binding.bottomNav.isVisible = true
+//                binding.fcvMiniPlayer.isVisible = true
+//                binding.btnVipCenter.isVisible = true
+//            }
+//        }
     }
 
 
@@ -205,6 +220,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setEvents() {
+        binding.btnVipCenter.setOnClickListener {
+            navController.navigate(R.id.navigate_subscription)
+        }
+    }
 
     companion object {
         const val KEY_IS_LOADED = "KEY_IS_LOADED"

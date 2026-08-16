@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home_24dp"
-        android:title="@string/txt_home"
-        app:showAsAction="ifRoom|withText" />
+        android:title="@string/txt_home" />
+
     <item
         android:id="@+id/navigation_library"
         android:icon="@drawable/ic_library_music_black"
-        android:title="@string/txt_library"
-        app:showAsAction="ifRoom|withText" />
+        android:title="@string/txt_library" />
+
+    <item
+        android:id="@+id/navigation_placeholder"
+        android:enabled="false"
+        android:title="" />
+
     <item
         android:id="@+id/navigation_discovery"
         android:icon="@drawable/ic_dashboard_black"
-        android:title="@string/txt_discovery"
-        app:showAsAction="ifRoom|withText" />
-    <item
-        android:id="@+id/navigation_settings"
-        android:icon="@drawable/ic_settings_black"
-        android:title="@string/txt_setting"
-        app:showAsAction="ifRoom|withText" />
+        android:title="@string/txt_discovery" />
+
     <item
         android:id="@+id/navigation_user_profile"
         android:icon="@drawable/ic_account_circle_24"
-        app:showAsAction="ifRoom"
-        android:title="@string/txt_me"/>
+        android:title="@string/txt_me" />
 </menu>
