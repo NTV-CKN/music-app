@@ -141,6 +141,14 @@ class SongManagementFragment : Fragment() {
     }
 
     private fun setupEvents() {
+        //refresh
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            songManagementViewModel.setSongsPagingState(
+                songManagementViewModel.currentQuery.value.query
+            )
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
+
         //FAB Add song
         binding.fabAddSong.setOnClickListener {
             addOrUpdateSongViewModel.setIsUpdateSongState(
