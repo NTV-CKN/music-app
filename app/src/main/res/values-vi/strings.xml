@@ -157,4 +157,6 @@
     <string name="txt_update_subscription">Cập nhật gói dịch vụ</string>
     <string name="txt_add_subscription">Thêm gói dịch vụ</string>
 
+    <string name="txt_subscribe_now">Đăng ký ngay</string>
+    <string name="txt_vip_saving_subscription">GÓI VIP TIẾT KIỆM</string>
 </resources>

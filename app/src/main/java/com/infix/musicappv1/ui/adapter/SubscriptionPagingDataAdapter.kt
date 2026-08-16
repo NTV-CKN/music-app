@@ -3,6 +3,7 @@ package com.infix.musicappv1.ui.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.graphics.toColorInt
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -99,25 +100,71 @@ class SubscriptionPagingDataAdapter(
         }
     }
 
-    //for User
+    // for User
     inner class UserViewHolder(private val binding: ItemSubscriptionBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.root.setOnClickListener {
-                val subscription = getItem(bindingAdapterPosition) ?: return@setOnClickListener
-                onSubscriptionClick?.invoke(subscription)
+            val clickAction = {
+                getItem(bindingAdapterPosition)?.let { subscription ->
+                    onSubscriptionClick?.invoke(subscription)
+                }
             }
+            binding.root.setOnClickListener { clickAction() }
+            binding.btnSelect.setOnClickListener { clickAction() }
         }
 
         @SuppressLint("SetTextI18n")
         fun bind(item: Subscription) {
+            val context = binding.root.context
+
             binding.apply {
-//                tvName.text = item.name
-//                tvDescription.text = item.description
-//                tvPrice.text = "${item.price} VNĐ"
-//                tvDuration.text = "${item.durationDays} ngày"
+                tvName.text = item.name
+                tvDescription.text = item.description
+
+                tvPrice.text = context.getString(
+                    R.string.txt_price_with_vnd,
+                    item.price.toString()
+                )
+
+                tvDuration.text = "/ ${context.getString(
+                    R.string.txt_duration_days_args,
+                    item.durationDays.toString()
+                )}"
+
+                val isHighValue = item.price >= 500_000.0
+
+                val colorPrimary = com.google.android.material.color.MaterialColors.getColor(
+                    root, com.google.android.material.R.attr.colorPrimarySurface
+                )
+                val colorOnPrimary = com.google.android.material.color.MaterialColors.getColor(
+                    root, com.google.android.material.R.attr.colorOnPrimary
+                )
+                val colorOutlineVariant = com.google.android.material.color.MaterialColors.getColor(
+                    root, com.google.android.material.R.attr.colorOutlineVariant
+                )
+                val colorGold = "#FFD700".toColorInt()
+
+                if (isHighValue) {
+                    cardSubscription.strokeColor = colorGold
+                    cardSubscription.strokeWidth = 3.dpToPx(context)
+
+                    tvPrice.setTextColor(colorGold)
+                    btnSelect.backgroundTintList = android.content.res.ColorStateList.valueOf(colorGold)
+                    btnSelect.setTextColor(android.graphics.Color.BLACK)
+                } else {
+                    cardSubscription.strokeColor = colorOutlineVariant
+                    cardSubscription.strokeWidth = 1.dpToPx(context)
+
+                    tvPrice.setTextColor(colorPrimary)
+                    btnSelect.backgroundTintList = android.content.res.ColorStateList.valueOf(colorPrimary)
+                    btnSelect.setTextColor(colorOnPrimary)
+                }
             }
+        }
+
+        private fun Int.dpToPx(context: android.content.Context): Int {
+            return (this * context.resources.displayMetrics.density).toInt()
         }
     }
 }

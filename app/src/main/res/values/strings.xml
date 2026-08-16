@@ -158,4 +158,7 @@
     <string name="txt_save_subscription">Save Subscription</string>
     <string name="txt_update_subscription">Update Subscription</string>
     <string name="txt_add_subscription">Add Subscription</string>
+
+    <string name="txt_subscribe_now">Subscribe Now</string>
+    <string name="txt_vip_saving_subscription">VIP SAVING</string>
 </resources>
