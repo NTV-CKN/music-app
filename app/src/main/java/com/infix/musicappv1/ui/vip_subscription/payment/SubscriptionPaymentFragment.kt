@@ -1,17 +1,15 @@
 package com.infix.musicappv1.ui.vip_subscription.payment
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.infix.musicappv1.R
-import com.infix.musicappv1.data.source.Result
 import com.infix.musicappv1.databinding.FragmentSubscriptionPaymentBinding
 import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
 import com.infix.musicappv1.utils.FormatUnitUtils
@@ -51,10 +49,11 @@ class SubscriptionPaymentFragment : Fragment() {
         binding.apply {
             tvPlanName.text = subscription.name
             tvPlanPrice.text = FormatUnitUtils.toVndFormatted(subscription.price)
-            tvPlanDuration.text = getString(R.string.txt_duration_days_args, subscription.durationDays.toString())
+            tvPlanDuration.text =
+                getString(R.string.txt_duration_days_args, subscription.durationDays.toString())
 
             btnConfirmPayment.setOnClickListener {
-//                subscriptionPaymentVM.createPaymentUrl(subscription.id)
+                subscriptionPaymentVM.createPaymentUrl(subscription.id)
             }
         }
     }
@@ -83,21 +82,7 @@ class SubscriptionPaymentFragment : Fragment() {
         }
 
         //result paymentUrl
-        subscriptionPaymentVM.paymentUrlResult.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is Result.Success -> {
-                    openVNPayCustomTab(result.data)
-                }
-
-                is Result.Error -> {
-                    Toast.makeText(
-                        requireContext(),
-                        result.err.message ?: "Khởi tạo thanh toán thất bại",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
+        subscriptionPaymentVM.paymentUrlResult.observe(viewLifecycleOwner, ::openVNPayCustomTab)
     }
 
     /**
@@ -108,6 +93,6 @@ class SubscriptionPaymentFragment : Fragment() {
             .setShowTitle(true)
             .build()
 
-        customTabsIntent.launchUrl(requireContext(), Uri.parse(url))
+        customTabsIntent.launchUrl(requireContext(), url.toUri())
     }
 }
