@@ -167,4 +167,18 @@
     <string name="txt_payment_method">Payment Method</string>
     <string name="txt_confirm_payment">Confirm Payment</string>
     <string name="txt_none_expired">None / Expired</string>
+    <string name="txt_transaction_info">Transaction Information</string>
+    <string name="txt_transaction_id">Transaction ID:</string>
+    <string name="txt_transaction_amount">Amount:</string>
+    <string name="txt_return_home">Back to home</string>
+    <string name="txt_retry_transaction">Retry payment</string>
+    <string name="txt_transaction_success">Payment successful!</string>
+    <string name="txt_description_after_transaction_success">Your account has been successfully upgraded to VIP. Enjoy high-quality music now!</string>
+    <string name="payment_error_cancelled">You have cancelled the payment transaction.</string>
+    <string name="payment_error_expired">The payment transaction has expired.</string>
+    <string name="payment_error_insufficient_balance">Insufficient bank account/wallet balance.</string>
+    <string name="payment_error_failed">Payment failed (Error code: %1$s).</string>
+    <string name="txt_payment_failed">Payment failed!</string>
+
+
 </resources>

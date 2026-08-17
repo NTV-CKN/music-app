@@ -1,6 +1,7 @@
 package com.infix.musicappv1.data.source.remote
 
 import com.infix.musicappv1.data.dto.BaseResultResponse
+import com.infix.musicappv1.data.dto.RequestPaymentResponse
 import com.infix.musicappv1.data.model.Subscription
 import com.infix.musicappv1.data.model.SubscriptionList
 import com.infix.musicappv1.data.model.album.Album
@@ -73,4 +74,7 @@ interface MusicService {
 
     @POST("v1/admin/remove-subscription")
     suspend fun removeSubscription(@Body body: Map<String, String>): Response<BaseResultResponse>
+
+    @POST("v1/create-url")
+    suspend fun createPaymentUrl(@Body body: Map<String, String>): Response<RequestPaymentResponse>
 }

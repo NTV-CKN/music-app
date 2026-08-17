@@ -23,6 +23,21 @@
         android:theme="@style/Theme.MusicAppV1"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.vip_subscription.payment.result.VNPayResultActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="vnpay-return"
+                    android:scheme="myapp" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.admin.AdminActivity"
             android:exported="false" />
         <activity

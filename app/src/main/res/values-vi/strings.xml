@@ -165,4 +165,16 @@
     <string name="txt_payment_method">Phương thức thanh toán</string>
     <string name="txt_confirm_payment">Xác nhận thanh toán</string>
     <string name="txt_none_expired">Chưa có / Đã hết hạn</string>
+    <string name="txt_transaction_info">Thông tin giao dịch</string>
+    <string name="txt_transaction_id">Mã giao dịch:</string>
+    <string name="txt_transaction_amount">Số tiền:</string>
+    <string name="txt_return_home">Trở về trang chủ</string>
+    <string name="txt_retry_transaction">Thử lại thanh toán</string>
+    <string name="txt_transaction_success">Thanh toán thành công!</string>
+    <string name="txt_description_after_transaction_success">Tài khoản của bạn đã nâng cấp VIP thành công. Tận hưởng âm nhạc chất lượng cao ngay bây giờ!</string>
+    <string name="payment_error_cancelled">Bạn đã hủy giao dịch thanh toán.</string>
+    <string name="payment_error_expired">Giao dịch đã hết hạn thanh toán.</string>
+    <string name="payment_error_insufficient_balance">Tài khoản ngân hàng/ví không đủ số dư.</string>
+    <string name="payment_error_failed">Thanh toán không thành công (Mã lỗi: %1$s).</string>
+    <string name="txt_payment_failed">Thanh toán không thành công!</string>
 </resources>
