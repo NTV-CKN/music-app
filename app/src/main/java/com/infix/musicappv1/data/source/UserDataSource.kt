@@ -11,5 +11,6 @@ interface UserDataSource {
 
     interface Remote {
         suspend fun login(): Result<User>
+        suspend fun getCurrentUserVipExpiry(uid: String): Long?
     }
 }

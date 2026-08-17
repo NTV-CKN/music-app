@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_song_management">
         <action
             android:id="@+id/action_navigate_song_management_to_add_or_update_song"
-            app:destination="@id/navigate_add_or_update_song" />
+            app:destination="@id/navigate_add_or_update_song"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right" />
     </fragment>
     <fragment
         android:id="@+id/navigate_add_or_update_song"
@@ -31,7 +35,11 @@
         tools:layout="@layout/fragment_album_management">
         <action
             android:id="@+id/action_navigate_manage_albums_to_navigate_add_or_update_album"
-            app:destination="@id/navigate_add_or_update_album" />
+            app:destination="@id/navigate_add_or_update_album"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right" />
     </fragment>
     <fragment
         android:id="@+id/navigate_add_or_update_album"
@@ -50,7 +58,11 @@
         tools:layout="@layout/fragment_artist_management">
         <action
             android:id="@+id/action_navigate_manage_artists_to_navigate_add_or_update_artist"
-            app:destination="@id/navigate_add_or_update_artist" />
+            app:destination="@id/navigate_add_or_update_artist"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right" />
     </fragment>
     <fragment
         android:id="@+id/navigate_add_or_update_artist"
@@ -66,10 +78,14 @@
         android:id="@+id/navigate_manage_vip_packages"
         android:name="com.infix.musicappv1.ui.admin.subscription.SubscriptionManagementFragment"
         android:label="@string/txt_manage_subscriptions"
-        tools:layout="@layout/fragment_subscription_management" >
+        tools:layout="@layout/fragment_subscription_management">
         <action
             android:id="@+id/action_navigate_manage_vip_packages_to_navigate_add_or_update_subscription"
-            app:destination="@id/navigate_add_or_update_subscription" />
+            app:destination="@id/navigate_add_or_update_subscription"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right" />
     </fragment>
     <fragment
         android:id="@+id/navigate_add_or_update_subscription"

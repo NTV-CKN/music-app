@@ -15,35 +15,35 @@
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_right"/>
+            app:popExitAnim="@anim/slide_right" />
         <action
             android:id="@+id/action_navigation_home_to_navigation_more_album"
             app:destination="@id/navigation_more_album"
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_right"/>
+            app:popExitAnim="@anim/slide_right" />
         <action
             android:id="@+id/action_navigation_home_to_navigate_more_song_recommend"
             app:destination="@id/navigate_more_song_recommend"
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_right"/>
+            app:popExitAnim="@anim/slide_right" />
         <action
             android:id="@+id/action_navigation_home_to_navigate_album_detail"
             app:destination="@id/navigate_album_detail"
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_right"/>
+            app:popExitAnim="@anim/slide_right" />
         <action
             android:id="@+id/action_navigation_home_to_navigate_search_song"
             app:destination="@id/navigate_search_song"
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_right"/>
+            app:popExitAnim="@anim/slide_right" />
     </fragment>
     <fragment
         android:id="@+id/navigation_discovery"
@@ -55,28 +55,28 @@
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_right"/>
+            app:popExitAnim="@anim/slide_right" />
         <action
             android:id="@+id/action_navigation_discovery_to_navigate_detail_artist"
             app:destination="@id/navigate_detail_artist"
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_right"/>
+            app:popExitAnim="@anim/slide_right" />
         <action
             android:id="@+id/action_navigation_discovery_to_navigate_more_song_most_heard"
             app:destination="@id/navigate_more_song_most_heard"
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_right"/>
+            app:popExitAnim="@anim/slide_right" />
         <action
             android:id="@+id/action_navigation_discovery_to_navigate_search_song"
             app:destination="@id/navigate_search_song"
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_right"/>
+            app:popExitAnim="@anim/slide_right" />
     </fragment>
     <fragment
         android:id="@+id/navigation_library"
@@ -88,21 +88,21 @@
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_right"/>
+            app:popExitAnim="@anim/slide_right" />
         <action
             android:id="@+id/action_navigation_library_to_navigate_more_your_playlist"
             app:destination="@id/navigate_more_your_playlist"
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_right"/>
+            app:popExitAnim="@anim/slide_right" />
         <action
             android:id="@+id/action_navigation_library_to_navigate_search_song"
             app:destination="@id/navigate_search_song"
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_right"/>
+            app:popExitAnim="@anim/slide_right" />
     </fragment>
 
     <fragment
@@ -119,7 +119,7 @@
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_right"/>
+            app:popExitAnim="@anim/slide_right" />
     </fragment>
     <fragment
         android:id="@+id/navigate_more_your_playlist"
@@ -132,19 +132,19 @@
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_right"/>
+            app:popExitAnim="@anim/slide_right" />
     </fragment>
     <fragment
         android:id="@+id/navigate_more_artist"
         android:name="com.infix.musicappv1.ui.discovery.artist.more.MoreArtistFragment"
-        tools:layout="@layout/fragment_more_artist" >
+        tools:layout="@layout/fragment_more_artist">
         <action
             android:id="@+id/action_navigate_more_artist_to_navigate_detail_artist"
             app:destination="@id/navigate_detail_artist"
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_right"/>
+            app:popExitAnim="@anim/slide_right" />
     </fragment>
     <fragment
         android:id="@+id/navigate_detail_artist"
@@ -179,5 +179,24 @@
     <fragment
         android:id="@+id/navigate_subscription"
         android:name="com.infix.musicappv1.ui.vip_subscription.SubscriptionFragment"
-        android:label="SubscriptionFragment" />
+        android:label="SubscriptionFragment"
+        tools:layout="@layout/fragment_subscription">
+        <action
+            android:id="@+id/action_navigate_subscription_to_navigate_subscription_payment"
+            app:destination="@id/navigate_subscription_payment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigate_subscription_payment"
+        android:name="com.infix.musicappv1.ui.vip_subscription.payment.SubscriptionPaymentFragment"
+        android:label="SubscriptionPaymentFragment"
+        tools:layout="@layout/fragment_subscription_payment">
+        <argument
+            android:name="subscriptionInfo"
+            app:argType="com.infix.musicappv1.data.model.Subscription"
+            app:nullable="false" />
+    </fragment>
 </navigation>

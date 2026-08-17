@@ -109,9 +109,8 @@ class SubscriptionFragment : Fragment() {
     }
 
     private fun navigateToCheckout(subscription: Subscription) {
-        // Chuyển sang màn hình thanh toán/xác nhận mua gói
-        // findNavController().navigate(
-        //     UserSubscriptionFragmentDirections.actionToCheckout(subscription)
-        // )
+         findNavController().navigate(
+             SubscriptionFragmentDirections.actionNavigateSubscriptionToNavigateSubscriptionPayment(subscription)
+         )
     }
 }

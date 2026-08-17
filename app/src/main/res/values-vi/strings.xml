@@ -160,4 +160,9 @@
     <string name="txt_subscribe_now">Đăng ký ngay</string>
     <string name="txt_vip_saving_subscription">GÓI VIP TIẾT KIỆM</string>
     <string name="txt_vip_subscription">Gói VIP</string>
+    <string name="txt_current_vip_info">Thông tin thời hạn VIP</string>
+    <string name="txt_vip_expect">Hạn VIP dự kiến mới:</string>
+    <string name="txt_payment_method">Phương thức thanh toán</string>
+    <string name="txt_confirm_payment">Xác nhận thanh toán</string>
+    <string name="txt_none_expired">Chưa có / Đã hết hạn</string>
 </resources>
