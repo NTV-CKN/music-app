@@ -162,4 +162,9 @@
     <string name="txt_subscribe_now">Subscribe Now</string>
     <string name="txt_vip_saving_subscription">VIP SAVING</string>
     <string name="txt_vip_subscription">VIP Subscription</string>
+    <string name="txt_current_vip_info">VIP Expiration Info</string>
+    <string name="txt_vip_expect">New expected VIP expiry date:</string>
+    <string name="txt_payment_method">Payment Method</string>
+    <string name="txt_confirm_payment">Confirm Payment</string>
+    <string name="txt_none_expired">None / Expired</string>
 </resources>

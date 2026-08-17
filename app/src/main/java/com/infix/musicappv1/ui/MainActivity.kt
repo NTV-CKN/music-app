@@ -15,6 +15,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
@@ -25,6 +26,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.infix.musicappv1.R
@@ -168,19 +170,22 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNav.setupWithNavController(navController)
 
-//        when (destination.id) {
-//            R.string.txt_title_subscription, R.id.checkoutFragment -> {
-//                binding.bottomNav.isVisible = false
-//                binding.fcvMiniPlayer.isVisible = false
-//                binding.btnVipCenter.isVisible = false
-//            }
-//
-//            else -> {
-//                binding.bottomNav.isVisible = true
-//                binding.fcvMiniPlayer.isVisible = true
-//                binding.btnVipCenter.isVisible = true
-//            }
-//        }
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.navigate_subscription_payment,
+                R.id.navigate_subscription -> {
+                    binding.bottomNav.isVisible = false
+                    binding.fcvMiniPlayer.isVisible = false
+                    binding.btnVipCenter.isVisible = false
+                }
+
+                else -> {
+                    binding.bottomNav.isVisible = true
+                    binding.fcvMiniPlayer.isVisible = true
+                    binding.btnVipCenter.isVisible = true
+                }
+            }
+        }
     }
 
 
@@ -222,7 +227,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun setEvents() {
         binding.btnVipCenter.setOnClickListener {
-            navController.navigate(R.id.navigate_subscription)
+            val options = navOptions {
+                anim {
+                    enter = R.anim.slide_left
+                    exit = R.anim.fade_out
+                    popEnter = R.anim.fade_in
+                    popExit = R.anim.slide_right
+                }
+            }
+
+            navController.navigate(R.id.navigate_subscription, null, options)
         }
     }
 

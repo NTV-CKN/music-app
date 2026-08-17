@@ -9,7 +9,7 @@ data class Subscription(
     var isActive: Boolean = true,
     var createAt: String = "",
     var updateAt: String = ""
-) {
+): java.io.Serializable {
     fun clone(): Subscription {
         return Subscription(
             id,

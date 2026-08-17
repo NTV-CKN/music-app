@@ -16,6 +16,6 @@
         android:label="AdminActivity" />
     <fragment
         android:id="@+id/navigation_settings"
-        android:label="@string/txt_setting"
-        android:name="com.infix.musicappv1.ui.settings.SettingsFragment" />
+        android:name="com.infix.musicappv1.ui.settings.SettingsFragment"
+        android:label="@string/txt_setting" />
 </navigation>
