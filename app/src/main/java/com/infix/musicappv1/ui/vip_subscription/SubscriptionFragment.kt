@@ -11,10 +11,12 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.infix.musicappv1.R
 import com.infix.musicappv1.data.model.Subscription
 import com.infix.musicappv1.databinding.FragmentSubscriptionBinding
 import com.infix.musicappv1.ui.adapter.SubscriptionPagingDataAdapter
 import com.infix.musicappv1.ui.admin.subscription.SubscriptionManagementViewModel
+import com.infix.musicappv1.ui.auth.AuthViewModel
 import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -32,6 +34,7 @@ class SubscriptionFragment : Fragment() {
     private lateinit var loadingDialogFragment: LoadingDialogFragment
 
     private val subscriptionManagementVM by viewModels<SubscriptionManagementViewModel>()
+    private val authViewModel by viewModels<AuthViewModel>()
     private var searchJob: Job? = null
 
     override fun onCreateView(
@@ -70,21 +73,26 @@ class SubscriptionFragment : Fragment() {
     }
 
     private fun observeViewModel() {
+        //subscriptions
         subscriptionManagementVM.subscriptionPagingData
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach { adapter.submitData(it) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        subscriptionManagementVM.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            if (isLoading == null) return@observe
-            try {
-                if (isLoading) {
-                    loadingDialogFragment.show(requireActivity().supportFragmentManager, null)
-                } else {
-                    loadingDialogFragment.dismissNow()
-                }
-            } catch (_: Exception) {
+        //loading subscriptionManagementVM
+        subscriptionManagementVM.isLoading.observe(viewLifecycleOwner, ::handleLoadingState)
+    }
+
+    private fun handleLoadingState(isLoading: Boolean?) {
+        if (isLoading == null) return
+
+        try {
+            if (isLoading) {
+                loadingDialogFragment.show(requireActivity().supportFragmentManager, null)
+            } else {
+                loadingDialogFragment.dismissNow()
             }
+        } catch (_: Exception) {
         }
     }
 
@@ -109,8 +117,16 @@ class SubscriptionFragment : Fragment() {
     }
 
     private fun navigateToCheckout(subscription: Subscription) {
-         findNavController().navigate(
-             SubscriptionFragmentDirections.actionNavigateSubscriptionToNavigateSubscriptionPayment(subscription)
-         )
+        val userSession = authViewModel.userSession.value
+        if (userSession != null)
+            findNavController().navigate(
+                SubscriptionFragmentDirections.actionNavigateSubscriptionToNavigateSubscriptionPayment(
+                    subscription
+                )
+            )
+        else
+            findNavController().navigate(
+                R.id.navigation_user_profile
+            )
     }
 }
