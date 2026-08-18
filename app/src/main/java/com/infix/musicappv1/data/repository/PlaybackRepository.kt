@@ -22,6 +22,9 @@ import javax.inject.Singleton
 class PlaybackRepository @Inject constructor(
     private val db: MusicDatabase
 ) {
+    //If user login/logout -> Refresh token for Exoplayer
+    private var refreshHttpDataSourceToken: (() -> Unit)? = null
+
     //observe song transition
     private val _mediaItemTransition: MutableStateFlow<MediaItemTransitionWrap?> =
         MutableStateFlow(null)
@@ -96,6 +99,14 @@ class PlaybackRepository @Inject constructor(
         _isPlaying.value = boolean
     }
 
+    fun setRefreshHttpDataSource(onRefresh: () -> Unit) {
+        refreshHttpDataSourceToken = onRefresh
+    }
+
+    fun invokeRefreshHttpDataSource() {
+        refreshHttpDataSourceToken?.invoke()
+    }
+
     suspend fun insertSongRecent(songRecent: SongRecent) {
         db.songRecentDao().insert(songRecent)
         db.songRecentDao().trimSongRecents()
@@ -110,7 +121,8 @@ class PlaybackRepository @Inject constructor(
         //if current song playing is favorite, we need update UI for that
         //else we only write favorite for song id and non update UI
         _indexToPlay.value?.let { indexToPlay ->
-            val currentSong = playlistTrackCurrent?.songsObject?.getOrNull(indexToPlay.indexToPlay ?: -1)
+            val currentSong =
+                playlistTrackCurrent?.songsObject?.getOrNull(indexToPlay.indexToPlay ?: -1)
             if (currentSong != null && currentSong.id == id)
                 _isFavorite.update { isFavorite }
 //            Log.d("SVU", isFavorite.toString())
@@ -132,7 +144,8 @@ class PlaybackRepository @Inject constructor(
     }
 
     private fun updateIsFavorite() {
-        val song = playlistTrackCurrent?.songsObject?.getOrNull(_indexToPlay.value?.indexToPlay ?: -1)
+        val song =
+            playlistTrackCurrent?.songsObject?.getOrNull(_indexToPlay.value?.indexToPlay ?: -1)
         song?.let {
             _isFavorite.value = song.favorite
         }

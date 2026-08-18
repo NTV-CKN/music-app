@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.AuthCredential
 import com.infix.musicappv1.data.model.user.User
+import com.infix.musicappv1.data.repository.PlaybackRepository
 import com.infix.musicappv1.data.repository.auth.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,13 +17,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val playbackRepository: PlaybackRepository
 ) : ViewModel() {
+    data class WrapUserSession(
+        val user: User? = null,
+        val time: Long = System.currentTimeMillis()
+    )
+
     private val _isLoading: MutableSharedFlow<Boolean> = MutableSharedFlow()
     val isLoading: SharedFlow<Boolean> = _isLoading
 
-    private val _userSession: MutableStateFlow<User?> = MutableStateFlow(null)
-    val userSession: StateFlow<User?> = _userSession
+    private val _userSession: MutableStateFlow<WrapUserSession> = MutableStateFlow(WrapUserSession())
+    val userSession: StateFlow<WrapUserSession> = _userSession
 
     fun emitLoading(isLoading: Boolean) {
         viewModelScope.launch { _isLoading.emit(isLoading) }
@@ -31,7 +38,9 @@ class AuthViewModel @Inject constructor(
     fun loadUserSession() {
         viewModelScope.launch(Dispatchers.IO) {
             _isLoading.emit(true)
-            _userSession.emit(authRepository.getUserSession())
+            _userSession.emit(
+                WrapUserSession(authRepository.getUserSession())
+            )
             _isLoading.emit(false)
         }
     }
@@ -44,9 +53,11 @@ class AuthViewModel @Inject constructor(
             _isLoading.emit(true)
 
             authRepository.loginWithGoogle(
-                authCredential,
-                onCompleted
-            )
+                authCredential
+            ) { message, isSuccess ->
+                onCompleted.invoke(message, isSuccess)
+                playbackRepository.invokeRefreshHttpDataSource()
+            }
 
             _isLoading.emit(false)
         }
@@ -55,6 +66,7 @@ class AuthViewModel @Inject constructor(
     fun logout() {
         viewModelScope.launch(Dispatchers.IO) {
             authRepository.logout()
+            playbackRepository.invokeRefreshHttpDataSource()
         }
     }
 }

@@ -9,6 +9,7 @@ import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import com.infix.musicappv1.BuildConfig.BASE_URL
 import com.infix.musicappv1.data.model.song.Song
 import java.util.Date
 
@@ -55,8 +56,9 @@ data class Playlist(
     private fun updateMediaItems(songs: List<Song>) {
         this.mediaItems.clear()
         songs.forEach { song ->
+            val source = "${BASE_URL}v1/songs/stream/${song.id}"
             val mediaItem = MediaItem.Builder()
-                .setUri(song.source)
+                .setUri(source)
                 .setMediaMetadata(
                     MediaMetadata.Builder()
                         .setArtworkUri(song.image.toUri())

@@ -33,6 +33,7 @@ import com.infix.musicappv1.R
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.ActivityMainBinding
 import com.infix.musicappv1.ui.MainActivity.Companion.PREF_PREV_SESSION
+import com.infix.musicappv1.ui.auth.AuthViewModel
 import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.MusicAppUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,6 +56,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private val playingSongSharedViewModel: PlayingSongSharedViewModel by viewModels()
+    private val authViewModel by viewModels<AuthViewModel>()
 
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -85,6 +87,11 @@ class MainActivity : AppCompatActivity() {
         setupObserver()
         calculateDensityOfApp()
         setEvents()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        observeAuthVM()
     }
 
     private fun calculateDensityOfApp() {
@@ -238,6 +245,10 @@ class MainActivity : AppCompatActivity() {
 
             navController.navigate(R.id.navigate_subscription, null, options)
         }
+    }
+
+    private fun observeAuthVM() {
+        authViewModel.loadUserSession()
     }
 
     companion object {

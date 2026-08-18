@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
@@ -132,6 +133,11 @@ class SongPagingDataAdapter(
         @SuppressLint("SuspiciousIndentation")
         fun bind() {
             val song = getItem(bindingAdapterPosition) ?: return
+            binding.tvBadgeVip.visibility = if (song.isVip)
+                View.VISIBLE
+            else
+                View.GONE
+
             binding.tvItemSongTitle.text = song.title
             binding.tvItemSongArtist.text = song.artist
             Glide.with(binding.root)

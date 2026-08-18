@@ -177,4 +177,6 @@
     <string name="payment_error_insufficient_balance">Tài khoản ngân hàng/ví không đủ số dư.</string>
     <string name="payment_error_failed">Thanh toán không thành công (Mã lỗi: %1$s).</string>
     <string name="txt_payment_failed">Thanh toán không thành công!</string>
+    <string name="txt_vip">VIP</string>
+    <string name="msg_vip_required_for_song">Chỉ có tài khoản VIP mới có thể nghe bài hát này.</string>
 </resources>
