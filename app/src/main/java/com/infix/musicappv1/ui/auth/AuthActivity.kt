@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.infix.musicappv1.R
-import com.infix.musicappv1.data.model.user.User
 import com.infix.musicappv1.databinding.ActivityAuthBinding
 import com.infix.musicappv1.ui.dialog.LoadingDialogFragment
 import com.infix.musicappv1.ui.user.UserManagementActivity
@@ -75,19 +74,19 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleUserSession(user: User?) {
+    private fun handleUserSession(wrapUserSession: AuthViewModel.WrapUserSession) {
         if (!isCallLoadUser) {
             authViewModel.loadUserSession()
             isCallLoadUser = true
             return
         }
 
-        if (user != null) {
+        if (wrapUserSession.user != null) {
             finish()
             handleLoadingDialog(false)
             val intent = Intent(this, UserManagementActivity::class.java)
             intent.apply {
-                putExtra(UserManagementActivity.USER_KEY, user)
+                putExtra(UserManagementActivity.USER_KEY, wrapUserSession.user)
             }
             startActivity(intent)
         }

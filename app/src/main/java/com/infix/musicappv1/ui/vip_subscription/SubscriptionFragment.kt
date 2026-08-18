@@ -118,7 +118,7 @@ class SubscriptionFragment : Fragment() {
 
     private fun navigateToCheckout(subscription: Subscription) {
         val userSession = authViewModel.userSession.value
-        if (userSession != null)
+        if (userSession.user != null)
             findNavController().navigate(
                 SubscriptionFragmentDirections.actionNavigateSubscriptionToNavigateSubscriptionPayment(
                     subscription

@@ -80,6 +80,7 @@ class LoginFragment : Fragment() {
                             Snackbar.LENGTH_SHORT
                         )
                         authViewModel.loadUserSession()
+
                     }
                 }
             } catch (e: Exception) {

@@ -87,6 +87,10 @@ class MainActivity : AppCompatActivity() {
         setupObserver()
         calculateDensityOfApp()
         setEvents()
+    }
+
+    override fun onStart() {
+        super.onStart()
         observeAuthVM()
     }
 
