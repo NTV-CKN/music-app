@@ -133,7 +133,7 @@ class PlaybackService : MediaSessionService() {
         onComplete: ((Boolean) -> Unit)? = null
     ) {
         serviceScope.launch {
-            if (tryingRefresh >= 4) {
+            if (tryingRefresh >= 2) {
                 tryingRefresh = 0
                 onComplete?.invoke(false)
                 return@launch
@@ -246,7 +246,9 @@ class PlaybackService : MediaSessionService() {
                                     mediaSession.player.prepare()
                                     mediaSession.player.play()
                                 } else {
-                                    mediaSession.player.stop()
+                                    mediaSession.player.seekToNext()
+                                    mediaSession.player.prepare()
+                                    mediaSession.player.play()
                                 }
                             }
                         }

@@ -3,6 +3,7 @@ package com.infix.musicappv1.data.model.song
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.firebase.firestore.PropertyName
 
 @Entity(tableName = "songs")
 open class Song(
@@ -19,6 +20,8 @@ open class Song(
     var favorite: Boolean = false,
     var counter: Int = 0,
     var replay: Int = 0,
+    @get:PropertyName("isVip")
+    @set:PropertyName("isVip")
     var isVip: Boolean = false,
     var genre: String = "",
     var energy: Float = 0.5f

@@ -26,6 +26,10 @@ class SubscriptionPaymentViewModel @Inject constructor(
     private val paymentRepository: ISubscriptionPaymentRepository
 ) : AndroidViewModel(application) {
 
+    init {
+        addListenerDocumentAndUpdateUserDB()
+    }
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -34,6 +38,16 @@ class SubscriptionPaymentViewModel @Inject constructor(
 
     private val _userVipExpiryMs = MutableLiveData<Long?>()
     val userVipExpiryMs: LiveData<Long?> = _userVipExpiryMs
+
+    fun addListenerDocumentAndUpdateUserDB() {
+        viewModelScope.launch(Dispatchers.IO) {
+            userRepository.listenerUserDocument().collect { result ->
+                if(result is Result.Success) {
+                    userRepository.updateUser(result.data)
+                }
+            }
+        }
+    }
 
     fun fetchUserVipExpiry() {
         viewModelScope.launch {

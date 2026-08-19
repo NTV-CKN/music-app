@@ -15,6 +15,10 @@ class UserLocalDataSourceImpl @Inject constructor(
         userDAO.insert(user)
     }
 
+    override suspend fun update(user: User) {
+        userDAO.update(user)
+    }
+
     override suspend fun clear() {
         userDAO.clear()
     }
