@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -34,7 +35,7 @@ class SubscriptionFragment : Fragment() {
     private lateinit var loadingDialogFragment: LoadingDialogFragment
 
     private val subscriptionManagementVM by viewModels<SubscriptionManagementViewModel>()
-    private val authViewModel by viewModels<AuthViewModel>()
+    private val authViewModel by activityViewModels<AuthViewModel>()
     private var searchJob: Job? = null
 
     override fun onCreateView(
