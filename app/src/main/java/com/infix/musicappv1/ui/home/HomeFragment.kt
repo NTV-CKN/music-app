@@ -18,12 +18,14 @@ import androidx.media3.session.MediaController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.infix.musicappv1.data.model.ai_rcm.AiMoodUiState
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentHomeBinding
 import com.infix.musicappv1.enums.PlaylistEnum
 import com.infix.musicappv1.media.MediaControllerService
+import com.infix.musicappv1.ui.adapter.home.SectionAiRecommendationAdapter
 import com.infix.musicappv1.ui.adapter.home.SectionAlbumListAdapter
 import com.infix.musicappv1.ui.adapter.home.SectionHeaderHomeAdapter
 import com.infix.musicappv1.ui.adapter.home.SectionSongListAdapter
@@ -47,6 +49,7 @@ class HomeFragment : BasePlayMusicFragment() {
     private lateinit var sectionAlbumListAdapter: SectionAlbumListAdapter
     private lateinit var sectionSongListAdapter: SectionSongListAdapter
     private lateinit var sectionSongPagingAdapter: SongPagingDataAdapter
+    private lateinit var sectionAiRecommend: SectionAiRecommendationAdapter
 
     private var isSongsReady = false
     private var isAlbumReady = false
@@ -139,6 +142,14 @@ class HomeFragment : BasePlayMusicFragment() {
         sectionSongListAdapter = SectionSongListAdapter {
             findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToNavigateMoreSongRecommend())
         }
+
+        sectionAiRecommend = SectionAiRecommendationAdapter(
+            onSuggestClick = ::handleClickAIRecommend,
+            onSongClick = { song, pos -> },
+            onOptionClick = { song -> },
+            permissionRepository = permissionRepository
+        )
+
         sectionAlbumListAdapter = SectionAlbumListAdapter()
 
         sectionSongPagingAdapter = SongPagingDataAdapter(
@@ -156,11 +167,7 @@ class HomeFragment : BasePlayMusicFragment() {
                     )
                 }
             },
-            object : SongAdapter.OptionSongClickListener {
-                override fun onOptionClick(song: Song) {
-                    showDialogSongOptionMenu(song)
-                }
-            }, permissionRepository
+            { song -> showDialogSongOptionMenu(song) }, permissionRepository
         )
         sectionSongPagingAdapter.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
@@ -169,6 +176,7 @@ class HomeFragment : BasePlayMusicFragment() {
             ConcatAdapter(
                 sectionHeaderHomeAdapter,
                 sectionAlbumListAdapter,
+                sectionAiRecommend,
                 sectionSongListAdapter,
                 sectionSongPagingAdapter
             )
@@ -183,10 +191,30 @@ class HomeFragment : BasePlayMusicFragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 try {
                     homeViewModel.songs.collectLatest { sectionSongPagingAdapter.submitData(it) }
-                }catch (ex: Exception) {
-                    Log.d("RecommendSongFragment", ex.message?:"Unknown")
+                } catch (ex: Exception) {
+                    Log.d("RecommendSongFragment", ex.message ?: "Unknown")
                 }
             }
         }
+    }
+
+    private fun handleClickAIRecommend(prompt: String) {
+        sectionAiRecommend.updateState(
+            AiMoodUiState.Loading
+        )
+
+        homeViewModel.loadRecommendSongsByAI(
+            prompt,
+            onSuccess = { aiRcm ->
+                sectionAiRecommend.updateState(
+                    AiMoodUiState.Success(aiRcm)
+                )
+            },
+            onFailed = {
+                sectionAiRecommend.updateState(
+                    AiMoodUiState.Idle
+                )
+            },
+        )
     }
 }

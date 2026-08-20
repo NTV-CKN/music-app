@@ -179,4 +179,8 @@
     <string name="txt_payment_failed">Thanh toán không thành công!</string>
     <string name="txt_vip">VIP</string>
     <string name="msg_vip_required_for_song">Chỉ có tài khoản VIP mới có thể nghe bài hát này.</string>
+
+    <string name="txt_mood_based_suggestions">✨ Gợi ý theo tâm trạng</string>
+    <string name="txt_suggestions">Gợi ý</string>
+    <string name="hint_how_are_you_feeling_today">Hôm nay bạn cảm thấy thế nào?</string>
 </resources>

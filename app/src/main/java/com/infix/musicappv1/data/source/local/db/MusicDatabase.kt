@@ -3,6 +3,7 @@ package com.infix.musicappv1.data.source.local.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.infix.musicappv1.data.model.ai_rcm.AIRecommendSongEntity
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.album.AlbumRemoteKeys
 import com.infix.musicappv1.data.model.artist.Artist
@@ -16,6 +17,7 @@ import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.model.song.SongRemoteKeys
 import com.infix.musicappv1.data.model.tracking.TrackingUpdate
 import com.infix.musicappv1.data.model.user.User
+import com.infix.musicappv1.data.source.local.ai_rcm.AIRecommendDAO
 import com.infix.musicappv1.data.source.local.album.AlbumDao
 import com.infix.musicappv1.data.source.local.album.AlbumRemoteKeysDao
 import com.infix.musicappv1.data.source.local.artist.ArtistDao
@@ -44,9 +46,10 @@ import com.infix.musicappv1.data.source.local.user.UserDAO
         ArtistRemoteKeys::class,
         AlbumRemoteKeys::class,
         SearchKeySong::class,
-        RecentSearchSong::class
+        RecentSearchSong::class,
+        AIRecommendSongEntity::class
     ],
-    version = 14,
+    version = 15,
     // autoMigrations = [AutoMigration(from = 3, to = 4)]
 )
 @TypeConverters(value = [DateConverter::class])
@@ -64,4 +67,5 @@ abstract class MusicDatabase : RoomDatabase() {
     abstract fun recentSearchSongDao(): RecentSearchSongDao
     abstract fun searchKeySongDao(): SearchKeySongDao
     abstract fun userDao(): UserDAO
+    abstract fun aiRcmDao(): AIRecommendDAO
 }
