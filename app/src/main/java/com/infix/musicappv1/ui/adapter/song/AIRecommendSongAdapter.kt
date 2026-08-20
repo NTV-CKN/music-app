@@ -1,0 +1,125 @@
+package com.infix.musicappv1.ui.adapter.song
+
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.infix.musicappv1.R
+import com.infix.musicappv1.data.model.song.Song
+import com.infix.musicappv1.data.repository.PermissionRepository
+import com.infix.musicappv1.databinding.ItemSongBinding
+import com.infix.musicappv1.utils.MusicAppUtils
+
+class AIRecommendSongAdapter(
+    private val onSongClick: SongClickListener,
+    private val onOptionClick: OptionSongClickListener,
+    private val permissionRepository: PermissionRepository
+) : RecyclerView.Adapter<AIRecommendSongAdapter.ViewHolder>() {
+
+    private val songs = mutableListOf<Song>()
+
+    inner class ViewHolder(private val binding: ItemSongBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(song: Song, position: Int) {
+            binding.tvBadgeVip.visibility = if (song.isVip)
+                View.VISIBLE
+            else
+                View.GONE
+
+            binding.tvItemSongTitle.text = song.title
+            binding.tvItemSongArtist.text = song.artist
+
+            Glide.with(binding.root)
+                .load(song.image)
+                .error(R.drawable.ic_song_24)
+                .into(binding.imgItemSong)
+
+            // Logic click bài hát kèm kiểm tra quyền thông báo từ SongAdapter
+            binding.root.setOnClickListener {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    val notificationGranted = ContextCompat.checkSelfPermission(
+                        binding.root.context,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) == PackageManager.PERMISSION_GRANTED
+
+                    permissionRepository.setGrantedNotification(notificationGranted)
+                    if (notificationGranted) {
+                        onSongClick.onSongClick(song, position)
+                    }
+                    permissionRepository.setAskPermissionNotification(!notificationGranted)
+                } else {
+                    onSongClick.onSongClick(song, position)
+                }
+            }
+
+            // Option Click
+            binding.btnItemSongOption.setOnClickListener {
+                onOptionClick.onOptionClick(song)
+            }
+        }
+    }
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder {
+        val binding = ItemSongBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+
+        val vto = binding.root.viewTreeObserver
+        vto.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                val width = if (binding.root.measuredWidth > 0) binding.root.measuredWidth else parent.measuredWidth
+                val clipWidthPixel = (MusicAppUtils.density * 32).toInt()
+                val targetWidth = width - clipWidthPixel
+
+                if (targetWidth > 0) {
+                    binding.layoutListSong.layoutParams.width = targetWidth
+                    binding.layoutListSong.requestLayout()
+                }
+            }
+        })
+
+        return ViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int
+    ) {
+        holder.bind(songs[position], position)
+    }
+
+    override fun getItemCount(): Int = songs.size
+
+    fun updateSongs(songs: List<Song>) {
+        val oldSize = this.songs.size
+        this.songs.clear()
+        this.songs.addAll(songs)
+
+        if (oldSize > this.songs.size) {
+            notifyItemRangeRemoved(0, oldSize)
+        }
+        notifyItemRangeChanged(0, this.songs.size)
+    }
+
+    fun interface SongClickListener {
+        fun onSongClick(song: Song, pos: Int)
+    }
+
+    fun interface OptionSongClickListener {
+        fun onOptionClick(song: Song)
+    }
+}

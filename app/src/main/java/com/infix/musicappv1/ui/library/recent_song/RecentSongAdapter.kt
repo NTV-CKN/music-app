@@ -1,6 +1,7 @@
 package com.infix.musicappv1.ui.library.recent_song
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.view.LayoutInflater
@@ -25,6 +26,7 @@ class RecentSongAdapter(
     inner class ViewHolder(private val binding: ItemSongBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("SuspiciousIndentation")
         fun bind(songRecent: SongRecent, pos: Int) {
             binding.tvItemSongTitle.text = songRecent.title
             binding.tvItemSongArtist.text = songRecent.artist

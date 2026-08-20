@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.session.MediaController
@@ -36,6 +37,8 @@ import com.infix.musicappv1.ui.viewmodels.PlayingSongSharedViewModel
 import com.infix.musicappv1.utils.MusicAppUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -103,6 +106,7 @@ class HomeFragment : BasePlayMusicFragment() {
         super.onViewCreated(view, savedInstanceState)
         setupInitDataTmp()
         initRecyclerView()
+        observeHomeVM()
     }
 
     override fun onStart() {
@@ -144,9 +148,20 @@ class HomeFragment : BasePlayMusicFragment() {
         }
 
         sectionAiRecommend = SectionAiRecommendationAdapter(
-            onSuggestClick = ::handleClickAIRecommend,
-            onSongClick = { song, pos -> },
-            onOptionClick = { song -> },
+            onSuggestClick = { prompt -> homeViewModel.loadRecommendSongsByAI(prompt) },
+            onSongClick = { song, pos ->
+                val songs =
+                    (homeViewModel.aiMoodState.value as? AiMoodUiState.Success)?.response?.songs
+                        ?: return@SectionAiRecommendationAdapter
+
+                val indexToPlay = MusicAppUtils.getIndexOfSong(song, songs)
+                playSong(
+                    indexToPlay,
+                    Playlist(namePlaylist = PlaylistEnum.AI_RECOMMEND_SONG.value),
+                    songs
+                )
+            },
+            onOptionClick = { song -> showDialogSongOptionMenu(song) },
             permissionRepository = permissionRepository
         )
 
@@ -198,23 +213,17 @@ class HomeFragment : BasePlayMusicFragment() {
         }
     }
 
-    private fun handleClickAIRecommend(prompt: String) {
-        sectionAiRecommend.updateState(
-            AiMoodUiState.Loading
-        )
+    private fun observeHomeVM() {
+        //aiMoodUiState
+        homeViewModel.aiMoodState
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach { handleAiMoodStateChange(it) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
 
-        homeViewModel.loadRecommendSongsByAI(
-            prompt,
-            onSuccess = { aiRcm ->
-                sectionAiRecommend.updateState(
-                    AiMoodUiState.Success(aiRcm)
-                )
-            },
-            onFailed = {
-                sectionAiRecommend.updateState(
-                    AiMoodUiState.Idle
-                )
-            },
+    private fun handleAiMoodStateChange(aiMoodUiState: AiMoodUiState) {
+        sectionAiRecommend.updateState(
+            aiMoodUiState
         )
     }
 }
