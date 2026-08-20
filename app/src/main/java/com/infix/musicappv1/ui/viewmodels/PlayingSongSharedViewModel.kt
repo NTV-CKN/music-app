@@ -18,7 +18,8 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class PlayingSongSharedViewModel @Inject constructor(private val playbackRepository: PlaybackRepository) : ViewModel() {
+class PlayingSongSharedViewModel @Inject constructor(private val playbackRepository: PlaybackRepository) :
+    ViewModel() {
     val currentPlaylist: LiveData<Playlist?> = playbackRepository.currentPlaylist.asLiveData()
     val indexToPlay: LiveData<PlaybackRepository.IndexToPlayDate?> =
         playbackRepository.indexToPlay.asLiveData()
@@ -49,15 +50,17 @@ class PlayingSongSharedViewModel @Inject constructor(private val playbackReposit
         if (playlist == null) {
             //we create new instance to avoid ref songs cleared => MediaItems is empty when call updateSongs
             val newInstance = Playlist(
-                playlistId =  playlistT.playlistId,
-                namePlaylist =  playlistT.namePlaylist,
+                playlistId = playlistT.playlistId,
+                namePlaylist = playlistT.namePlaylist,
                 artwork = playlistT.artwork
             )
             playbackRepository.getPlaylists()[playlistT.namePlaylist] = newInstance
             playlist = newInstance
         }
         //avoid not update recent playlist
-        if (playlist.namePlaylist == PlaylistEnum.RECENT.value) {
+        if (playlist.namePlaylist == PlaylistEnum.RECENT.value
+            || playlist.namePlaylist == PlaylistEnum.AI_RECOMMEND_SONG.value
+        ) {
             val newPlaylist =
                 Playlist(namePlaylist = playlist.namePlaylist, playlistId = playlist.playlistId)
             playbackRepository.getPlaylists()[playlistT.namePlaylist] = newPlaylist

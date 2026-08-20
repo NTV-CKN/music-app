@@ -8,14 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.infix.musicappv1.data.model.ai_rcm.AiMoodUiState
 import com.infix.musicappv1.data.repository.PermissionRepository
 import com.infix.musicappv1.databinding.FragmentSectionAiRecommendationBinding
-import com.infix.musicappv1.ui.adapter.song.SongAdapter
-import com.infix.musicappv1.ui.adapter.song.SongAdapter.OptionSongClickListener
-import com.infix.musicappv1.ui.adapter.song.SongAdapter.SongClickListener
+import com.infix.musicappv1.ui.adapter.song.AIRecommendSongAdapter
 
 class SectionAiRecommendationAdapter(
     private val onSuggestClick: (String) -> Unit,
-    private val onSongClick: SongClickListener,
-    private val onOptionClick: OptionSongClickListener,
+    private val onSongClick: AIRecommendSongAdapter.SongClickListener,
+    private val onOptionClick: AIRecommendSongAdapter.OptionSongClickListener,
     private val permissionRepository: PermissionRepository
 ) : RecyclerView.Adapter<SectionAiRecommendationAdapter.AiViewHolder>() {
 
@@ -65,6 +63,8 @@ class SectionAiRecommendationAdapter(
                     binding.progressAiLoading.visibility = View.VISIBLE
                     binding.cardAiMessage.visibility = View.GONE
                     binding.rvAiSongs.visibility = View.GONE
+
+                    binding.btnSuggest.isEnabled = false
                 }
 
                 is AiMoodUiState.Success -> {
@@ -76,13 +76,13 @@ class SectionAiRecommendationAdapter(
                     binding.rvAiSongs.visibility = View.VISIBLE
 
                     if (binding.rvAiSongs.adapter == null) {
-                        binding.rvAiSongs.adapter = SongAdapter(
+                        binding.rvAiSongs.adapter = AIRecommendSongAdapter(
                             onSongClick = onSongClick,
                             onOptionClick = onOptionClick,
                             permissionRepository
                         )
                     }
-                    (binding.rvAiSongs.adapter as? SongAdapter)?.updateSongs(state.response.songs)
+                    (binding.rvAiSongs.adapter as? AIRecommendSongAdapter)?.updateSongs(state.response.songs)
                 }
 
                 is AiMoodUiState.Error -> {
@@ -90,6 +90,8 @@ class SectionAiRecommendationAdapter(
                     Toast.makeText(binding.root.context, state.message, Toast.LENGTH_SHORT).show()
                 }
             }
+
+            binding.btnSuggest.isEnabled = true
         }
     }
 }

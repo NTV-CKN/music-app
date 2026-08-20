@@ -11,6 +11,10 @@ data class AiRecommendationResponse(
 sealed class AiMoodUiState {
     object Idle : AiMoodUiState()
     object Loading : AiMoodUiState()
-    data class Success(val response: AiRecommendationResponse) : AiMoodUiState()
+    data class Success(
+        val response: AiRecommendationResponse,
+        private val time: Long = System.currentTimeMillis()
+    ) : AiMoodUiState()
+
     data class Error(val message: String) : AiMoodUiState()
 }

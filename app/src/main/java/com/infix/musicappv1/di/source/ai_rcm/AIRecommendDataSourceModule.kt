@@ -1,6 +1,7 @@
 package com.infix.musicappv1.di.source.ai_rcm
 
 import com.infix.musicappv1.data.source.AIRecommendDataSource
+import com.infix.musicappv1.data.source.local.ai_rcm.AIRecommendLocalDataSource
 import com.infix.musicappv1.data.source.remote.ai_rcm.AIRecommendRemoteDataSource
 import dagger.Binds
 import dagger.Module
@@ -16,4 +17,10 @@ abstract class AIRecommendDataSourceModule {
     abstract fun bindAiRcmRemoteDataSource(
         remote: AIRecommendRemoteDataSource
     ): AIRecommendDataSource.Remote
+
+    @Binds
+    @ActivityRetainedScoped
+    abstract fun bindAiRcmLocalDataSource(
+        remote: AIRecommendLocalDataSource
+    ): AIRecommendDataSource.Local
 }
