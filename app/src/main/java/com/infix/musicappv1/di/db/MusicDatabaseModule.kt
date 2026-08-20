@@ -2,6 +2,7 @@ package com.infix.musicappv1.di.db
 
 import android.content.Context
 import androidx.room.Room
+import com.infix.musicappv1.data.source.local.ai_rcm.AIRecommendDAO
 import com.infix.musicappv1.data.source.local.album.AlbumDao
 import com.infix.musicappv1.data.source.local.album.AlbumRemoteKeysDao
 import com.infix.musicappv1.data.source.local.artist.ArtistDao
@@ -79,4 +80,7 @@ object MusicDatabaseModule {
 
     @Provides
     fun provideSearchKeySongDao(db: MusicDatabase): SearchKeySongDao = db.searchKeySongDao()
+
+    @Provides
+    fun provideAiRcmDao(db: MusicDatabase): AIRecommendDAO = db.aiRcmDao()
 }

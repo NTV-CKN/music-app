@@ -18,6 +18,7 @@ import androidx.media3.session.MediaController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.infix.musicappv1.data.model.ai_rcm.AiMoodUiState
 import com.infix.musicappv1.data.model.playlist.Playlist
 import com.infix.musicappv1.data.model.song.Song
 import com.infix.musicappv1.data.repository.PermissionRepository
@@ -143,9 +144,9 @@ class HomeFragment : BasePlayMusicFragment() {
         }
 
         sectionAiRecommend = SectionAiRecommendationAdapter(
-            onSuggestClick = {prompt ->},
-            onSongClick = {song, pos ->},
-            onOptionClick = {song ->},
+            onSuggestClick = ::handleClickAIRecommend,
+            onSongClick = { song, pos -> },
+            onOptionClick = { song -> },
             permissionRepository = permissionRepository
         )
 
@@ -190,10 +191,30 @@ class HomeFragment : BasePlayMusicFragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 try {
                     homeViewModel.songs.collectLatest { sectionSongPagingAdapter.submitData(it) }
-                }catch (ex: Exception) {
-                    Log.d("RecommendSongFragment", ex.message?:"Unknown")
+                } catch (ex: Exception) {
+                    Log.d("RecommendSongFragment", ex.message ?: "Unknown")
                 }
             }
         }
+    }
+
+    private fun handleClickAIRecommend(prompt: String) {
+        sectionAiRecommend.updateState(
+            AiMoodUiState.Loading
+        )
+
+        homeViewModel.loadRecommendSongsByAI(
+            prompt,
+            onSuccess = { aiRcm ->
+                sectionAiRecommend.updateState(
+                    AiMoodUiState.Success(aiRcm)
+                )
+            },
+            onFailed = {
+                sectionAiRecommend.updateState(
+                    AiMoodUiState.Idle
+                )
+            },
+        )
     }
 }

@@ -4,6 +4,7 @@ import com.infix.musicappv1.data.dto.BaseResultResponse
 import com.infix.musicappv1.data.dto.RequestPaymentResponse
 import com.infix.musicappv1.data.model.Subscription
 import com.infix.musicappv1.data.model.SubscriptionList
+import com.infix.musicappv1.data.model.ai_rcm.AiRecommendationResponse
 import com.infix.musicappv1.data.model.album.Album
 import com.infix.musicappv1.data.model.album.AlbumList
 import com.infix.musicappv1.data.model.artist.Artist
@@ -77,4 +78,7 @@ interface MusicService {
 
     @POST("v1/create-url")
     suspend fun createPaymentUrl(@Body body: Map<String, String>): Response<RequestPaymentResponse>
+
+    @POST("v1/ai-rcm/recommend")
+    suspend fun getSongRecommend(@Body body: Map<String, String>): Response<AiRecommendationResponse>
 }

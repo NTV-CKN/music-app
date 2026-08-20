@@ -4,6 +4,7 @@ import com.infix.musicappv1.data.model.song.Song
 
 data class AiRecommendationResponse(
     val aiMessage: String = "",
+    val promptSummary: String = "",
     val songs: List<Song> = emptyList()
 )
 
